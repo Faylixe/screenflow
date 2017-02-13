@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<screenflow start="wifi_prompt">
+    <screen name="wifi_prompt" type="select">
+        <label>Configure WiFi ?</label>
+        <option>Yes</option>
+        <option>No</option>
+    </screen>
+    <screen name="wifi_select" type="recycler" />
+    <screen name="wifi_passphrase" type="input">
+        <label>Enter passphrase for %s</label>
+        <input_type>password</input_type>
+    </screen>
+</screenflow>
