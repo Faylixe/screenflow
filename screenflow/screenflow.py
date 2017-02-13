@@ -162,6 +162,7 @@ class ScreenFlow(object):
                 if not self.transition.update(self.surface):
                     self.transition = None
                     self.state = ScreenFlow.ACTIVE
+                    current.on_screen_activated()
             elif self.state == ScreenFlow.ACTIVE:
                 current.process_event()
 

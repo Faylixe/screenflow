@@ -1,15 +1,3 @@
-#!/usr/bin/python
-
-""" To document. """
-
-from math import floor
-
-import pygame
-#from wifi import Cell
-from pygame.locals import MOUSEBUTTONDOWN, MOUSEBUTTONUP # pylint: disable=no-name-in-module
-
-# Initializes font engine if required.
-pygame.font.init()
 
 class ItemViewRenderer(object):
     """ Item view rendering class. """
@@ -62,38 +50,3 @@ class ListView(object):
         """
         for item in model:
             pass
-
-class WifiManager(object):
-    """ Class for managing wifi connection. """
-
-    def __init__(self, surface, renderer):
-        """Default constructor.
-
-        :param surface:
-        """
-        self.surface = surface
-        self.renderer = renderer
-        self.running = False
-
-    def on_wifi_network(self, networks):
-        """Display
-
-        :param networks:
-        """
-        pass
-
-    def on_select_network(self, network):
-        """Callback
-        """
-        pass
-
-    def run(self):
-        """Wifi manager main loop. """
-        #self.onWifiNetwork(Cell.all('wlan0'))
-        self.running = True
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == MOUSEBUTTONDOWN:
-                    pass
-                elif event.type == MOUSEBUTTONUP:
-                    pass

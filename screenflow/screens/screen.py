@@ -17,9 +17,9 @@ class Screen(object):
         """
         for event in pygame.event.get():
             if event.type == MOUSEBUTTONDOWN:
-                pass
+                self.on_mouse_down(pygame.mouse.get_pos())
             elif event.type == MOUSEBUTTONUP:
-                pass
+                self.on_mouse_up(pygame.mouse.get_pos())
 
     def generate_preview(self, size):
         """
@@ -33,6 +33,22 @@ class Screen(object):
     def draw(self, surface):
         """
         :param surface:
+        """
+        pass
+
+    def on_screen_activated(self):
+        """ Callback method for screen activation pre processing. """
+        pass
+
+    def on_mouse_down(self, position):
+        """
+        :param position:
+        """
+        pass
+
+    def on_mouse_up(self, position):
+        """
+        :param position:
         """
         pass
 
