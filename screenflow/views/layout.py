@@ -2,14 +2,15 @@
 
 """ To Document """
 
+from screenflow.views.view import View
 
-class View(object):
+class Layout(View):
     """ To document. """
 
     def __init__(self):
         """Default constructor.
         """
-        pass
+        View.__init__(self)
 
     def get_expected_size(self, parent_size):
         """

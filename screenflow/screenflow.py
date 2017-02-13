@@ -80,6 +80,10 @@ class ScreenFlow(object):
             resolution = (info.current_w, info.current_h)
             self.surface = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
         self.transition = None
+        def shutdown():
+            """ Simple quit function. """
+            self.running = False
+        self.quit = shutdown
 
     def add_screen(self, screen):
         """Adds the given screen to this screen flow.
@@ -166,24 +170,12 @@ class ScreenFlow(object):
             elif self.state == ScreenFlow.ACTIVE:
                 current.process_event()
 
-    def quit(self):
-        """ Creates and returns a callback function for stopping the application.
-
-        :returns: Created callback function.
-        """
-        def delegate():
-            """ Delegate function. """
-            self.running = False
-        return delegate
-
     def load_from_file(self, flow_file):
         """Factory function that creates a ScreenFlow instance from
         the given XML file.
 
-        :param file:
-        :returns:
+        :param file: Target XML file to load screens from.
         """
-        screenflow = ScreenFlow()
         with open(flow_file, 'r') as stream:
             xml = stream.read()
             # TODO : Perform xml validation through schema.
@@ -193,5 +185,3 @@ class ScreenFlow(object):
                 for screen in screens:
                     self.add_screen(Screen.create(screen))
             else:
-                self.add_screen(Screen.create(screens))
-        return screenflow
