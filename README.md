@@ -44,7 +44,7 @@ flow.run()
 
 ## Define your flow with XML
 
-You can also (and better have to) define all your screen using XML file like in the following exemple :
+You can also (and better have to) define all your screens using XML file like in the following exemple :
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
