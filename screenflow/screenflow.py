@@ -5,7 +5,8 @@
 import xmltodict
 import pygame
 
-from pygame_screenflow import Screen
+from screenflow.screens import configure_screenflow
+from screenflow.constant import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 
 pygame.init()
 
@@ -70,6 +71,7 @@ class ScreenFlow(object):
 
         :param surface: Optional surface this flow will be rendered into.
         """
+        configure_screenflow(self)
         self.screens = {}
         self.running = False
         self.stack = []
@@ -80,10 +82,6 @@ class ScreenFlow(object):
             resolution = (info.current_w, info.current_h)
             self.surface = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
         self.transition = None
-        def shutdown():
-            """ Simple quit function. """
-            self.running = False
-        self.quit = shutdown
 
     def add_screen(self, screen):
         """Adds the given screen to this screen flow.
@@ -113,6 +111,10 @@ class ScreenFlow(object):
         self.transition = ScreenTransition(previews, side)
         self.state = ScreenFlow.IN_TRANSITION
 
+    def quit(self):
+        """Stops the execution of this screenflow. """
+        self.running = False
+
     def navigate_to(self, screen):
         """Creates and returns a transition callback function.
 
@@ -122,12 +124,9 @@ class ScreenFlow(object):
         :param screen: Screen to navigate to.
         :returns: Created callback function.
         """
-        def delegate():
-            """ Delegate function. """
-            previews = (self.stack[-1].generate_preview(), screen.generate_preview())
-            self.stack.append(screen)
-            self.set_transition(previews, ScreenTransition.FORWARD)
-        return delegate
+        previews = (self.stack[-1].generate_preview(), screen.generate_preview())
+        self.stack.append(screen)
+        self.set_transition(previews, ScreenTransition.FORWARD)
 
     def navigate_back(self):
         """Creates and returns a transition callback function.
@@ -137,14 +136,11 @@ class ScreenFlow(object):
 
         :returns: Created callback function.
         """
-        def delegate():
-            """ Delegate function. """
-            if len(self.stack) == 1:
-                raise NavigationException('Cannot navigate back, no more screen.')
-            screen = self.stack.pop()
-            previews = (self.stack[-1].generate_preview(), screen.generate_preview())
-            self.set_transition(previews, ScreenTransition.FORWARD)
-        return delegate
+        if len(self.stack) == 1:
+            raise NavigationException('Cannot navigate back, no more screen.')
+        screen = self.stack.pop()
+        previews = (self.stack[-1].generate_preview(), screen.generate_preview())
+        self.set_transition(previews, ScreenTransition.FORWARD)
 
     def get_current_screen(self):
         """Current screen access method.
@@ -158,6 +154,7 @@ class ScreenFlow(object):
         a main loop over it until application is killed
         or quit() callback is reached.
         """
+        del self.stack[:]
         self.running = True
         while self.running:
             pygame.display.flip()
@@ -170,6 +167,28 @@ class ScreenFlow(object):
             elif self.state == ScreenFlow.ACTIVE:
                 current.process_event()
 
+    def register_factory(self, type_name, factory):
+        """Registers the given factory for the given type.
+
+        :param type_name: Type name to registered factory under.
+        :param factory: Factory function used for creating associated screen type instance.
+        """
+        if type_name in self.factories.keys():
+            raise ValueError('Screen type %s already registered' % type_name)
+        self.factories[type_name] = factory
+
+    def create_screen(self, screen_def):
+        """Factory method that creates a screen from the given definition.
+
+        :param screen_def: Screen definition as a dictionary from XML parsing.
+        """
+        if XML_TYPE not in screen_def.keys():
+            raise AttributeError('No screen type specified.')
+        screen_type = screen_def[XML_TYPE]
+        if screen_type not in self.factories.keys():
+            raise ValueError('Unknown screen type %s' % screen_type)
+        return self.factories[screen_type](screen_def)
+
     def load_from_file(self, flow_file):
         """Factory function that creates a ScreenFlow instance from
         the given XML file.
@@ -178,10 +197,15 @@ class ScreenFlow(object):
         """
         with open(flow_file, 'r') as stream:
             xml = stream.read()
-            # TODO : Perform xml validation through schema.
             content = xmltodict.parse(xml)
-            screens = content['screenflow']['screen']
+            if XML_SCREENFLOW not in content.keys():
+                raise AttributeError('No screenflow root element found')
+            screenflow_def = content[XML_SCREENFLOW]
+            if XML_SCREEN not in screenflow_def.keys():
+                raise AttributeError('No screen definition found')
+            screens = screenflow_def[XML_SCREEN]
             if isinstance(screens, list):
                 for screen in screens:
-                    self.add_screen(Screen.create(screen))
+                    self.add_screen(self.create_screen(screen))
             else:
+                self.add_screen(self.create_screen(screens))

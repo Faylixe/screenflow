@@ -51,18 +51,3 @@ class Screen(object):
         :param position:
         """
         pass
-
-    @staticmethod
-    def create(metadata):
-        """
-        :param metadata:
-        """
-        if '@type' not in metadata.keys():
-            raise AttributeError('No screen type specified.')
-        screen_type = metadata['@type']
-        if type == 'select':
-            pass
-        elif type == 'input':
-            pass
-        else:
-            raise ValueError('Unknown screen type %s' % screen_type)

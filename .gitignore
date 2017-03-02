@@ -93,3 +93,5 @@ ENV/
 /main.py
 
 /.vscode
+/test.py
+/test.xml
