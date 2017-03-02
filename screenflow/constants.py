@@ -7,3 +7,6 @@
 XML_SCREENFLOW = 'screenflow'
 XML_SCREEN = 'screen'
 XML_TYPE = '@type'
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)

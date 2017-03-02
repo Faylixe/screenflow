@@ -6,7 +6,8 @@ import xmltodict
 import pygame
 
 from screenflow.screens import configure_screenflow
-from screenflow.constant import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
+from screenflow.constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
+from screenflow import FontProvider # TODO : Check for cyclic dep here :/
 
 pygame.init()
 
@@ -51,7 +52,7 @@ class ScreenTransition(object):
         surface.blit(self.previews[1], (self.position, 0))
         return True
 
-class ScreenFlow(object):
+class ScreenFlow(FontProvider):
     """ To document. """
 
     # Constant that indicates this flow is in creation mode.
@@ -71,6 +72,7 @@ class ScreenFlow(object):
 
         :param surface: Optional surface this flow will be rendered into.
         """
+        super(ScreenFlow, self).__init__()
         configure_screenflow(self)
         self.screens = {}
         self.running = False
@@ -82,6 +84,8 @@ class ScreenFlow(object):
             resolution = (info.current_w, info.current_h)
             self.surface = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
         self.transition = None
+        self.primary_font = None
+        self.secondary_font = None
 
     def add_screen(self, screen):
         """Adds the given screen to this screen flow.
@@ -89,6 +93,7 @@ class ScreenFlow(object):
         :param screen: Screen to add to this flow.
         """
         self.screens[screen.name] = screen
+        screen.set_font_provider(self)
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access
