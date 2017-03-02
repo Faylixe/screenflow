@@ -7,7 +7,7 @@ import pygame
 
 from screenflow.screens import configure_screenflow
 from screenflow.constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
-from screenflow import FontProvider # TODO : Check for cyclic dep here :/
+from screenflow import FontManager # TODO : Check for cyclic dep here :/
 
 pygame.init()
 
@@ -84,8 +84,6 @@ class ScreenFlow(FontProvider):
             resolution = (info.current_w, info.current_h)
             self.surface = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
         self.transition = None
-        self.primary_font = None
-        self.secondary_font = None
 
     def add_screen(self, screen):
         """Adds the given screen to this screen flow.
@@ -93,7 +91,7 @@ class ScreenFlow(FontProvider):
         :param screen: Screen to add to this flow.
         """
         self.screens[screen.name] = screen
-        screen.set_font_provider(self)
+        screen.set_font_manager(self)
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access

@@ -9,34 +9,22 @@ import pygame
 class Screen(object):
     """ Base class for screen object. """
 
-    def __init__(self, background_color=WHITE, primary_color=BLACK):
+    def __init__(self, background_color=WHITE):
         """Default constructor.
 
         :param background_color:
-        :param primary_color:
         """
-        self.font_provider = None
+        self.font_manager = None
         self.background_color = background_color
-        self.primary_color = primary_color
-    
-    def set_font_provider(self, provider):
-        """
-        :param provider:
-        """
-        self.font_provider = provider
 
-    def get_primary_font(self):
-        """Returns font instance to use for rendering text.
+    def set_font_manager(self, font_manager):
         """
-        return self.font_provider.get_primary_font()
-
-    def get_secondary_font(self):
-        """Returns font instance to use for rendering text.
+        :param font_manager:
         """
-        return self.font_provider.get_secondary_font()
+        self.font_manager = font_manager
 
     def get_surface_size(self, surface):
-        """
+        """ Surface
         """
         return surface.get_size()
 
