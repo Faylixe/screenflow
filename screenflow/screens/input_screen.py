@@ -2,7 +2,7 @@
 
 """ To document """
 
-from pygame_screenflow import Screen
+from screenflow.screens import Screen
 
 class InputScreen(Screen):
     """To document.

@@ -5,9 +5,9 @@
 import xmltodict
 import pygame
 
-from screenflow.screens import configure_screenflow
-from screenflow.constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
-from screenflow import FontManager # TODO : Check for cyclic dep here :/
+from screens import configure_screenflow
+from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
+from font_manager import FontManager # TODO : Check for cyclic dep here :/
 
 pygame.init()
 

@@ -5,7 +5,7 @@
 import logging
 import pygame
 
-from screenflow.constants import BLACK
+from constants import BLACK
 
 # Configure logger.
 logging.basicConfig()
