@@ -45,7 +45,7 @@ def test_navigate_back():
     screenflow.stack.append(foo)
     screenflow.stack.append(bar)
     screenflow.navigate_back()
-    assert screenflow.state = ScreenFlow.IN_TRANSITION
+    assert screenflow.state == ScreenFlow.IN_TRANSITION
     assert len(screenflow.stack) == 1
     assert screenflow.stack[0] == foo
 
