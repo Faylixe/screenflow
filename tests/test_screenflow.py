@@ -3,7 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
-from screenflow.constants im    port XML_TYPE
+from screenflow.constants import XML_TYPE
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
