@@ -25,7 +25,7 @@ def check_created_font_holder(holder, expected_default_size=10):
     assert holder.text_color is None
     assert holder.default_size == expected_default_size
 
-def check_font_holder_value(holder, expected_text_color, expected_font=None)
+def check_font_holder_value(holder, expected_text_color, expected_font=None):
     """Ensures that font holder value matches given expected ones.
     
     :param holder: Holder to check value from.

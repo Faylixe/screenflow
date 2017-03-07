@@ -1,20 +1,12 @@
 #!/usr/bin/python
 
-""" Simple test suite for FontHolder and FontManager classes. """
+""" To document. """
 
 import pygame
 
 from screenflow import ScreenFlow, NavigationException, ScreenTransition
 from screenflow.constants import BLACK, WHITE
 from screenflow.constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
-
-def setup_module():
-    """ Module font setup """
-    pygame.font.init()
-
-def teardown_module():
-    """ Module font teardown """
-    pygame.font.quit()
 
 # Default surface size used for testing.
 DEFAULT_SURFACE_SIZE = (640, 480)
@@ -38,18 +30,21 @@ class SurfaceMock(object):
         return size
 
     def blit(self, source, position):
-        """
-        :param source:
-        :param position:
+        """ Blit method mocking.
+
+        :param source: Source to blit into this surface.
+        :param position: Position to blit source to.
         """
         self.blit_call += 1
 
 def check_transition(side, speed, width, expected_speed, expected_position):
-    """
-    
-    :param side:
-    :param expected_speed:
-    :param expected_position:
+    """ Executes and check a transition using given side, speed and surface width.
+
+    :param side: Side of the created transition.
+    :param speed: Speed of the created transition.
+    :param width: Width of the target surface transition is running into.
+    :param expected_speed: Expected effective speed value for transition.
+    :param expected_position: Expected starting position for transition.
     """
     surface = SurfaceMock()
     previews = [SurfaceMock(), SurfaceMock()]
@@ -62,11 +57,11 @@ def check_transition(side, speed, width, expected_speed, expected_position):
     return transition.position
 
 def test_forward_transition():
-    """ """
+    """ Test case for forward transition. """
     final_position = check_transition(ScreenTransition.FORWARD, 20, 480,  -20, 480)
     assert final_position < 0
 
 def test_backward_transition():
-    """ """
+    """ Test case for backward transition. """
     final_position = check_transition(ScreenTransition.BACKWARD, 20, 480,  20, 0)
     assert final_position > 480
