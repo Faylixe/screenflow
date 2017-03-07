@@ -52,7 +52,7 @@ class ScreenTransition(object):
         surface.blit(self.previews[1], (self.position, 0))
         return True
 
-class ScreenFlow(FontProvider):
+class ScreenFlow(FontManager):
     """ To document. """
 
     # Constant that indicates this flow is in creation mode.
