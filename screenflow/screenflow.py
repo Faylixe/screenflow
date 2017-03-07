@@ -73,6 +73,7 @@ class ScreenFlow(FontManager):
         super(ScreenFlow, self).__init__()
         configure_screenflow(self)
         self.screens = {}
+        self.factories = {}
         self.running = False
         self.stack = []
         self.state = ScreenFlow.CREATING
