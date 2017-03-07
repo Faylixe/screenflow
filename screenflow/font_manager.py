@@ -34,7 +34,7 @@ class FontHolder(object):
             logging.debug('Font not settled, using default Arial from system')
             self.font = pygame.font.SysFont('arial', self.default_size)
         return self.font
-        
+
     def get_text_color(self):
         """Delegate color instance getter. Creating
         one if not available using black color.

@@ -71,9 +71,9 @@ class ScreenFlow(FontManager):
         :param surface: Optional surface this flow will be rendered into.
         """
         super(ScreenFlow, self).__init__()
-        configure_screenflow(self)
         self.screens = {}
         self.factories = {}
+        configure_screenflow(self)
         self.running = False
         self.stack = []
         self.state = ScreenFlow.CREATING
@@ -103,7 +103,7 @@ class ScreenFlow(FontManager):
         if name in self.screens.keys():
             return self.screens[name]
         raise AttributeError('Unknown screen %s' % name)
-
+        
     def set_transition(self, previews, side):
         """Sets this flow as in transition using given previews and side.
 
