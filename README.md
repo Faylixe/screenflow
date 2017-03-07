@@ -1,5 +1,7 @@
 # ScreenFlow
 
+[![CircleCI](https://circleci.com/gh/Faylixe/screenflow/tree/master.svg?style=svg)](https://circleci.com/gh/Faylixe/screenflow/tree/master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d99a5f63cf241409f87661703906d33)](https://www.codacy.com/app/Faylixe/screenflow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Faylixe/screenflow&amp;utm_campaign=Badge_Grade)
+
 **ScreenFlow** is a light UI engine built on top of Pygame.
 It is primarily designed for building configuration interface for IoT devices like RaspberryPi.
 
