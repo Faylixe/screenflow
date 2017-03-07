@@ -2,7 +2,22 @@ machine:
   environment:
     AUDIODEV: null
 
+dependencies:
+  post:
+    - pip install codacy-coverage
+
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/nosetests
-    - nosetests --with-xunit --xunit-file=$CIRCLE_TEST_REPORTS/nosetests/unittests.xml
+    -> nosetests
+          --with-xunit
+          --xunit-file=$CIRCLE_TEST_REPORTS/nosetests/unittests.xml
+          --with-coverage
+          --cover-xml
+          --cover-xml-file=$CIRCLE_TEST_REPORTS/nosetests/coverage.xml
+
+deployment:
+  coverage:
+    branch: master
+    commands:
+      - python-codacy-coverage -r $CIRCLE_TEST_REPORTS/nosetests/coverage.xml
