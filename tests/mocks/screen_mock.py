@@ -2,6 +2,8 @@
 
 """ To document. """
 
+from surface_mock import SurfaceMock
+
 class ScreenMock(object):
     """ Mock class for Screen. """
 
@@ -14,3 +16,6 @@ class ScreenMock(object):
         """ """
         self.font_manager = manager
     
+    def generate_preview():
+        """ """
+        return SurfaceMock()

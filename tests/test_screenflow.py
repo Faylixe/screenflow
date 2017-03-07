@@ -3,7 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
-from screenflow.constants import XML_TYPE
+from screenflow.constants im    port XML_TYPE
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
@@ -104,10 +104,10 @@ def test_load_from_not_existing_file():
 def test_load_from_file_without_root():
     """ Test case for XML file loading error handling (no root element). """
     screenflow = ScreenFlow()
-    screenflow.load_from_file('resources/test_screenflow_without_root.xml')
+    screenflow.load_from_file('tests/resources/test_screenflow_without_root.xml')
 
 @raises(AttributeError)
 def test_load_from_file_without_screen():
     """ Test case for XML file loading error handling (no screen element). """
     screenflow = ScreenFlow()
-    screenflow.load_from_file('resources/test_screenflow_without_screen.xml')
+    screenflow.load_from_file('tests/resources/test_screenflow_without_screen.xml')

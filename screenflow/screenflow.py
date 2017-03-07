@@ -138,7 +138,7 @@ class ScreenFlow(FontManager):
 
         :returns: Created callback function.
         """
-        if len(self.stack) == 1:
+        if len(self.stack) <= 1:
             raise NavigationException('Cannot navigate back, no more screen.')
         screen = self.stack.pop()
         previews = (self.stack[-1].generate_preview(), screen.generate_preview())
