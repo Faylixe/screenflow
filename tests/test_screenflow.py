@@ -96,18 +96,18 @@ def test_load_from_file():
 
 @raises(IOError)
 def test_load_from_not_existing_file():
-    """ Test case for XML file loading. """
+    """ Test case for XML file loading error handling (file not exists). """
     screenflow = ScreenFlow()
     screenflow.load_from_file('ghost_file.xml')
 
 @raises(AttributeError)
 def test_load_from_file_without_root():
-    """ Test case for XML file loading. """
+    """ Test case for XML file loading error handling (no root element). """
     screenflow = ScreenFlow()
     screenflow.load_from_file('resources/test_screenflow_without_root.xml')
 
 @raises(AttributeError)
 def test_load_from_file_without_screen():
-    """ Test case for XML file loading. """
+    """ Test case for XML file loading error handling (no screen element). """
     screenflow = ScreenFlow()
     screenflow.load_from_file('resources/test_screenflow_without_screen.xml')
