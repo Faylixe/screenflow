@@ -1,3 +1,7 @@
+machine:
+  environment:
+    AUDIODEV: null
 test:
   override:
-    - nosetests --with-xunit
+    - mkdir -p $CIRCLE_TEST_REPORTS/nosetests
+    - nosetests --with-xunit --xunit-file=$CIRCLE_TEST_REPORTS/nosetests/unittests.xml
