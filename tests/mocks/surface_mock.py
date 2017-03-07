@@ -23,7 +23,7 @@ class SurfaceMock(object):
 
         :returns: Size of this surface.
         """
-        return size
+        return self.size
 
     def blit(self, source, position):
         """ Blit method mocking.
