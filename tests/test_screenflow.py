@@ -17,7 +17,7 @@ def test_add_screen():
     assert screen.font_manager == screenflow
     assert name in screenflow.screens.keys()
     assert screenflow.screens[name] == screen
-    assert screenflow.foo = screen
+    assert screenflow.foo == screen
 
 def test_navigate_to():
     """ Test case for navigating to another screen. """
