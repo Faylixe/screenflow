@@ -29,9 +29,9 @@ def test_forward_transition():
     final_position = check_transition(
         ScreenTransition.FORWARD,
         20,
-        DEFAULT_SURFACE_SIZE[1],
+        DEFAULT_SURFACE_SIZE[0],
         -20,
-        DEFAULT_SURFACE_SIZE[1])
+        DEFAULT_SURFACE_SIZE[0])
     assert final_position < 0
 
 def test_backward_transition():
@@ -39,7 +39,7 @@ def test_backward_transition():
     final_position = check_transition(
         ScreenTransition.BACKWARD,
         20,
-        DEFAULT_SURFACE_SIZE[1],
+        DEFAULT_SURFACE_SIZE[0],
         20,
         0)
-    assert final_position > DEFAULT_SURFACE_SIZE[1]
+    assert final_position > DEFAULT_SURFACE_SIZE[0]
