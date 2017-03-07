@@ -26,7 +26,7 @@ def test_navigate_to():
     bar = ScreenMock('bar')
     screenflow.stack.append(foo)
     screenflow.navigate_to(bar)
-    assert screenflow.state = ScreenFlow.IN_TRANSITION
+    assert screenflow.state == ScreenFlow.IN_TRANSITION
     assert len(screenflow.stack) == 2
     assert screenflow.stack[0] == foo
     assert screenflow.stack[1] == bar
