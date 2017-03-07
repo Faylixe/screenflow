@@ -74,7 +74,7 @@ def test_draw_primary_text():
     surface = SurfaceMock()
     manager.draw_primary_text('foo', surface, DEFAULT_DRAW_POSITION)
     assert surface.blit_call == 1
-    
+
 def test_draw_secondary_text():
     """ Test case for secondary text drawing. """
     manager = FontManager()
