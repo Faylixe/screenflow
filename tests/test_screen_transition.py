@@ -2,9 +2,8 @@
 
 """ To document. """
 
-from screenflow import ScreenTransition
-
-from tests.mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
+from screenflow.screenflow import ScreenTransition
+from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 
 def check_transition(side, speed, width, expected_speed, expected_position):
     """ Executes and check a transition using given side, speed and surface width.

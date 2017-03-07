@@ -9,6 +9,7 @@ from screenflow.constants import BLACK, WHITE
 
 def setup_module():
     """ Module font setup """
+    pygame.init()
     pygame.font.init()
 
 def teardown_module():

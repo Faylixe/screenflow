@@ -9,8 +9,6 @@ from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 from font_manager import FontManager # TODO : Check for cyclic dep here :/
 
-pygame.init()
-
 class NavigationException(Exception):
     """ Custom exception for navigation issues. """
     pass
