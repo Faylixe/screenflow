@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" Unit test case for ScreenTransition. """
+""" Simple test suite for ScreenTransition class. """
 
 from screenflow.screenflow import ScreenTransition
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE

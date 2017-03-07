@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" To document. """
+""" Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
 from screenflow.constants import XML_TYPE
