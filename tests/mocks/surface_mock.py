@@ -2,8 +2,6 @@
 
 """ To document. """
 
-import pygame
-
 # Default surface size used for testing.
 DEFAULT_SURFACE_SIZE = (640, 480)
 

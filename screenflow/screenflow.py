@@ -157,6 +157,7 @@ class ScreenFlow(FontManager):
         """
         del self.stack[:]
         self.running = True
+        # TODO : Set current state to ACTIVE ?
         while self.running:
             pygame.display.flip()
             current = self.get_current_screen()

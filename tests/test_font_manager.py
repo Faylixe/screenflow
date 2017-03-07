@@ -3,7 +3,6 @@
 """ Simple test suite for FontHolder and FontManager classes. """
 
 import pygame
-
 from screenflow.font_manager import FontHolder, FontManager
 from screenflow.constants import BLACK, WHITE
 

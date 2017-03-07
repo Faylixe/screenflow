@@ -1,6 +1,7 @@
 machine:
   environment:
     AUDIODEV: null
+
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/nosetests

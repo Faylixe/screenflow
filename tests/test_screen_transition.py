@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" To document. """
+""" Unit test case for ScreenTransition. """
 
 from screenflow.screenflow import ScreenTransition
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
