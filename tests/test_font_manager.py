@@ -3,8 +3,12 @@
 """ Simple test suite for FontHolder and FontManager classes. """
 
 import pygame
-from screenflow.font_manager import FontHolder, FontManager
+from screenflow.font_manager import FontHolder, FontManager, draw_text
 from screenflow.constants import BLACK, WHITE
+from mocks.surface_mock import SurfaceMock
+
+# Drawing position for testing.
+DEFAULT_DRAW_POSITION = (0, 0)
 
 def setup_module():
     """ Module font setup """
@@ -56,3 +60,24 @@ def test_font_manager():
     manager = FontManager()
     check_created_font_holder(manager.primary, 15)
     check_created_font_holder(manager.secondary)
+
+def test_draw_text():
+    """ Test case for draw_test. """
+    holder = FontHolder(10)
+    surface = SurfaceMock()
+    draw_text('foo', surface, holder, DEFAULT_DRAW_POSITION)
+    assert surface.blit_call == 1
+
+def test_draw_primary_text():
+    """ Test case for primary text drawing. """
+    manager = FontManager()
+    surface = SurfaceMock()
+    manager.draw_primary_text('foo', surface, DEFAULT_DRAW_POSITION)
+    assert surface.blit_call == 1
+    
+def test_draw_secondary_text():
+    """ Test case for secondary text drawing. """
+    manager = FontManager()
+    surface = SurfaceMock()
+    manager.draw_secondary_text('foo', surface, DEFAULT_DRAW_POSITION)
+    assert surface.blit_call == 1
