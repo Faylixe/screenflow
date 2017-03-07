@@ -16,6 +16,6 @@ class ScreenMock(object):
         """ """
         self.font_manager = manager
     
-    def generate_preview():
+    def generate_preview(self):
         """ """
         return SurfaceMock()
