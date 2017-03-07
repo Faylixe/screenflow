@@ -12,10 +12,6 @@ def setup_module():
     pygame.init()
     pygame.font.init()
 
-def teardown_module():
-    """ Module font teardown """
-    pygame.font.quit()
-
 def check_created_font_holder(holder, expected_default_size=10):
     """Ensures the given created holder as default expected values.
 
