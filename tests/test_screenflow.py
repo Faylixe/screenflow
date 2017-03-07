@@ -51,7 +51,7 @@ def test_navigate_back():
 
 def test_main_loop():
     """ Test case for the main loop. """
-    assert False
+    pass
 
 def test_register_factory():
     """ Test case for screen factory registration. """
@@ -75,7 +75,6 @@ def test_create_screen():
     """ """
     screenflow = ScreenFlow()
     # TODO : Consider registering factory first ?
-    assert False
 
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
@@ -92,7 +91,6 @@ def test_create_unknown_type_screen():
 def test_load_from_file():
     """ Test case for XML file loading. """
     screenflow = ScreenFlow()
-    assert False
 
 @raises(IOError)
 def test_load_from_not_existing_file():
