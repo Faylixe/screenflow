@@ -95,8 +95,8 @@ def test_create_screen():
     screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
     assert isinstance(screen, MessageScreen)
-    assert screen.message = 'test'
-    assert screen.name = 'foo'
+    assert screen.message == 'test'
+    assert screen.name == 'foo'
 
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
