@@ -4,6 +4,7 @@
 
 from screenflow import ScreenFlow, NavigationException
 from screenflow.constants import XML_TYPE
+from screenflow.screens import MessageScreen
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
@@ -18,6 +19,20 @@ def test_add_screen():
     assert name in screenflow.screens.keys()
     assert screenflow.screens[name] == screen
     assert screenflow.foo == screen
+
+def test_get_current_screen():
+    """ Test case for top stack access. """
+    screenflow = ScreenFlow()
+    screen = ScreenMock('foo')
+    screenflow.stack.append(screen)
+    current = screenflow.get_current_screen()
+    assert current == screen
+
+@raises(IndexErrpr)
+def test_get_current_screen_empty_stack():
+    """ Test case for empty stack access. """
+    screenflow = ScreenFlow()
+    screenflow.get_current_screen()
 
 def test_navigate_to():
     """ Test case for navigating to another screen. """
@@ -72,9 +87,12 @@ def test_register_factory_duplicate():
     screenflow.register_factory(name, None)
 
 def test_create_screen():
-    """ """
+    """ Test case for create_screen method. """
     screenflow = ScreenFlow()
-    # TODO : Consider registering factory first ?
+    screendef = {}
+    screendef[XML_TYPE] = 'message'
+    screen = screenflow.create_screen()
+    assert isinstance(screen, MessageScreen)
 
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
@@ -91,7 +109,10 @@ def test_create_unknown_type_screen():
 def test_load_from_file():
     """ Test case for XML file loading. """
     screenflow = ScreenFlow()
-
+    screenflow.load_from_file('tests/resources/test_screenflow.xml')
+    assert isinstance(screenflow.foo, MessageScreen)
+    #TODO : Check stack ?
+    
 @raises(IOError)
 def test_load_from_not_existing_file():
     """ Test case for XML file loading error handling (file not exists). """

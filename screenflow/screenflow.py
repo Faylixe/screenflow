@@ -149,6 +149,8 @@ class ScreenFlow(FontManager):
 
         :returns: Current screen displayed.
         """
+        if len(self.stack) == 0:
+            raise IndexError('Screen stack is empty')
         return self.stack[-1]
 
     def run(self):
