@@ -3,7 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
-from screenflow.constants import XML_TYPE
+from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
@@ -91,6 +91,7 @@ def test_create_screen():
     screenflow = ScreenFlow()
     screendef = {}
     screendef[XML_TYPE] = 'message'
+    screendef[XML_NAME] = 'foo'
     screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
     assert isinstance(screen, MessageScreen)
