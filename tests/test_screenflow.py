@@ -95,6 +95,8 @@ def test_create_screen():
     screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
     assert isinstance(screen, MessageScreen)
+    assert screen.message = 'test'
+    assert screen.name = 'foo'
 
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
@@ -112,6 +114,7 @@ def test_load_from_file():
     """ Test case for XML file loading. """
     screenflow = ScreenFlow()
     screenflow.load_from_file('tests/resources/test_screenflow.xml')
+    print str(screenflow.screens)
     assert isinstance(screenflow.foo, MessageScreen)
     #TODO : Check stack ?
 
