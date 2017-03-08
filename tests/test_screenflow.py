@@ -91,6 +91,7 @@ def test_create_screen():
     screenflow = ScreenFlow()
     screendef = {}
     screendef[XML_TYPE] = 'message'
+    screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
     assert isinstance(screen, MessageScreen)
 
