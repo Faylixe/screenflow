@@ -91,7 +91,7 @@ def test_create_screen():
     screenflow = ScreenFlow()
     screendef = {}
     screendef[XML_TYPE] = 'message'
-    screen = screenflow.create_screen()
+    screen = screenflow.create_screen(screendef)
     assert isinstance(screen, MessageScreen)
 
 @raises(AttributeError)

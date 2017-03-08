@@ -7,6 +7,7 @@ import logging
 from math import floor
 
 from screenflow.screens import Screen
+from screenflow.constants import XML_NAME
 
 # Configure logger.
 logging.basicConfig()
@@ -65,12 +66,12 @@ class MessageScreen(Screen):
     a text message, and allows transition on touch event.
     """
 
-    def __init__(self, message):
+    def __init__(self, name, message):
         """Default constructor.
 
         :param message: Message displayed into the screen.
         """
-        super(MessageScreen, self).__init__(self)
+        super(MessageScreen, self).__init__(self, name)
         self.raw_message = (' '.join(message.split())).split('\n')
         self.message = Message()
         self.callback = None
@@ -124,4 +125,4 @@ def factory(screen_def):
     """
     if XML_MESSAGE not in screen_def:
         raise AttributeError('No message set in screen definition')
-    return MessageScreen(screen_def[XML_MESSAGE])
+    return MessageScreen(screen_def[XML_NAME], screen_def[XML_MESSAGE])

@@ -9,11 +9,13 @@ import pygame
 class Screen(object):
     """ Base class for screen object. """
 
-    def __init__(self, background_color=WHITE):
+    def __init__(self, name, background_color=WHITE):
         """Default constructor.
 
+        :param name:
         :param background_color:
         """
+        self.name = name
         self.font_manager = None
         self.background_color = background_color
 

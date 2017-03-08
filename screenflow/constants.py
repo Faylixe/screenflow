@@ -6,6 +6,7 @@
 XML_SCREENFLOW = 'screenflow'
 XML_SCREEN = 'screen'
 XML_TYPE = '@type'
+XML_NAME = '@name'
 
 # Common color.
 WHITE = (255, 255, 255)
