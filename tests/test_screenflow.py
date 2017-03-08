@@ -28,7 +28,7 @@ def test_get_current_screen():
     current = screenflow.get_current_screen()
     assert current == screen
 
-@raises(IndexErrpr)
+@raises(IndexError)
 def test_get_current_screen_empty_stack():
     """ Test case for empty stack access. """
     screenflow = ScreenFlow()
@@ -112,7 +112,7 @@ def test_load_from_file():
     screenflow.load_from_file('tests/resources/test_screenflow.xml')
     assert isinstance(screenflow.foo, MessageScreen)
     #TODO : Check stack ?
-    
+
 @raises(IOError)
 def test_load_from_not_existing_file():
     """ Test case for XML file loading error handling (file not exists). """
