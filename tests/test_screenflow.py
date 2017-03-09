@@ -5,7 +5,7 @@
 from screenflow import ScreenFlow, NavigationException
 from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
-from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
+from mocks.surface_mock import SurfaceMock
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
 
@@ -27,7 +27,7 @@ def test_add_screen():
 def test_unknown_screen_access():
     """ Test case for unknown screen access. """
     screenflow = ScreenFlow(surface)
-    screen = screenflow.foo
+    screenflow.foo
 
 def test_get_current_screen():
     """ Test case for top stack access. """

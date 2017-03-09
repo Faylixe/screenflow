@@ -11,6 +11,7 @@ class ScreenMock(object):
         """ Default constructor. """
         self.font_manager = None
         self.name = name
+        self.preview_generated = 0
 
     def set_font_manager(self, manager):
         """ """
@@ -18,4 +19,5 @@ class ScreenMock(object):
 
     def generate_preview(self):
         """ """
+        self.preview_generated += 1
         return SurfaceMock()
