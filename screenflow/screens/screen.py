@@ -1,6 +1,27 @@
 #!/usr/bin/python
 
-""" To document """
+"""
+
+    Screen
+    ======
+
+    A **Screen** is a basic unit which is manipulated by a **Screenflow**.
+
+    Rendering
+    ---------
+
+    Text rendering
+    ~~~~~~~~~~~~~~
+
+    In order to draw text, a **Screen** use a **FontManager**, which manages.
+
+    Background
+    ~~~~~~~~~~
+
+    Event handling
+    --------------
+
+"""
 
 from screenflow.constants import WHITE
 

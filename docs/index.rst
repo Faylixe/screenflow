@@ -13,6 +13,7 @@ Contents
    :caption: Screenflow
    
    getting_started
+   screen
    screenflow
 
 .. _screen-docs:
