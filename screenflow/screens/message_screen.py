@@ -20,12 +20,12 @@
     Callback binding
     ----------------
 
-    Given a ``screenflow`` instance, with registered ``foo`` message screen,
+    Given a *screenflow* instance, with registered *foo* message screen,
     callback binding can be achieved using ``on_touch`` decorator:
 
     .. code-block:: python
 
-        @screeflow.foo.on_touch
+        @screenflow.foo.on_touch
         def on_foo_touch():
             # TODO : Callback action here.
 
