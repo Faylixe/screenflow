@@ -24,7 +24,7 @@ That is why lot of basic **Screen** implementation are already available as in.
 Installation
 ------------
 
-**Screenflow** is available on *PyPi* repository and can then be installed through *pip* :
+**Screenflow** is available on **PyPi** repository and can then be installed through *pip* :
 
 .. code-block:: bash
 
