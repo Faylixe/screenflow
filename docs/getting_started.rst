@@ -24,5 +24,29 @@ That is why lot of basic **Screen** implementation are already available as in.
 Installation
 ------------
 
+**Screenflow** is available on *PyPi* repository and can then be installed through *pip* :
+
+.. highlight: bash
+
+    pip install screenflow
+
 First screenflow
 ----------------
+
+Simple hello world with **screenflow** looks like this :
+
+.. code-block:: python
+
+    from screenflow import ScreenFlow
+    from screenflow.screens import MessageScreen
+
+    screenflow = ScreenFlow()
+    message = MessageScreen('intro', 'Hello screenflow !')
+
+    @screenflow.intro.on_touch()
+    def on_message_touch():
+        screenflow.quit()
+    
+    screenflow.add_screen(message)
+    screenflow.run(message)
+
