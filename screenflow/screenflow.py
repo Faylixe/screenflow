@@ -1,6 +1,19 @@
 #!/usr/bin/python
 
-""" To document """
+"""
+    ScreenFlow
+    ==========
+
+    Screen binding
+    --------------
+
+    XML loading
+    ------------
+
+    Custom screen
+    -------------
+
+"""
 
 import xmltodict
 import pygame
