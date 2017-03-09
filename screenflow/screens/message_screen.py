@@ -171,7 +171,8 @@ XML_MESSAGE = 'message'
 
 
 def factory(screen_def):
-    """Static factory function for creating a message screen from
+    """Static factory function for creating a message screen
+    from a given XML screen definition.
 
     :param screen_def: Screen definition as a dictionary from XML parsing.
     :returns: Created message screen instance.
