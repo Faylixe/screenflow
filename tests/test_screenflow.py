@@ -9,6 +9,7 @@ from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
 
+# Mock surface used for created screenflow.
 surface = SurfaceMock()
 
 def test_add_screen():
@@ -21,6 +22,12 @@ def test_add_screen():
     assert name in screenflow.screens.keys()
     assert screenflow.screens[name] == screen
     assert screenflow.foo == screen
+
+@raises(AttributeError)
+def test_unknown_screen_access():
+    """ Test case for unknown screen access. """
+    screenflow = ScreenFlow(surface)
+    screen = screenflow.foo
 
 def test_get_current_screen():
     """ Test case for top stack access. """
@@ -96,7 +103,6 @@ def test_create_screen():
     screendef[XML_NAME] = 'foo'
     screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
-    print(screen.name)
     assert isinstance(screen, MessageScreen)
     assert screen.raw_message == ['test']
     assert screen.name == 'foo'
@@ -113,12 +119,21 @@ def test_create_unknown_type_screen():
     screenflow = ScreenFlow(surface)
     screenflow.create_screen({XML_TYPE: 'foo'})
 
-def test_load_from_file():
-    """ Test case for XML file loading. """
+def check_xml_screenflow(file):
+    """ Base test for XML screenflow loading. """
     screenflow = ScreenFlow(surface)
-    screenflow.load_from_file('tests/resources/test_screenflow.xml')
+    screenflow.load_from_file(file)
     assert isinstance(screenflow.foo, MessageScreen)
-    #TODO : Check stack ?
+    return screenflow
+
+def test_load_from_file_single():
+    """ Test case for XML file loading with one screen. """
+    check_xml_screenflow('tests/resources/test_single_screenflow.xml')
+
+def test_load_from_file_multiple():
+    """ Test case for XML file loading with multiple screen. """
+    screenflow = check_xml_screenflow('tests/resources/test_multiple_screenflow.xml')
+    assert isinstance(screenflow.bar, MessageScreen)
 
 @raises(IOError)
 def test_load_from_not_existing_file():
