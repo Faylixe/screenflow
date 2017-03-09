@@ -9,11 +9,13 @@ from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
 
+surface = SurfaceMock()
+
 def test_add_screen():
     """ Test case for screen insertion. """
     name = 'foo'
     screen = ScreenMock(name)
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.add_screen(screen)
     assert screen.font_manager == screenflow
     assert name in screenflow.screens.keys()
@@ -22,7 +24,7 @@ def test_add_screen():
 
 def test_get_current_screen():
     """ Test case for top stack access. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screen = ScreenMock('foo')
     screenflow.stack.append(screen)
     current = screenflow.get_current_screen()
@@ -31,12 +33,12 @@ def test_get_current_screen():
 @raises(IndexError)
 def test_get_current_screen_empty_stack():
     """ Test case for empty stack access. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.get_current_screen()
 
 def test_navigate_to():
     """ Test case for navigating to another screen. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
     screenflow.stack.append(foo)
@@ -48,13 +50,13 @@ def test_navigate_to():
 
 @raises(NavigationException)
 def test_navigate_back_error():
-    """ Test case for navigating back error handling. """
-    screenflow = ScreenFlow()
+    """ Test case for navigating back error hxzandling. """
+    screenflow = ScreenFlow(surface)
     screenflow.navigate_back()
 
 def test_navigate_back():
-    """ Test case for navigating back. """
-    screenflow = ScreenFlow()
+    """ Test case for navigatixng back. """
+    screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
     screenflow.stack.append(foo)
