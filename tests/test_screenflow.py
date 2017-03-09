@@ -8,9 +8,11 @@ from screenflow.screens import MessageScreen
 from mocks.surface_mock import SurfaceMock
 from mocks.screen_mock import ScreenMock
 from nose.tools import raises
+from os.path import join
 
 # Mock surface used for created screenflow.
 surface = SurfaceMock()
+
 
 def test_add_screen():
     """ Test case for screen insertion. """
@@ -23,13 +25,15 @@ def test_add_screen():
     assert screenflow.screens[name] == screen
     assert screenflow.foo == screen
 
+
 @raises(AttributeError)
 def test_unknown_screen_access():
     """ Test case for unknown screen access. """
     screenflow = ScreenFlow(surface)
     screen = screenflow.foo
     assert screen is not None
-    
+
+
 def test_get_current_screen():
     """ Test case for top stack access. """
     screenflow = ScreenFlow(surface)
@@ -38,11 +42,13 @@ def test_get_current_screen():
     current = screenflow.get_current_screen()
     assert current == screen
 
+
 @raises(IndexError)
 def test_get_current_screen_empty_stack():
     """ Test case for empty stack access. """
     screenflow = ScreenFlow(surface)
     screenflow.get_current_screen()
+
 
 def test_navigate_to():
     """ Test case for navigating to another screen. """
@@ -56,11 +62,13 @@ def test_navigate_to():
     assert screenflow.stack[0] == foo
     assert screenflow.stack[1] == bar
 
+
 @raises(NavigationException)
 def test_navigate_back_error():
-    """ Test case for navigating back error hxzandling. """
+    """ Test case for navigating back error handling. """
     screenflow = ScreenFlow(surface)
     screenflow.navigate_back()
+
 
 def test_navigate_back():
     """ Test case for navigatixng back. """
@@ -74,19 +82,23 @@ def test_navigate_back():
     assert len(screenflow.stack) == 1
     assert screenflow.stack[0] == foo
 
+
 def test_main_loop():
     """ Test case for the main loop. """
     pass
 
+
 def test_register_factory():
     """ Test case for screen factory registration. """
     screenflow = ScreenFlow(surface)
+
     def factory(metadata):
         pass
     name = 'foo'
     screenflow.register_factory(name, factory)
     assert name in screenflow.factories.keys()
     assert screenflow.factories[name] == factory
+
 
 @raises(ValueError)
 def test_register_factory_duplicate():
@@ -95,6 +107,7 @@ def test_register_factory_duplicate():
     name = 'foo'
     screenflow.register_factory(name, None)
     screenflow.register_factory(name, None)
+
 
 def test_create_screen():
     """ Test case for create_screen method. """
@@ -108,17 +121,20 @@ def test_create_screen():
     assert screen.raw_message == ['test']
     assert screen.name == 'foo'
 
+
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
     """ Test case for creating screen without type. """
     screenflow = ScreenFlow(surface)
     screenflow.create_screen({})
 
+
 @raises(ValueError)
 def test_create_unknown_type_screen():
     """ Test case for creating screen with unknown type. """
     screenflow = ScreenFlow(surface)
     screenflow.create_screen({XML_TYPE: 'foo'})
+
 
 def check_xml_screenflow(file):
     """ Base test for XML screenflow loading. """
@@ -127,14 +143,21 @@ def check_xml_screenflow(file):
     assert isinstance(screenflow.foo, MessageScreen)
     return screenflow
 
+
 def test_load_from_file_single():
     """ Test case for XML file loading with one screen. """
     check_xml_screenflow('tests/resources/test_single_screenflow.xml')
 
+# Path for XML test resources.
+RESOURCES_PATH = 'tests/resources'
+
+
 def test_load_from_file_multiple():
     """ Test case for XML file loading with multiple screen. """
-    screenflow = check_xml_screenflow('tests/resources/test_multiple_screenflow.xml')
+    file = join(RESOURCES_PATH, 'test_multiple_screenflow.xml')
+    screenflow = check_xml_screenflow(file)
     assert isinstance(screenflow.bar, MessageScreen)
+
 
 @raises(IOError)
 def test_load_from_not_existing_file():
@@ -142,14 +165,18 @@ def test_load_from_not_existing_file():
     screenflow = ScreenFlow(surface)
     screenflow.load_from_file('ghost_file.xml')
 
+
 @raises(AttributeError)
 def test_load_from_file_without_root():
     """ Test case for XML file loading error handling (no root element). """
+    file = join(RESOURCES_PATH, 'test_screenflow_without_root.xml')
     screenflow = ScreenFlow(surface)
-    screenflow.load_from_file('tests/resources/test_screenflow_without_root.xml')
+    screenflow.load_from_file(file)
+
 
 @raises(AttributeError)
 def test_load_from_file_without_screen():
     """ Test case for XML file loading error handling (no screen element). """
+    file = join(RESOURCES_PATH, 'test_screenflow_without_screen.xml')
     screenflow = ScreenFlow(surface)
-    screenflow.load_from_file('tests/resources/test_screenflow_without_screen.xml')
+    screenflow.load_from_file(file)

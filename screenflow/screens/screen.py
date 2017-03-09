@@ -6,6 +6,7 @@ from screenflow.constants import WHITE
 
 import pygame
 
+
 class Screen(object):
     """ Base class for screen object. """
 

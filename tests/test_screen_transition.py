@@ -5,6 +5,7 @@
 from screenflow.screenflow import ScreenTransition
 from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
 
+
 def check_transition(side, speed, width, expected_speed, expected_position):
     """ Executes and check a transition using given side, speed and surface width.
 
@@ -24,6 +25,7 @@ def check_transition(side, speed, width, expected_speed, expected_position):
     assert surface.blit_call == (width / speed) * 2
     return transition.position
 
+
 def test_forward_transition():
     """ Test case for forward transition. """
     final_position = check_transition(
@@ -33,6 +35,7 @@ def test_forward_transition():
         -20,
         DEFAULT_SURFACE_SIZE[0])
     assert final_position < 0
+
 
 def test_backward_transition():
     """ Test case for backward transition. """

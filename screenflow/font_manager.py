@@ -11,6 +11,7 @@ from constants import BLACK
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
+
 class FontHolder(object):
     """Holder class for a font and a text color.
 
@@ -46,6 +47,7 @@ class FontHolder(object):
             self.text_color = BLACK
         return self.text_color
 
+
 def draw_text(text, surface, holder, position):
     """Simple methods that draws text on the given surface
     using the given font holder for resources.
@@ -58,6 +60,7 @@ def draw_text(text, surface, holder, position):
     font = holder.get_font()
     text_color = holder.get_text_color()
     surface.blit(font.render(text, 1, text_color, None), position)
+
 
 class FontManager(object):
     """A FontManager is responsible for storing two fonts :

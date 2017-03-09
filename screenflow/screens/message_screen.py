@@ -1,4 +1,4 @@
-##!/usr/bin/python
+# !/usr/bin/python
 
 """ To document """
 
@@ -12,6 +12,7 @@ from screenflow.constants import XML_NAME
 # Configure logger.
 logging.basicConfig()
 logger = logging.getLogger(__name__)
+
 
 class Message(object):
     """ To document. """
@@ -34,7 +35,8 @@ class Message(object):
             if tokens_size == 0:
                 logging.warning('Empty line detected')
             elif tokens_size == 1:
-                logging.warning('Cannot split line to avoid text overflow : %s', line)
+                logging.warning(
+                    'Cannot split line to avoid text overflow : %s', line)
             else:
                 middle = int(floor(len(tokens) / 2))
                 return (tokens[:middle], tokens[middle:])
@@ -60,6 +62,7 @@ class Message(object):
             normalized = buffer
             if not update_performed:
                 break
+
 
 class MessageScreen(Screen):
     """MessageScreen class. A MessageScreen aims to only display
@@ -109,14 +112,17 @@ class MessageScreen(Screen):
         x = (full_surface_size[0] - self.message.max_line_width) / 2
         y = (full_surface_size[1] - self.message.max_line_height) / 2
         for line in self.message.text:
-            text_surface = font.render(line, 1, self.primary_color, None)    
+            text_surface = font.render(line, 1, self.primary_color, None)
             text_surface_width, _ = text_surface.get_size()
-            text_surface_start = x + ((self.message.max_line_width - text_surface_width) / 2)
+            text_surface_start = x + \
+                ((self.message.max_line_width - text_surface_width) / 2)
             surface.blit(text_surface, (text_surface_start, y))
             y += self.message.max_line_height
 
+
 # XML tag for message parameter.
 XML_MESSAGE = 'message'
+
 
 def factory(screen_def):
     """Static factory function for creating a message screen from

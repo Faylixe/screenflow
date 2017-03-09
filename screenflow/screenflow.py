@@ -9,9 +9,11 @@ from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 from font_manager import FontManager
 
+
 class NavigationException(Exception):
     """ Custom exception for navigation issues. """
     pass
+
 
 class ScreenTransition(object):
     """ Simple class for managing transition between two given screens. """
@@ -50,6 +52,7 @@ class ScreenTransition(object):
         surface.blit(self.previews[1], (self.position, 0))
         return True
 
+
 class ScreenFlow(FontManager):
     """ To document. """
 
@@ -81,7 +84,9 @@ class ScreenFlow(FontManager):
         if self.surface is None:
             info = pygame.display.Info()
             resolution = (info.current_w, info.current_h)
-            self.surface = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
+            self.surface = pygame.display.set_mode(
+                resolution,
+                pygame.FULLSCREEN)
         self.transition = None
 
     def add_screen(self, screen):
@@ -126,7 +131,9 @@ class ScreenFlow(FontManager):
         :param screen: Screen to navigate to.
         :returns: Created callback function.
         """
-        previews = (self.stack[-1].generate_preview(), screen.generate_preview())
+        previews = (
+            self.stack[-1].generate_preview(),
+            screen.generate_preview())
         self.stack.append(screen)
         self.set_transition(previews, ScreenTransition.FORWARD)
 
@@ -141,7 +148,8 @@ class ScreenFlow(FontManager):
         if len(self.stack) <= 1:
             raise NavigationException('Cannot navigate back, no more screen.')
         screen = self.stack.pop()
-        previews = (self.stack[-1].generate_preview(), screen.generate_preview())
+        previews = (self.stack[-1].generate_preview(),
+                    screen.generate_preview())
         self.set_transition(previews, ScreenTransition.FORWARD)
 
     def get_current_screen(self):
@@ -176,7 +184,7 @@ class ScreenFlow(FontManager):
         """Registers the given factory for the given type.
 
         :param type_name: Type name to registered factory under.
-        :param factory: Factory function used for creating associated screen type instance.
+        :param factory: Factory function used for creating associated type.
         """
         if type_name in self.factories.keys():
             raise ValueError('Screen type %s already registered' % type_name)

@@ -4,6 +4,7 @@
 
 from surface_mock import SurfaceMock
 
+
 class ScreenMock(object):
     """ Mock class for Screen. """
 

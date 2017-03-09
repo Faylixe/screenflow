@@ -10,10 +10,12 @@ from mocks.surface_mock import SurfaceMock
 # Drawing position for testing.
 DEFAULT_DRAW_POSITION = (0, 0)
 
+
 def setup_module():
     """ Module font setup """
     pygame.init()
     pygame.font.init()
+
 
 def check_created_font_holder(holder, expected_default_size=10):
     """Ensures the given created holder as default expected values.
@@ -24,6 +26,7 @@ def check_created_font_holder(holder, expected_default_size=10):
     assert holder.font is None
     assert holder.text_color is None
     assert holder.default_size == expected_default_size
+
 
 def check_font_holder_value(holder, expected_text_color, expected_font=None):
     """Ensures that font holder value matches given expected ones.
@@ -40,11 +43,13 @@ def check_font_holder_value(holder, expected_text_color, expected_font=None):
     assert text_color is not None
     assert text_color == expected_text_color
 
+
 def test_default_font_holder():
     """ Test case for default unsettled font holder instance. """
     holder = FontHolder(10)
     check_created_font_holder(holder)
     check_font_holder_value(holder, BLACK)
+
 
 def test_custom_font_holder():
     """ Test case for settled font holder instance. """
@@ -55,11 +60,13 @@ def test_custom_font_holder():
     holder.text_color = WHITE
     check_font_holder_value(holder, WHITE, font)
 
+
 def test_font_manager():
     """ FontManager test. """
     manager = FontManager()
     check_created_font_holder(manager.primary, 15)
     check_created_font_holder(manager.secondary)
+
 
 def test_draw_text():
     """ Test case for draw_test. """
@@ -68,12 +75,14 @@ def test_draw_text():
     draw_text('foo', surface, holder, DEFAULT_DRAW_POSITION)
     assert surface.blit_call == 1
 
+
 def test_draw_primary_text():
     """ Test case for primary text drawing. """
     manager = FontManager()
     surface = SurfaceMock()
     manager.draw_primary_text('foo', surface, DEFAULT_DRAW_POSITION)
     assert surface.blit_call == 1
+
 
 def test_draw_secondary_text():
     """ Test case for secondary text drawing. """

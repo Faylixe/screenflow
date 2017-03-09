@@ -5,6 +5,7 @@
 # Default surface size used for testing.
 DEFAULT_SURFACE_SIZE = (640, 480)
 
+
 class SurfaceMock(object):
     """ Mock class for pygame Surface. """
 
