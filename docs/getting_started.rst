@@ -26,7 +26,7 @@ Installation
 
 **Screenflow** is available on *PyPi* repository and can then be installed through *pip* :
 
-.. highlight: bash
+.. code-block:: bash
 
     pip install screenflow
 
