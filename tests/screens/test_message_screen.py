@@ -78,7 +78,7 @@ def test_message_lines():
     sizer = FontHolder(10)
     text = 'This is a very long text which requires to be splitted'
     message = Message(text)
-    lines = message.lines(sizer, 200)
+    lines = message.lines(sizer, 100)
     assert len(lines) == 2
     assert lines[0] == 'This is a very long'
     assert lines[1] == 'text which requires to be splitted'
