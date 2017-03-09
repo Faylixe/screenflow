@@ -3,11 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Screenflow
+Contents
 ==========
-
-**ScreenFlow** is a light UI engine built on top of Pygame.
-It is primarily designed for building configuration interface for IoT devices like RaspberryPi.
 
 .. _user-docs:
 
