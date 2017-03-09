@@ -72,7 +72,7 @@ def test_main_loop():
 
 def test_register_factory():
     """ Test case for screen factory registration. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     def factory(metadata):
         pass
     name = 'foo'
@@ -83,38 +83,39 @@ def test_register_factory():
 @raises(ValueError)
 def test_register_factory_duplicate():
     """ Test case for screen factory duplicate registration. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     name = 'foo'
     screenflow.register_factory(name, None)
     screenflow.register_factory(name, None)
 
 def test_create_screen():
     """ Test case for create_screen method. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screendef = {}
     screendef[XML_TYPE] = 'message'
     screendef[XML_NAME] = 'foo'
     screendef['message'] = 'test'
     screen = screenflow.create_screen(screendef)
+    print(screen.name)
     assert isinstance(screen, MessageScreen)
-    assert screen.message == 'test'
+    assert screen.raw_message == ['test']
     assert screen.name == 'foo'
 
 @raises(AttributeError)
 def test_create_screen_not_valid_xml():
     """ Test case for creating screen without type. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.create_screen({})
 
 @raises(ValueError)
 def test_create_unknown_type_screen():
     """ Test case for creating screen with unknown type. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.create_screen({XML_TYPE: 'foo'})
 
 def test_load_from_file():
     """ Test case for XML file loading. """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.load_from_file('tests/resources/test_screenflow.xml')
     assert isinstance(screenflow.foo, MessageScreen)
     #TODO : Check stack ?
@@ -122,17 +123,17 @@ def test_load_from_file():
 @raises(IOError)
 def test_load_from_not_existing_file():
     """ Test case for XML file loading error handling (file not exists). """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.load_from_file('ghost_file.xml')
 
 @raises(AttributeError)
 def test_load_from_file_without_root():
     """ Test case for XML file loading error handling (no root element). """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.load_from_file('tests/resources/test_screenflow_without_root.xml')
 
 @raises(AttributeError)
 def test_load_from_file_without_screen():
     """ Test case for XML file loading error handling (no screen element). """
-    screenflow = ScreenFlow()
+    screenflow = ScreenFlow(surface)
     screenflow.load_from_file('tests/resources/test_screenflow_without_screen.xml')

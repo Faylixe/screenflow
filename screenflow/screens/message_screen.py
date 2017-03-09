@@ -71,7 +71,7 @@ class MessageScreen(Screen):
 
         :param message: Message displayed into the screen.
         """
-        super(MessageScreen, self).__init__(self, name)
+        super(MessageScreen, self).__init__(name)
         self.raw_message = (' '.join(message.split())).split('\n')
         self.message = Message()
         self.callback = None
