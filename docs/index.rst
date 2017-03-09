@@ -6,20 +6,24 @@
 Screenflow
 ==========
 
+**ScreenFlow** is a light UI engine built on top of Pygame.
+It is primarily designed for building configuration interface for IoT devices like RaspberryPi.
+
+.. _user-docs:
+
 .. toctree::
    :maxdepth: 2
    :caption: Screenflow
    
    getting_started
 
+.. _screen-docs:
+
 .. toctree::
    :maxdepth: 2
    :caption: Builtin screen
    
-   screens/MessageScreen
-   screens/SelectScreen
-   screens/InputScreen
-   screens/ListScreen
-
-**ScreenFlow** is a light UI engine built on top of Pygame.
-It is primarily designed for building configuration interface for IoT devices like RaspberryPi.
+   screens/message_screen
+   screens/select_screen
+   screens/input_screen
+   screens/list_screen
