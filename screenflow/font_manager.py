@@ -37,6 +37,14 @@ class FontHolder(object):
             self._font = pygame.font.SysFont('arial', self.default_size)
         return self._font
 
+    @font.setter
+    def font(self, font):
+        """Setter for font value.
+
+        :param font: Font value to set.
+        """
+        self._font = font
+
 
 def draw_text(text, surface, holder, position):
     """Simple methods that draws text on the given surface
