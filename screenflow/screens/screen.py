@@ -13,15 +13,15 @@ class Screen(object):
     def __init__(self, name, background_color=WHITE):
         """Default constructor.
 
-        :param name:
-        :param background_color:
+        :param name: Name of this screen.
+        :param background_color: Default background color.
         """
         self.name = name
         self.font_manager = None
         self.background_color = background_color
 
     def set_font_manager(self, font_manager):
-        """
+        """Sets the delegate font manager instance.
         :param font_manager:
         """
         self.font_manager = font_manager

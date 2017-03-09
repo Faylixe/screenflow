@@ -21,31 +21,21 @@ class FontHolder(object):
 
     def __init__(self, default_size):
         """ Default constructor. """
-        self.font = None
-        self.text_color = None
+        self._font = None
+        self.text_color = BLACK
         self.default_size = default_size
 
-    def get_font(self):
+    @property
+    def font(self):
         """Delegate font instance getter. Creating
         one if not available using arial system font.
 
         :returns: Font instance to use.
         """
-        if self.font is None:
+        if self._font is None:
             logging.debug('Font not settled, using default Arial from system')
-            self.font = pygame.font.SysFont('arial', self.default_size)
-        return self.font
-
-    def get_text_color(self):
-        """Delegate color instance getter. Creating
-        one if not available using black color.
-
-        :returns: Color instance to use.
-        """
-        if self.text_color is None:
-            logging.debug('Text color not settled, using default Black')
-            self.text_color = BLACK
-        return self.text_color
+            self._font = pygame.font.SysFont('arial', self.default_size)
+        return self._font
 
 
 def draw_text(text, surface, holder, position):
@@ -57,9 +47,7 @@ def draw_text(text, surface, holder, position):
     :param holder: FontHolder instance to use for getting font and text color.
     :param position: Position of the text to draw relative to the surface.
     """
-    font = holder.get_font()
-    text_color = holder.get_text_color()
-    surface.blit(font.render(text, 1, text_color, None), position)
+    surface.blit(holder.font.render(text, 1, holder.text_color, None), position)
 
 
 class FontManager(object):

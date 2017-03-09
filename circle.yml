@@ -4,13 +4,14 @@ machine:
 
 dependencies:
   post:
+    - pip install pytest pytest-cov
     - pip install coverage
     - pip install codacy-coverage
 
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/nosetests
-    - nosetests --with-xunit --xunit-file=$CIRCLE_TEST_REPORTS/nosetests/unittests.xml --with-coverage
+    - pytest --junitxml=$CIRCLE_TEST_REPORTS/nosetests/unittests.xml --cov-report term --cov=screenflow
     - coverage xml
 
 deployment:
