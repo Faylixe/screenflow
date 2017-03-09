@@ -1,10 +1,10 @@
 # !/usr/bin/python
 
 """
-    ``MessageScreen``
-    =================
+    MessageScreen
+    =============
 
-    ``MessageScreen`` is the most basic screen implementation that just aims
+    *MessageScreen* is the most basic screen implementation that just aims
     to display a message to the user and trigger callback when a mouse event
     occurs at any position in the screen.
 
@@ -21,7 +21,7 @@
     ----------------
 
     Given a ``screenflow`` instance, with registered ``foo`` message screen,
-    callback binding can be achieve using ``on_touch`` decorator:
+    callback binding can be achieved using ``on_touch`` decorator:
 
     .. code-block:: python
 
