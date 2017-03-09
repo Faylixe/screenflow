@@ -17,10 +17,10 @@ def create_message_screen(name, message):
     :param name: Name of the created screen.
     :param message: Message of the created screen.
     """
-    screendef = {}
-    screendef[XML_NAME] = name
-    screendef[XML_MESSAGE] = message
-    screen = factory(screendef)
+    screen_def = {}
+    screen_def[XML_NAME] = name
+    screen_def[XML_MESSAGE] = message
+    screen = factory(screen_def)
     return screen
 
 
@@ -29,7 +29,7 @@ def test_factory():
     name = 'foo'
     screen = create_message_screen(name, name)
     assert isinstance(screen, MessageScreen)
-    assert screen.name == 'foo'
+    assert screen.name == name
 
 
 @raises(AttributeError)

@@ -1,6 +1,35 @@
 ##!/usr/bin/python
 
 """
+    SelectScreen
+    ============
+
+    Description incomming.
+
+    XML definition
+    --------------
+
+    .. code-block:: xml
+
+        <screen name="foo" type="select">
+            <label>displayed label</label>
+            <option>first choice</option>
+            <option>second choice</option>
+            ...
+        </screen>
+
+    Callback binding
+    ----------------
+
+    Given a *screenflow* instance, with registered *foo* select screen,
+    callback binding can be achieved using ``on_select`` decorator:
+
+    .. code-block:: python
+
+        @screenflow.foo.on_sekect
+        def on_foo_select(option):
+            # TODO : Callback action here.
+
 """
 
 from screenflow.screens import Screen
@@ -31,6 +60,29 @@ class SelectScreen(Screen):
         """
         self.callback = function
         return function
+
+    def on_mouse_up(self, position):
+        """Mouse up event processing. Detects collision over displayed options
+        and triggers callback if any options is hit.
+
+        :param position: Position of the mouse up event.
+        """
+        # TODO : Compute option collision
+        pass
+    
+    def draw_option(self, surface, bounds, option):
+        """
+        """
+
+    def draw(self, surface):
+        """Drawing method, display centered label and options list below.
+
+        :param surface: Surface to draw this screen into.
+        """
+        super(SelectScreen, self).draw(surface)
+        # TODO : Draw label (using message screen ?)
+        for option in self.options:
+            # TODO : Draw option
 
 # XML tag for label parameter.
 XML_LABEL = 'label'
