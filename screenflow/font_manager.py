@@ -45,6 +45,15 @@ class FontHolder(object):
         """
         self._font = font
 
+    def __call__(self, text):
+        """Function call overloading that allows holder
+        to be used as a text sizer.
+
+        :param text: Text to evaluate rendering for.
+        :returns: Rendering size of the given text.
+        """
+        return self.font.size(text)
+
 
 def draw_text(text, surface, holder, position):
     """Simple methods that draws text on the given surface

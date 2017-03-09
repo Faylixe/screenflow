@@ -12,12 +12,12 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
-def split_line(line, font, surface_width):
+def split_line(line, sizer, surface_width):
     """Splits the given line into chunks that matches the given surface_width
     regarding of the given font in order to avoid text overflow.
 
     :param line: Line to split.
-    :param font: Font used to render line.
+    :param sizer: Function that computes rendering size for a given text.
     :param surface_width: Width of the surface line will be rendered.
     :returns: List of chunks that matches the surface_width if possible.
     """
@@ -25,7 +25,7 @@ def split_line(line, font, surface_width):
     queue = [line]
     while len(queue) > 0:
         current = queue.pop(0)
-        line_width, _ = font.size(current)
+        line_width, _ = sizer(current)
         if line_width >= surface_width:
             tokens = line.split()
             tokens_size = len(tokens)
@@ -64,25 +64,25 @@ class Message(object):
         - Internal line collection is empty.
         - Target surface width changed.
 
-        :param surface_width: Width of the target surface line will be rendered.
+        :param surface_width: Width of the surface line will be rendered.
         :returns: True if lines should be recomputed, False otherwise.
         """
         return len(self._lines) == 0 or surface_width != self._last_width
 
-    def lines(self, font, surface_width):
+    def lines(self, sizer, surface_width):
         """Property binding of _lines attributes that computes if required text
         normalization to avoid text overflow.
 
-        :param font: Font used to render line.
+        :param sizer: Function that computes rendering size for a given text.
         :param surface_width: Width of the surface line will be rendered.
         :returns: Lines to display.
         """
         if self.should_update(surface_width):
             del self._lines[:]
             for line in self.text:
-                line_width, _ = font.size(line)
+                line_width, _ = sizer(line)
                 if line_width >= surface_width:
-                    self._lines += split_line(line, font, surface_width)
+                    self._lines += split_line(line, sizer, surface_width)
                 else:
                     self._lines.append(line)
         return self._lines
@@ -125,17 +125,16 @@ class MessageScreen(Screen):
         :param surface: Surface to draw this screen into.
         """
         super(MessageScreen, self).draw(surface)
-        font = self.primary_font.font
         surface_width, _ = self.get_surface_size(surface)
-        lines = self.message.lines(font, surface_width)
+        text_sizer = self.font_manager.primary
+        lines = self.message.lines(text_sizer, surface_width)
         y = self.padding[1]
         # TODO : Compute max size for centering ?
         for line in lines:
-            text_surface = font.render(line, 1, self.primary_color, None)
-            text_surface_width, text_surface_height = text_surface.get_size()
+            text_surface_width, text_surface_height = text_sizer(line)
             text_surface_start = (surface_width - text_surface_width) / 2
             x = (self.padding[0] + text_surface_start)
-            surface.blit(text_surface, (x, y))
+            self.font_manager.draw_primary_text(line, surface, (x, y))
             y += text_surface_height
 
 

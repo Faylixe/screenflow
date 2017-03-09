@@ -95,7 +95,7 @@ class ScreenFlow(FontManager):
         :param screen: Screen to add to this flow.
         """
         self.screens[screen.name] = screen
-        screen.set_font_manager(self)
+        screen.font_manager = self
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access

@@ -18,26 +18,24 @@ class Screen(object):
         """
         self.name = name
         self.padding = (0, 0)
-        self.font_manager = None
+        self._font_manager = None
         self.background_color = background_color
 
     @property
-    def primary_font(self):
+    def font_manager(self):
         """
         :returns:
         """
-        if self.font_manager is None:
-            return None
-        return self.font_manager.primary
+        if self._font_manager is None:
+            raise AttributeError('Font manager not initialized')
+        return self._font_manager
 
-    @property
-    def secondary_font(self):
+    @font_manager.setter
+    def font_manager(self, delegate):
         """
-        :returns:
+        :param delegate:
         """
-        if self.font_manager is None:
-            return None
-        return self.font_manager.secondary
+        self._font_manager = delegate
 
     def set_font_manager(self, font_manager):
         """Sets the delegate font manager instance.
