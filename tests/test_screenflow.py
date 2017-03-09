@@ -27,8 +27,9 @@ def test_add_screen():
 def test_unknown_screen_access():
     """ Test case for unknown screen access. """
     screenflow = ScreenFlow(surface)
-    screenflow.foo
-
+    screen = screenflow.foo
+    assert screen is not None
+    
 def test_get_current_screen():
     """ Test case for top stack access. """
     screenflow = ScreenFlow(surface)

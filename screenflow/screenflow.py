@@ -6,7 +6,7 @@ import xmltodict
 import pygame
 
 from screens import configure_screenflow
-from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE, XML_START
+from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 from font_manager import FontManager
 
 class NavigationException(Exception):
@@ -153,12 +153,12 @@ class ScreenFlow(FontManager):
             raise IndexError('Screen stack is empty')
         return self.stack[-1]
 
-    def run(self):
+    def run(self, start_screen):
         """Starts this screen flow and maintains
         a main loop over it until application is killed
         or quit() callback is reached.
         """
-        del self.stack[:]
+        self.stack.append(start_screen)
         self.running = True
         # TODO : Set current state to ACTIVE ?
         while self.running:
