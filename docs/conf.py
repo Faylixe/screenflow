@@ -15,7 +15,7 @@
 import sys
 from os.path import join, abspath
 
-sys.path.insert(0, join(abspath('.'), 'screenflow'))
+sys.path.insert(0, abspath('../'))
 
 extensions = [
     'sphinx.ext.autodoc',

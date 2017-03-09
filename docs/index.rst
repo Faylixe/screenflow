@@ -23,4 +23,3 @@ Contents
    screens/message_screen
    screens/select_screen
    screens/input_screen
-   screens/list_screen

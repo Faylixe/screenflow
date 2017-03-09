@@ -4,7 +4,7 @@
     ``MessageScreen``
     =================
 
-    A ``MessageScreen`` is the most basic screen implementation that just aims
+    ``MessageScreen`` is the most basic screen implementation that just aims
     to display a message to the user and trigger callback when a mouse event
     occurs at any position in the screen.
 
@@ -23,11 +23,11 @@
     Given a ``screenflow`` instance, with registered ``foo`` message screen,
     callback binding can be achieve using ``on_touch`` decorator:
 
-    :Example:
+    .. code-block:: python
 
-    @screeflow.foo.on_touch
-    def on_foo_touch():
-        # TODO : Callback action here.
+        @screeflow.foo.on_touch
+        def on_foo_touch():
+            # TODO : Callback action here.
 
 """
 
