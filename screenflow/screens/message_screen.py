@@ -1,6 +1,35 @@
 # !/usr/bin/python
 
-""" To document """
+"""
+    ``MessageScreen``
+    =================
+
+    A ``MessageScreen`` is the most basic screen implementation that just aims
+    to display a message to the user and trigger callback when a mouse event
+    occurs at any position in the screen.
+
+    XML definition
+    ---------------
+
+    .. code-block:: xml
+
+        <screen name="foo" type="message">
+            <message>displayed message</message>
+        </screen>
+
+    Callback binding
+    ----------------
+
+    Given a ``screenflow`` instance, with registered ``foo`` message screen,
+    callback binding can be achieve using ``on_touch`` decorator:
+
+    :Example:
+
+    @screeflow.foo.on_touch
+    def on_foo_touch():
+        # TODO : Callback action here.
+
+"""
 
 import logging
 from math import floor
@@ -29,9 +58,7 @@ def split_line(line, sizer, surface_width):
         if line_width >= surface_width:
             tokens = line.split()
             tokens_size = len(tokens)
-            if tokens_size == 0:
-                logging.warning('Empty line detected')
-            elif tokens_size == 1:
+            if tokens_size == 1:
                 logging.warning('Cannot split "%s" to avoid overflow', line)
                 splits.append(current)
             else:
