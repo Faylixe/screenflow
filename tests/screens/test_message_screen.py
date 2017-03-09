@@ -3,7 +3,10 @@
 """ Simple test suite for Message screen associated classes. """
 
 from screenflow.constants import XML_NAME
-from screenflow.screens.message_screen import MessageScreen, factory, XML_MESSAGE
+from screenflow.font_manager import FontManager
+from screenflow.screens import MessageScreen
+from screenflow.screens.message_screen import factory, XML_MESSAGE
+from tests.mocks.surface_mock import SurfaceMock
 from nose.tools import raises
 
 
@@ -50,16 +53,19 @@ def test_mouse_event():
     screen = create_message_screen('foo', 'foo')
     call = []
 
-    @screen.on_touch
     def callback():
         call.append(True)
+    screen.callback = callback
     screen.on_mouse_up(None)
     assert len(call) == 1
 
 
 def test_draw():
     """ """
-    pass
+    screen = create_message_screen('foo', 'foo')
+    screen.set_font_manager(FontManager())
+    surface = SurfaceMock()
+    screen.draw(surface)
 
 
 def test_message_normalize():

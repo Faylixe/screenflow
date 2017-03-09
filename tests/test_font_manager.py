@@ -45,6 +45,7 @@ def test_custom_font_holder():
     holder.text_color = WHITE
     check_font_holder_value(holder, WHITE, font)
 
+
 def test_draw_text():
     """ Test case for draw_test. """
     holder = FontHolder(10)

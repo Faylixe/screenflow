@@ -16,6 +16,7 @@ class SurfaceMock(object):
         """
         self.size = size
         self.blit_call = 0
+        self.fill_call = 0
 
     def get_size(self):
         """ Returns the size of this surface.
@@ -31,3 +32,10 @@ class SurfaceMock(object):
         :param position: Position to blit source to.
         """
         self.blit_call += 1
+
+    def fill(self, color):
+        """
+
+        :param color:
+        """
+        self.fill_call += 1

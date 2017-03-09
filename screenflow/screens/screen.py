@@ -17,8 +17,27 @@ class Screen(object):
         :param background_color: Default background color.
         """
         self.name = name
+        self.padding = (0, 0)
         self.font_manager = None
         self.background_color = background_color
+
+    @property
+    def primary_font(self):
+        """
+        :returns:
+        """
+        if self.font_manager is None:
+            return None
+        return self.font_manager.primary
+
+    @property
+    def secondary_font(self):
+        """
+        :returns:
+        """
+        if self.font_manager is None:
+            return None
+        return self.font_manager.secondary
 
     def set_font_manager(self, font_manager):
         """Sets the delegate font manager instance.
