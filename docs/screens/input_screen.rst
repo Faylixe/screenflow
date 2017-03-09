@@ -1,2 +1,1 @@
-InputScreen
-==========
+.. automodule:: screenflow.screens.input_screen

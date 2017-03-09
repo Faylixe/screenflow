@@ -1,2 +1,1 @@
-SelectScreen
-============
+.. automodule:: screenflow.screens.select_screen

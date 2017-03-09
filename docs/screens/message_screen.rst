@@ -1,2 +1,1 @@
-MessageScreen
-=============
+.. automodule:: screenflow.screens.message_screen
