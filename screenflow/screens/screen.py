@@ -37,12 +37,6 @@ class Screen(object):
         """
         self._font_manager = delegate
 
-    def set_font_manager(self, font_manager):
-        """Sets the delegate font manager instance.
-        :param font_manager:
-        """
-        self.font_manager = font_manager
-
     def get_surface_size(self, surface):
         """ Surface
         """

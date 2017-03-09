@@ -68,3 +68,12 @@ def test_draw_secondary_text():
     surface = SurfaceMock()
     manager.draw_secondary_text('foo', surface, DEFAULT_DRAW_POSITION)
     assert surface.blit_call == 1
+
+
+def test_font_holder_call():
+    """ Test case for font holder size call. """
+    holder = FontHolder(10)
+    size = holder('foo')
+    assert len(size) == 2
+    assert size[0] > 0
+    assert size[1] > 0

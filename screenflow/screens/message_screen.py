@@ -36,8 +36,8 @@ def split_line(line, sizer, surface_width):
                 splits.append(current)
             else:
                 middle = int(floor(len(tokens) / 2))
-                queue.append(tokens[:middle])
-                queue.append(tokens[middle:])
+                queue.append(' '.join(tokens[:middle]))
+                queue.append(' '.join(tokens[middle:]))
         else:
             splits.append(current)
     return splits
@@ -85,6 +85,7 @@ class Message(object):
                     self._lines += split_line(line, sizer, surface_width)
                 else:
                     self._lines.append(line)
+            self._last_width = surface_width
         return self._lines
 
 
