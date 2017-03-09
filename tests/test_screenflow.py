@@ -114,7 +114,6 @@ def test_load_from_file():
     """ Test case for XML file loading. """
     screenflow = ScreenFlow()
     screenflow.load_from_file('tests/resources/test_screenflow.xml')
-    print str(screenflow.screens)
     assert isinstance(screenflow.foo, MessageScreen)
     #TODO : Check stack ?
 
