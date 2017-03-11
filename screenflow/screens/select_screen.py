@@ -36,6 +36,21 @@ from screenflow.screens import Screen
 from screenflow.constants import XML_NAME
 
 
+class Option(object):
+    """
+    """
+
+    def __init__(self, label):
+        """
+        """
+        self.label = label
+
+    def draw(self, surface, bounds):
+        """
+        """
+        pass
+
+
 class SelectScreen(Screen):
     """To document.
     """
@@ -49,7 +64,10 @@ class SelectScreen(Screen):
         """
         super(SelectScreen, self).__init__(name)
         self.label = label
-        self.options = options
+        self.options = []
+        for option in options:
+            # TODO : Consider using option factory here.
+            self.options.append(Option(option))
         self.callback = None
 
     def on_select(self, function):
@@ -70,11 +88,6 @@ class SelectScreen(Screen):
         # TODO : Compute option collision
         pass
 
-    def draw_option(self, surface, bounds, option):
-        """
-        """
-        pass
-
     def draw(self, surface):
         """Drawing method, display centered label and options list below.
 
@@ -89,7 +102,7 @@ class SelectScreen(Screen):
             bounds = (x, y)
             # TODO : Add size to bound..
             # TODO : Update y
-            self.draw_option(surface, bounds, option)
+            option.draw(surface, bounds)
 
 # XML tag for label parameter.
 XML_LABEL = 'label'

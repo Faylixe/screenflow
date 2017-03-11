@@ -82,11 +82,6 @@ def test_mouse_event():
     pass
 
 
-def test_draw_option():
-    """ Test case for option drawing method. """
-    pass
-
-
 def test_draw():
     """ Test case for select screen drawing method. """
     pass
