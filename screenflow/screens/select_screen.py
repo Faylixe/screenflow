@@ -69,10 +69,11 @@ class SelectScreen(Screen):
         """
         # TODO : Compute option collision
         pass
-    
+
     def draw_option(self, surface, bounds, option):
         """
         """
+        pass
 
     def draw(self, surface):
         """Drawing method, display centered label and options list below.
@@ -81,9 +82,14 @@ class SelectScreen(Screen):
         """
         super(SelectScreen, self).draw(surface)
         # TODO : Draw label (using message screen ?)
+        x = 0
+        y = 0
         for option in self.options:
             # TODO : Draw option
-            pass
+            bounds = (x, y)
+            # TODO : Add size to bound..
+            # TODO : Update y
+            self.draw_option(surface, bounds, option)
 
 # XML tag for label parameter.
 XML_LABEL = 'label'

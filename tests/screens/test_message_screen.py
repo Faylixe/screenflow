@@ -9,8 +9,14 @@ from screenflow.screens.message_screen import Message, factory, XML_MESSAGE
 from tests.mocks.surface_mock import SurfaceMock
 from pytest import raises
 
+# Default name for testing.
+DEFAULT_NAME = 'select'
 
-def create_message_screen(name, message):
+# Default message used for testing.
+DEFAULT_MESSAGE = 'Message'
+
+
+def create_message_screen(name=DEFAULT_NAME, message=DEFAULT_MESSAGE):
     """Simple factory method that creates
     a message using the given name and message.
 
@@ -26,10 +32,9 @@ def create_message_screen(name, message):
 
 def test_factory():
     """ Test case for message screen factory. """
-    name = 'foo'
-    screen = create_message_screen(name, name)
+    screen = create_message_screen()
     assert isinstance(screen, MessageScreen)
-    assert screen.name == name
+    assert screen.name == DEFAULT_NAME
 
 
 def test_messageless_factory():
@@ -40,7 +45,7 @@ def test_messageless_factory():
 
 def test_on_touch():
     """ Test case for on_touch event binding. """
-    screen = create_message_screen('foo', 'foo')
+    screen = create_message_screen()
 
     @screen.on_touch
     def callback():
@@ -50,7 +55,7 @@ def test_on_touch():
 
 def test_mouse_event():
     """ Test case for mouse event. """
-    screen = create_message_screen('foo', 'foo')
+    screen = create_message_screen()
     call = []
 
     def callback():
@@ -62,7 +67,7 @@ def test_mouse_event():
 
 def test_draw():
     """ Test case for message screen drawing method. """
-    screen = create_message_screen('foo', 'foo')
+    screen = create_message_screen()
     screen.font_manager = FontManager()
     surface = SurfaceMock()
     screen.draw(surface)
@@ -70,7 +75,7 @@ def test_draw():
     assert surface.blit_call == 1
     lines = screen.message.lines(None, surface.get_size()[0])
     assert len(lines) >= 0
-    assert lines[0] == 'foo'
+    assert lines[0] == DEFAULT_MESSAGE
 
 
 def test_message_lines():
