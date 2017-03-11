@@ -7,10 +7,11 @@ from screenflow.font_manager import FontManager, FontHolder
 from screenflow.screens import SelectScreen
 from screenflow.screens.select_screen import factory, XML_LABEL, XML_OPTION
 from tests.mocks.surface_mock import SurfaceMock
-from nose.tools import raises
+from pytest import raises
 
 # Default options used for testing.
 DEFAULT_OPTIONS = ['Yes', 'No']
+
 
 def create_select_screen(name, label, options=DEFAULT_OPTIONS):
     """Simple factory method that creates
@@ -23,7 +24,7 @@ def create_select_screen(name, label, options=DEFAULT_OPTIONS):
     screen_def = {}
     screen_def[XML_NAME] = name
     screen_def[XML_LABEL] = label
-    screen_def[XML_OPTION = options
+    screen_def[XML_OPTION] = options
     screen = factory(screen_def)
     return screen
 
@@ -36,17 +37,17 @@ def test_factory():
     assert screen.name == name
 
 
-@raises(AttributeError)
 def test_labelless_factory():
     """ Test case for select screen factory with invalid definition. """
     screen_def = {}
-    screen_def[XML_OPTIONS] = DEFAULT_OPTIONS'
-    factory(screen_def)
+    screen_def[XML_OPTION] = DEFAULT_OPTIONS
+    with raises(AttributeError) as e:
+        factory(screen_def)
 
 
-@raises(AttributeError)
 def test_optionless_factory():
     """ Test case for select screen factory with invalid definition. """
     screen_def = {}
     screen_def[XML_LABEL] = 'foo'
-    factory(screen_def)
+    with raises(AttributeError) as e:
+        factory(screen_def)

@@ -83,6 +83,7 @@ class SelectScreen(Screen):
         # TODO : Draw label (using message screen ?)
         for option in self.options:
             # TODO : Draw option
+            pass
 
 # XML tag for label parameter.
 XML_LABEL = 'label'

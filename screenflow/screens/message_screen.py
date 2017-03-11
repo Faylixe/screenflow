@@ -140,7 +140,7 @@ class MessageScreen(Screen):
         return function
 
     def on_mouse_up(self, position):
-        """Mouse up event processor. Calls the delegate callback function if any.
+        """Mouse up event processing. Calls the delegate callback function if any.
 
         :param position: Position of the mouse up event.
         """

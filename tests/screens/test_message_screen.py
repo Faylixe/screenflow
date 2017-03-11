@@ -7,7 +7,7 @@ from screenflow.font_manager import FontManager, FontHolder
 from screenflow.screens import MessageScreen
 from screenflow.screens.message_screen import Message, factory, XML_MESSAGE
 from tests.mocks.surface_mock import SurfaceMock
-from nose.tools import raises
+from pytest import raises
 
 
 def create_message_screen(name, message):
@@ -32,10 +32,10 @@ def test_factory():
     assert screen.name == name
 
 
-@raises(AttributeError)
 def test_messageless_factory():
     """ Test case for message screen factory with invalid definition. """
-    factory({})
+    with raises(AttributeError) as e:
+        factory({})
 
 
 def test_on_touch():
@@ -92,4 +92,3 @@ def test_message_large_token():
     lines = message.lines(sizer, 200)
     assert len(lines) == 1
     assert lines[0] == 'Thisisaverylongtextwhichrequirestobesplitted'
-
