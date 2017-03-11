@@ -28,6 +28,29 @@ from screenflow.constants import WHITE
 import pygame
 
 
+class Sizeable(object):
+    """
+    """
+
+    def __init__(self, object, sizer):
+        """Default constructor.
+
+        :param data:
+        """
+        self.data = data
+        self.sizer = sizer
+        self._size = None
+
+    @property
+    def size(self):
+        """
+        :returns:
+        """
+        if self._size is None:
+            self._size = self.sizer(data)
+        return self._size
+
+
 class Screen(object):
     """ Base class for screen object. """
 
@@ -57,6 +80,11 @@ class Screen(object):
         :param delegate:
         """
         self._font_manager = delegate
+
+    def create_primary_sizeable(self, sizeable):
+        """
+        """
+        pass
 
     def get_surface_size(self, surface):
         """ Surface
