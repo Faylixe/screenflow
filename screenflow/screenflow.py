@@ -17,7 +17,7 @@
 
 import xmltodict
 
-from pygame import FULLSCREEN, HWSURFACE, DOUBLEBUF
+from pygame import time, FULLSCREEN, HWSURFACE, DOUBLEBUF
 from pygame.display import set_mode, flip, Info
 
 from screens import configure_screenflow
@@ -165,7 +165,7 @@ class ScreenFlow(FontManager):
             raise NavigationException('Cannot navigate back, no more screen.')
         screen = self.stack.pop()
         previews = (self.surface.copy(),
-                    screen.generate_preview(size))
+                    self.get_current_screen().generate_preview(size))
         self.set_transition(previews, ScreenTransition.BACKWARD)
 
     def get_current_screen(self):
@@ -177,25 +177,33 @@ class ScreenFlow(FontManager):
             raise IndexError('Screen stack is empty')
         return self.stack[-1]
 
+    def draw(self):
+        """
+        """
+        screen = self.get_current_screen()
+        screen.draw(self.surface)
+
     def run(self, start_screen):
         """Starts this screen flow and maintains
         a main loop over it until application is killed
         or quit() callback is reached.
         """
         self.stack.append(start_screen)
-        start_screen.draw(self.surface)
+        self.draw()
         self.running = True
         self.state = ScreenFlow.ACTIVE
         while self.running:
+            flip()
             current = self.get_current_screen()
             if self.state == ScreenFlow.IN_TRANSITION:
+                time.wait(50)
                 if not self.transition.update(self.surface):
                     self.transition = None
                     self.state = ScreenFlow.ACTIVE
+                    self.draw()
                     current.on_screen_activated()
             elif self.state == ScreenFlow.ACTIVE:
                 self.running = current.process_event()
-            flip()
 
     def register_factory(self, type_name, factory):
         """Registers the given factory for the given type.
