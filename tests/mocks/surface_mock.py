@@ -39,3 +39,8 @@ class SurfaceMock(object):
         :param color:
         """
         self.fill_call += 1
+
+    def copy(self):
+        """
+        """
+        return self
