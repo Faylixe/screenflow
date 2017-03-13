@@ -68,8 +68,8 @@ class Message(object):
         :param message: Raw message instance to use.
         """
         self.text = (' '.join(message.split())).split('\n')
-        self._lines = []
-        self._last_width = 0
+        self.__lines = []
+        self.__last_width = 0
 
     def should_update(self, surface_width):
         """Indicates if the normalization process should be done again.
@@ -81,7 +81,7 @@ class Message(object):
         :param surface_width: Width of the surface line will be rendered.
         :returns: True if lines should be recomputed, False otherwise.
         """
-        return len(self._lines) == 0 or surface_width != self._last_width
+        return len(self._lines) == 0 or surface_width != self.__last_width
 
     def lines(self, sizer, surface_width):
         """Property binding of _lines attributes that computes if required text
@@ -92,15 +92,15 @@ class Message(object):
         :returns: Lines to display.
         """
         if self.should_update(surface_width):
-            del self._lines[:]
+            del self.__lines[:]
             for line in self.text:
                 line_width, _ = sizer(line)
                 if line_width >= surface_width:
-                    self._lines += split_line(line, sizer, surface_width)
+                    self.__lines += split_line(line, sizer, surface_width)
                 else:
-                    self._lines.append(line)
-            self._last_width = surface_width
-        return self._lines
+                    self.__lines.append(line)
+            self.__last_width = surface_width
+        return self.__lines
 
 
 class MessageBasedScreen(Screen):
@@ -116,8 +116,8 @@ class MessageBasedScreen(Screen):
         """
         Screen.__init__(self, name)
         self.message = Message(message)
-        self._last_width = 0
-        self._message_surface = None
+        self.__last_width = 0
+        self.__message_surface = None
 
     def get_message_surface(self, parent_surface_size):
         """Factory method that creates a surface with this screen message.
@@ -126,26 +126,26 @@ class MessageBasedScreen(Screen):
         :param parent_surface_width: Width of the target parent surface.
         :returns: Created surface.
         """
-        size_updated = self._last_width != parent_surface_size[0]
-        if self._message_surface is None or size_updated:
+        size_updated = self.__last_width != parent_surface_size[0]
+        if self.__message_surface is None or size_updated:
+            self.__last_width = parent_surface_size[0]
+            # TODO : Refactor sizer concept.
             text_sizer = self.font_manager.primary
             lines = self.message.lines(text_sizer, parent_surface_size[0])
             line_width = get_longest(lines, text_sizer)
             line_height = get_highest(lines, text_sizer)
             size = (line_width, len(lines) * line_height)
-            self._message_surface = self.create_surface(size)
+            self.__message_surface = self.create_surface(size)
             # TODO : Consider using property ?
-            self._message_surface.fill((255, 255, 255))
+            self.draw_background(self.__message_surface)
             y = 0
             for line in lines:
                 text_surface_width, _ = text_sizer(line)
                 x = (line_width - text_surface_width) / 2
-                self.font_manager.draw_primary_text(
-                    line,
-                    self._message_surface,
-                    (x, y))
+                self.line_surface = self.draw_primary_text(line)
+                self.__message_surface.blit(self.line_surface, (x, y))
                 y += line_height
-        return self._message_surface
+        return self.__message_surface
 
     @staticmethod
     def get_message(screen_def):
