@@ -3,10 +3,11 @@
 """ Simple test suite for Message screen associated classes. """
 
 from screenflow.constants import XML_NAME
-from screenflow.font_manager import FontManager, FontHolder
+from screenflow.font_manager import FontManager
 from screenflow.screens import MessageScreen
-from screenflow.screens.message_screen import Message, factory, XML_MESSAGE
-from tests.mocks.surface_mock import SurfaceMock
+from screenflow.screens.message_screen import factory
+from screenflow.screens.message_based_screen import Message, XML_MESSAGE
+from tests.mocks.surface_mock import SurfaceMock, factory as mock_factory
 from pytest import raises
 
 # Default name for testing.
@@ -69,6 +70,7 @@ def test_draw():
     """ Test case for message screen drawing method. """
     screen = create_message_screen()
     screen.font_manager = FontManager()
+    screen.surface_factory = mock_factory
     surface = SurfaceMock()
     screen.draw(surface)
     assert surface.fill_call == 1
@@ -76,24 +78,3 @@ def test_draw():
     lines = screen.message.lines(None, surface.get_size()[0])
     assert len(lines) >= 0
     assert lines[0] == DEFAULT_MESSAGE
-
-
-def test_message_lines():
-    """ Test case for message splitting. """
-    sizer = FontHolder(10)
-    text = 'This is a very long text which requires to be splitted'
-    message = Message(text)
-    lines = message.lines(sizer, 100)
-    assert len(lines) == 2
-    assert lines[0] == 'This is a very long'
-    assert lines[1] == 'text which requires to be splitted'
-
-
-def test_message_large_token():
-    """ Test case for message splitting with large token. """
-    sizer = FontHolder(10)
-    text = 'Thisisaverylongtextwhichrequirestobesplitted'
-    message = Message(text)
-    lines = message.lines(sizer, 200)
-    assert len(lines) == 1
-    assert lines[0] == 'Thisisaverylongtextwhichrequirestobesplitted'
