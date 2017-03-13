@@ -31,29 +31,6 @@ from pygame.event import get as events
 from pygame.constants import QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP
 
 
-class Sizeable(object):
-    """
-    """
-
-    def __init__(self, object, sizer):
-        """Default constructor.
-
-        :param data:
-        """
-        self.data = data
-        self.sizer = sizer
-        self._size = None
-
-    @property
-    def size(self):
-        """
-        :returns:
-        """
-        if self._size is None:
-            self._size = self.sizer(data)
-        return self._size
-
-
 class Screen(object):
     """ Base class for screen object. """
 
@@ -65,6 +42,7 @@ class Screen(object):
         """
         self.name = name
         self.padding = (0, 0)
+        self._surface_factory = None
         self._font_manager = None
         self.background_color = background_color
 
@@ -84,10 +62,30 @@ class Screen(object):
         """
         self._font_manager = delegate
 
-    def create_primary_sizeable(self, sizeable):
+    @property
+    def surface_factory(self):
         """
+        :returns:
         """
-        pass
+        if self._surface_factory is None:
+            def pygame_factory(size):
+                return Surface(size)
+            self._surface_factory = pygame_factory
+        return self._surface_factory
+
+    @surface_factory.setter
+    def surface_factory(self, factory):
+        """
+        :param factory:
+        """
+        self._surface_factory = factory
+
+    def create_surface(self, size):
+        """
+        :param size:
+        :returns:
+        """
+        return self.surface_factory(size)
 
     def get_surface_size(self, surface):
         """ Surface

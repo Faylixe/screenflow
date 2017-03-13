@@ -57,15 +57,17 @@ def split_line(line, sizer, surface_width):
         current = queue.pop(0)
         line_width, _ = sizer(current)
         if line_width >= surface_width:
-            tokens = line.split()
+            tokens = current.split()
             tokens_size = len(tokens)
             if tokens_size == 1:
                 logging.warning('Cannot split "%s" to avoid overflow', line)
                 splits.append(current)
             else:
                 middle = int(floor(len(tokens) / 2))
-                queue.append(' '.join(tokens[:middle]))
-                queue.append(' '.join(tokens[middle:]))
+                subqueue = []
+                subqueue.append(' '.join(tokens[:middle]))
+                subqueue.append(' '.join(tokens[middle:]))
+                queue = subqueue + queue
         else:
             splits.append(current)
     return splits
@@ -130,6 +132,7 @@ class MessageScreen(Screen):
         super(MessageScreen, self).__init__(name)
         self.message = Message(message)
         self.callback = None
+        self._last_width = 0
         self._message_surface = None
 
     def on_touch(self, function):
@@ -150,11 +153,14 @@ class MessageScreen(Screen):
             self.callback()
 
     def get_message_surface(self, parent_surface_width):
+        """Factory method that creates a surface with this screen message.
+        Created surface is cached in order to avoid duplicate computation.
+
+        :param parent_surface_width: Width of the target parent surface.
+        :returns: Created surface.
         """
-        :param parent_surface_width:
-        :returns:
-        """
-        if self._message_surface is None:
+        size_updated = self._last_width != parent_surface_width
+        if self._message_surface is None or size_updated:
             text_sizer = self.font_manager.primary
             lines = self.message.lines(text_sizer, parent_surface_width)
             longest = max(lines, key=lambda l: text_sizer(l)[0])
@@ -162,14 +168,13 @@ class MessageScreen(Screen):
             line_width = text_sizer(longest)[0]
             line_height = text_sizer(heighest)[1]
             size = (line_width, len(lines) * line_height)
-            self._message_surface = Surface(size)
+            self._message_surface = self.create_surface(size)
             # TODO : Consider using property ?
             self._message_surface.fill((255, 255, 255))
             y = 0
             for line in lines:
                 text_surface_width, _ = text_sizer(line)
-                text_surface_start = (line_width - text_surface_width) / 2
-                x = (self.padding[0] + text_surface_start)
+                x = (line_width - text_surface_width) / 2
                 self.font_manager.draw_primary_text(
                     line,
                     self._message_surface,

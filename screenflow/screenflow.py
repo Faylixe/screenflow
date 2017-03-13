@@ -163,9 +163,9 @@ class ScreenFlow(FontManager):
         size = self.surface.get_size()
         if len(self.stack) <= 1:
             raise NavigationException('Cannot navigate back, no more screen.')
-        screen = self.stack.pop()
-        previews = (self.surface.copy(),
-                    self.get_current_screen().generate_preview(size))
+        self.stack.pop()
+        previews = (self.get_current_screen().generate_preview(size),
+                    self.surface.copy())
         self.set_transition(previews, ScreenTransition.BACKWARD)
 
     def get_current_screen(self):

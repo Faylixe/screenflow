@@ -44,3 +44,9 @@ class SurfaceMock(object):
         """
         """
         return self
+
+
+def factory(size):
+    """
+    """
+    return SurfaceMock(size)
