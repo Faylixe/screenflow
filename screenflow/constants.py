@@ -11,3 +11,7 @@ XML_NAME = '@name'
 # Common color.
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+
+# Orientation.
+HORIZONTAL = 0
+VERTICAL = 1

@@ -16,7 +16,9 @@
 """
 
 import xmltodict
-import pygame
+
+from pygame import FULLSCREEN, HWSURFACE, DOUBLEBUF
+from pygame.display import set_mode, flip, Info
 
 from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
@@ -95,11 +97,10 @@ class ScreenFlow(FontManager):
         self.state = ScreenFlow.CREATING
         self.surface = surface
         if self.surface is None:
-            info = pygame.display.Info()
+            info = Info()
             resolution = (info.current_w, info.current_h)
-            self.surface = pygame.display.set_mode(
-                resolution,
-                pygame.FULLSCREEN)
+            flags = FULLSCREEN | HWSURFACE | DOUBLEBUF
+            self.surface = set_mode(resolution, flags)
         self.transition = None
 
     def add_screen(self, screen):
@@ -144,9 +145,10 @@ class ScreenFlow(FontManager):
         :param screen: Screen to navigate to.
         :returns: Created callback function.
         """
+        size = self.surface.get_size()
         previews = (
-            self.stack[-1].generate_preview(),
-            screen.generate_preview())
+            self.surface.copy(),
+            screen.generate_preview(size))
         self.stack.append(screen)
         self.set_transition(previews, ScreenTransition.FORWARD)
 
@@ -158,12 +160,13 @@ class ScreenFlow(FontManager):
 
         :returns: Created callback function.
         """
+        size = self.surface.get_size()
         if len(self.stack) <= 1:
             raise NavigationException('Cannot navigate back, no more screen.')
         screen = self.stack.pop()
-        previews = (self.stack[-1].generate_preview(),
-                    screen.generate_preview())
-        self.set_transition(previews, ScreenTransition.FORWARD)
+        previews = (self.surface.copy(),
+                    screen.generate_preview(size))
+        self.set_transition(previews, ScreenTransition.BACKWARD)
 
     def get_current_screen(self):
         """Current screen access method.
@@ -180,10 +183,10 @@ class ScreenFlow(FontManager):
         or quit() callback is reached.
         """
         self.stack.append(start_screen)
+        start_screen.draw(self.surface)
         self.running = True
-        # TODO : Set current state to ACTIVE ?
+        self.state = ScreenFlow.ACTIVE
         while self.running:
-            pygame.display.flip()
             current = self.get_current_screen()
             if self.state == ScreenFlow.IN_TRANSITION:
                 if not self.transition.update(self.surface):
@@ -191,7 +194,8 @@ class ScreenFlow(FontManager):
                     self.state = ScreenFlow.ACTIVE
                     current.on_screen_activated()
             elif self.state == ScreenFlow.ACTIVE:
-                current.process_event()
+                self.running = current.process_event()
+            flip()
 
     def register_factory(self, type_name, factory):
         """Registers the given factory for the given type.
