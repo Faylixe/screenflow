@@ -1,3 +1,4 @@
 xmltodict
 pygame
 pytest
+tinycss

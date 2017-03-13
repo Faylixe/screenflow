@@ -79,12 +79,9 @@ class MessageScreen(MessageBasedScreen):
         """
         super(MessageScreen, self).draw(surface)
         # TODO : Consider using parent surface size getter.
-        surface_width, surface_height = surface.get_size()
-        message_surface = self.get_message_surface(surface_width)
-        message_surface_size = message_surface.get_size()
-        x = (surface_width - message_surface_size[0]) / 2
-        y = (surface_height - message_surface_size[1]) / 2
-        surface.blit(message_surface, (x, y))
+        surface_size = surface.get_size()
+        message_surface = self.get_message_surface(surface_size)
+        self.draw_centered(surface, message_surface)
 
 
 def factory(screen_def):

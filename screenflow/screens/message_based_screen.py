@@ -108,28 +108,28 @@ class MessageBasedScreen(Screen):
     transition on touch event.
     """
 
-    def __init__(self, name, message, **kwargs):
+    def __init__(self, name, message):
         """Default constructor.
 
         :param name:
         :param message: Message displayed into the screen.
         """
-        super(MessageBasedScreen, self).__init__(name)
+        Screen.__init__(self, name)
         self.message = Message(message)
         self._last_width = 0
         self._message_surface = None
 
-    def get_message_surface(self, parent_surface_width):
+    def get_message_surface(self, parent_surface_size):
         """Factory method that creates a surface with this screen message.
         Created surface is cached in order to avoid duplicate computation.
 
         :param parent_surface_width: Width of the target parent surface.
         :returns: Created surface.
         """
-        size_updated = self._last_width != parent_surface_width
+        size_updated = self._last_width != parent_surface_size[0]
         if self._message_surface is None or size_updated:
             text_sizer = self.font_manager.primary
-            lines = self.message.lines(text_sizer, parent_surface_width)
+            lines = self.message.lines(text_sizer, parent_surface_size[0])
             line_width = get_longest(lines, text_sizer)
             line_height = get_highest(lines, text_sizer)
             size = (line_width, len(lines) * line_height)

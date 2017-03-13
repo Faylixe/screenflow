@@ -62,7 +62,7 @@ class Oriented(object):
 
     def __init__(self, orientation,  **kwargs):
         """
-        """"
+        """
         self.orientation = orientation
 
     def isVertical(self):
@@ -79,7 +79,7 @@ class Oriented(object):
 class Screen(object):
     """ Base class for screen object. """
 
-    def __init__(self, name, background_color=WHITE, **kwargs):
+    def __init__(self, name, background_color=WHITE):
         """Default constructor.
 
         :param name: Name of this screen.
@@ -164,6 +164,15 @@ class Screen(object):
         :param surface: Surface to draw background into.
         """
         surface.fill(self.background_color)
+
+    def draw_centered(self, surface, delegate):
+        """
+        """
+        surface_size = surface.get_size()
+        delegate_surface_size = delegate.get_size()
+        x = (surface_size[0] - delegate_surface_size[0]) / 2
+        y = (surface_size[1] - delegate_surface_size[1]) / 2
+        surface.blit(delegate, (x, y))
 
     def draw(self, surface):
         """

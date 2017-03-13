@@ -95,3 +95,4 @@ ENV/
 /.vscode
 /test.py
 /test.xml
+/test.css
