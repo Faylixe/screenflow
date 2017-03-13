@@ -1,4 +1,4 @@
-##!/usr/bin/python
+# !/usr/bin/python
 
 """
     SelectScreen
@@ -12,7 +12,9 @@
     .. code-block:: xml
 
         <screen name="foo" type="select">
-            <label>displayed label</label>
+            <message>displayed message</message>
+            <cellbackground>#000000</cellbackground> <!-- optional -->
+            <cellpadding>20</cellpadding> <!-- optional -->
             <option>first choice</option>
             <option>second choice</option>
             ...
@@ -32,43 +34,39 @@
 
 """
 
-from screenflow.screens import Screen
-from screenflow.constants import XML_NAME
+from screenflow.screens.screen import Oriented, get_longest, get_highest
+from screenflow.screens.message_based_screen import MessageBasedScreen
+from screenflow.constants import XML_NAME, VERTICAL, HORIZONTAL, BLACK, WHITE
 
 
-class Option(object):
-    """
-    """
-
-    def __init__(self, label):
-        """
-        """
-        self.label = label
-
-    def draw(self, surface, bounds):
-        """
-        """
-        pass
-
-
-class SelectScreen(Screen):
+class SelectScreen(MessageBasedScreen, Oriented):
     """To document.
     """
 
-    def __init__(self, name, label, options):
+    def __init__(
+            self,
+            name,
+            message,
+            options,
+            orientation=VERTICAL,
+            cell_background_color=BLACK,
+            cell_padding=10):
         """Default constructor.
 
         :param name:
-        :param label:
+        :param message:
         :param options:
+        :param orientation:
+        :param cell_background_color:
+        :param cell_padding:
         """
-        super(SelectScreen, self).__init__(name)
-        self.label = label
-        self.options = []
-        for option in options:
-            # TODO : Consider using option factory here.
-            self.options.append(Option(option))
+        MessageBasedScreen.__init__(self, name, message)
+        Oriented.__init__(self, orientation)
+        self.options = options
+        self.cell_background_color = cell_background_color
+        self.cell_padding = cell_padding
         self.callback = None
+        self._options_surface = None
 
     def on_select(self, function):
         """Decorator method that registers  the given function as selection callback.
@@ -88,24 +86,107 @@ class SelectScreen(Screen):
         # TODO : Compute option collision
         pass
 
+    def get_option_surface(self, option, size):
+        """
+        :param option:
+        :param size:
+        """
+        option_surface = self.create_surface(size)
+        option_surface.fill(self.cell_background_color)
+        # TODO : Draw option text.
+        return option_surface
+
+    def get_options_surface_size(self, options_surface_size):
+        """
+        :param option_width:
+        :param option_height:
+        :returns:
+        """
+        n = len(self.options)
+        surface_width = options_surface_size[0]
+        surface_height = options_surface_size[1]
+        total_padding = self.cell_padding * (n - 1)
+        if self.isVertical():
+            surface_height *= n
+            surface_height += total_padding
+        else:
+            surface_width *= n
+            surface_width += total_padding
+        return (surface_width, surface_height)
+
+    def check_bounds(self, surface, parent):
+        """
+        """
+        if surface[0] > parent[0]:
+            # TODO : Warning.
+            pass
+        if surface[1] > parent[1]:
+            # TODO : Warning.
+            pass
+
+    def get_options_surface(self, parent_surface_size):
+        """
+        :param parent_surface_width:
+        :returns:
+        """
+        if self._options_surface is None:
+            text_sizer = self.font_manager.primary
+            option_width = get_longest(self.options, text_sizer)
+            option_height = get_highest(self.options, text_sizer)
+            option_surface_size = (option_width, option_height)
+            options_surface_size = self.get_options_surface_size(
+                option_surface_size)
+            self.check_bounds(options_surface_size, parent_surface_size)
+            self._options_surface = self.create_surface(options_surface_size)
+            # TODO : Add property ?
+            self._options_surface.fill((255, 255, 255))
+            current = 0
+            for option in self.options:
+                option_surface = self.get_option_surface(
+                    option,
+                    option_surface_size)
+                position = None
+                if self.isVertical():
+                    position = (0, current)
+                else:
+                    position = (current, 0)
+                self._options_surface.blit(option_surface, position)
+                if self.isVertical():
+                    current += option_height
+                else:
+                    current += option_width
+                current += self.cell_padding
+        return self._options_surface
+
+    def get_final_surface(self, message_surface, options_surface):
+        """
+        """
+        message_surface_size = message_surface.get_size()
+        options_surface_size = options_surface.get_size()
+        width = max(message_surface_size[0], options_surface_size[0])
+        height = message_surface_size[1] + options_surface_size[1] + 20
+        # TODO : Add padding.
+        surface = self.create_surface((width, height))
+        surface.fill((255, 255, 255))
+        message_x = (width - message_surface_size[0]) / 2
+        surface.blit(message_surface, (message_x, 0))
+        options_x = (width - options_surface_size[0]) / 2
+        # TODO : Add padding.
+        options_y = message_surface_size[1] + 20
+        surface.blit(options_surface, (options_x, options_y))
+        return surface
+
     def draw(self, surface):
         """Drawing method, display centered label and options list below.
 
         :param surface: Surface to draw this screen into.
         """
         super(SelectScreen, self).draw(surface)
-        # TODO : Draw label (using message screen ?)
-        x = 0
-        y = 0
-        for option in self.options:
-            # TODO : Draw option
-            bounds = (x, y)
-            # TODO : Add size to bound..
-            # TODO : Update y
-            option.draw(surface, bounds)
-
-# XML tag for label parameter.
-XML_LABEL = 'label'
+        surface_size = surface.get_size()
+        message_surface = self.get_message_surface(surface_size)
+        options_surface = self.get_options_surface(surface_size)
+        final_surface = self.get_final_surface(message_surface, options_surface)
+        self.draw_centered(surface, final_surface)
 
 # XML tag for option parameters.
 XML_OPTION = 'option'
@@ -118,12 +199,11 @@ def factory(screen_def):
     :param screen_def: Screen definition as a dictionary from XML parsing.
     :returns: Created select screen instance.
     """
-    if XML_LABEL not in screen_def:
-        raise AttributeError('No label set in screen definition')
+    message = MessageBasedScreen.get_message(screen_def)
     if XML_OPTION not in screen_def:
         raise AttributeError('No option(s) set in screen definition')
-    label = screen_def[XML_LABEL]
     options = screen_def[XML_OPTION]
     if not isinstance(options, list):
         raise AttributeError('At least two options is required')
-    return SelectScreen(screen_def[XML_NAME], label, options)
+    # TODO : Parse optional padding
+    return SelectScreen(screen_def[XML_NAME], message, options)

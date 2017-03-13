@@ -15,6 +15,7 @@
 import logging
 from math import floor
 from screenflow.screens import Screen
+from screenflow.screens.screen import get_longest, get_highest
 from screenflow.constants import XML_NAME
 
 # Configure logger.
@@ -110,28 +111,27 @@ class MessageBasedScreen(Screen):
     def __init__(self, name, message):
         """Default constructor.
 
+        :param name:
         :param message: Message displayed into the screen.
         """
-        super(MessageBasedScreen, self).__init__(name)
+        Screen.__init__(self, name)
         self.message = Message(message)
         self._last_width = 0
         self._message_surface = None
 
-    def get_message_surface(self, parent_surface_width):
+    def get_message_surface(self, parent_surface_size):
         """Factory method that creates a surface with this screen message.
         Created surface is cached in order to avoid duplicate computation.
 
         :param parent_surface_width: Width of the target parent surface.
         :returns: Created surface.
         """
-        size_updated = self._last_width != parent_surface_width
+        size_updated = self._last_width != parent_surface_size[0]
         if self._message_surface is None or size_updated:
             text_sizer = self.font_manager.primary
-            lines = self.message.lines(text_sizer, parent_surface_width)
-            longest = max(lines, key=lambda l: text_sizer(l)[0])
-            heighest = max(lines, key=lambda l: text_sizer(l)[1])
-            line_width = text_sizer(longest)[0]
-            line_height = text_sizer(heighest)[1]
+            lines = self.message.lines(text_sizer, parent_surface_size[0])
+            line_width = get_longest(lines, text_sizer)
+            line_height = get_highest(lines, text_sizer)
             size = (line_width, len(lines) * line_height)
             self._message_surface = self.create_surface(size)
             # TODO : Consider using property ?

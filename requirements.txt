@@ -1,3 +1,5 @@
 xmltodict
 pygame
 pytest
+tinycss
+webcolors

@@ -23,12 +23,57 @@
 
 """
 
-from screenflow.constants import WHITE
+from screenflow.constants import WHITE, VERTICAL, HORIZONTAL
 
 from pygame import Surface
 from pygame.mouse import get_pos as mouse_position
 from pygame.event import get as events
 from pygame.constants import QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP
+
+
+def find(collection, sizer, axis):
+    """
+    """
+    best = max(collection, key=lambda x: sizer(x)[axis])
+    return sizer(best)[axis]
+
+
+def get_longest(collection, sizer):
+    """
+    :param collection:
+    :param sizer:
+    :returns:
+    """
+    return find(collection, sizer, 0)
+
+
+def get_highest(collection, sizer):
+    """
+    :param collection:
+    :param sizer:
+    :returns:
+    """
+    return find(collection, sizer, 1)
+
+
+class Oriented(object):
+    """
+    """
+
+    def __init__(self, orientation,  **kwargs):
+        """
+        """
+        self.orientation = orientation
+
+    def isVertical(self):
+        """
+        """
+        return self.orientation == VERTICAL
+
+    def isHorizontal(self):
+        """
+        """
+        return self.orientation == HORIZONTAL
 
 
 class Screen(object):
@@ -119,6 +164,15 @@ class Screen(object):
         :param surface: Surface to draw background into.
         """
         surface.fill(self.background_color)
+
+    def draw_centered(self, surface, delegate):
+        """
+        """
+        surface_size = surface.get_size()
+        delegate_surface_size = delegate.get_size()
+        x = (surface_size[0] - delegate_surface_size[0]) / 2
+        y = (surface_size[1] - delegate_surface_size[1]) / 2
+        surface.blit(delegate, (x, y))
 
     def draw(self, surface):
         """
