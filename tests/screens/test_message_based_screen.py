@@ -20,7 +20,7 @@ def test_get_message_surface():
     screen = MessageBasedScreen(DEFAULT_NAME, DEFAULT_MESSAGE)
     screen.font_manager = FontManager()
     screen.surface_factory = mock_factory
-    surface = screen.get_message_surface(500)
+    surface = screen.get_message_surface((500, 500))
     assert surface.blit_call == 1
     assert surface.fill_call == 1
     lines = screen.message.lines(None, 500)

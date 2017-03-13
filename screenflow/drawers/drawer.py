@@ -12,7 +12,10 @@ class Drawer(object):
         """
         :param parent:
         """
-        self.cell_style = Style(parent.cell_style)
+        self.generic = GenericStyle(parent.generic_style)
+        self.primary = FontStyle(parent.primary)
+        self.secondary = FontStyle(parent.secondary)
+        self.button = ButtonStyle(parent.button)
 
     def draw_background(self, surface):
         """Background drawing method.

@@ -1,62 +1,6 @@
 #!/usr/bin/python
 
-""" 
-
-    Supported CSS rules
-    -------------------
-
-    Selector
-    ~~~~~~~~~~~~~
-
-    There is three top level selector (TLS) that can be used :
-
-    - screenflow
-    - #screen_name
-    - .screen_type
-
-    General selector properties
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Here are the rules supported by any **TLS** selector
-    with their default values :
-
-    .. code-block:: css
-
-        tls {
-            background-color: white;
-            padding: 20;
-        }
-
-    Component font selector
-    ~~~~~~~~~~~~~~~~~~~~~~~
-
-    For any top level selector, we can add specific rule
-    for **primary** as **secondary** font to be used for
-    the target componenents :
-
-    .. code-block:: css
-
-        tls primary {
-            color: black;
-            font-size: 20;
-            font-familiy: Arial;
-        }
-
-    Component button selector
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    For any top level selector, we can add specific rule
-    for **button** design to be used for the target componenents :
-
-    .. code-block:: css
-
-        tls button {
-            background-color: black;
-            padding: 20;
-            color: white;
-            font-size: 20;
-            font-familiy: Arial;
-        }
+"""
 """
 
 import logging
@@ -79,6 +23,12 @@ def get_color(value):
     return name_to_rgb(value)
 
 
+def background_color_parser(drawer, value):
+    """
+    """
+    pass
+
+
 class DrawerManager(object):
     """To document.
     """
@@ -89,10 +39,6 @@ class DrawerManager(object):
         self.name_drawers = {}
         self.type_drawers = {}
         self.screenflow_drawer = Drawer()
-        self.screenflow_drawer.background_color = (255, 255, 255)
-        self.screenflow_drawer.text_color = (0, 0, 0)
-        self.screenflow_drawer.padding = 20
-        self.screenflow_drawer.cell_padding = 20
 
     def create_screen_name_drawer(self, selector):
         """
@@ -134,8 +80,9 @@ class DrawerManager(object):
             self.declaration_parser(declaration, drawer)
 
     def load(self, file):
-        """
-        :param file:
+        """Loads and parses the given CSS file.
+
+        :param file: CSS file to load.
         """
         parser = tinycss.make_parser('fonts3')
         stylesheet = parser.parse_stylesheet_file(file)
