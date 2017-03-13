@@ -192,6 +192,7 @@ class ScreenFlow(FontManager):
                 if not self.transition.update(self.surface):
                     self.transition = None
                     self.state = ScreenFlow.ACTIVE
+                    current.draw(self.surface)
                     current.on_screen_activated()
             elif self.state == ScreenFlow.ACTIVE:
                 self.running = current.process_event()
