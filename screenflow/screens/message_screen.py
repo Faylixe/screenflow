@@ -33,6 +33,7 @@
 
 import logging
 from math import floor
+from pygame import Surface
 from screenflow.screens import Screen
 from screenflow.constants import XML_NAME
 
@@ -129,6 +130,7 @@ class MessageScreen(Screen):
         super(MessageScreen, self).__init__(name)
         self.message = Message(message)
         self.callback = None
+        self._message_surface = None
 
     def on_touch(self, function):
         """Decorator method that registers the given function as screen touch callback.
@@ -147,23 +149,47 @@ class MessageScreen(Screen):
         if self.callback is not None:
             self.callback()
 
+    def get_message_surface(self, parent_surface_width):
+        """
+        :param parent_surface_width:
+        :returns:
+        """
+        if self._message_surface is None:
+            text_sizer = self.font_manager.primary
+            lines = self.message.lines(text_sizer, parent_surface_width)
+            longest = max(lines, key=lambda l: text_sizer(l)[0])
+            heighest = max(lines, key=lambda l: text_sizer(l)[1])
+            line_width = text_sizer(longest)[0]
+            line_height = text_sizer(heighest)[1]
+            size = (line_width, len(lines) * line_height)
+            self._message_surface = Surface(size)
+            # TODO : Consider using property ?
+            self._message_surface.fill((255, 255, 255))
+            y = 0
+            for line in lines:
+                text_surface_width, _ = text_sizer(line)
+                text_surface_start = (line_width - text_surface_width) / 2
+                x = (self.padding[0] + text_surface_start)
+                self.font_manager.draw_primary_text(
+                    line,
+                    self._message_surface,
+                    (x, y))
+                y += line_height
+        return self._message_surface
+
     def draw(self, surface):
         """Drawing method, display centered text.
 
         :param surface: Surface to draw this screen into.
         """
         super(MessageScreen, self).draw(surface)
-        surface_width, _ = self.get_surface_size(surface)
-        text_sizer = self.font_manager.primary
-        lines = self.message.lines(text_sizer, surface_width)
-        y = self.padding[1]
-        # TODO : Compute max size for centering ?
-        for line in lines:
-            text_surface_width, text_surface_height = text_sizer(line)
-            text_surface_start = (surface_width - text_surface_width) / 2
-            x = (self.padding[0] + text_surface_start)
-            self.font_manager.draw_primary_text(line, surface, (x, y))
-            y += text_surface_height
+        # TODO : Consider using parent surface size getter.
+        surface_width, surface_height = surface.get_size()
+        message_surface = self.get_message_surface(surface_width)
+        message_surface_size = message_surface.get_size()
+        x = (surface_width - message_surface_size[0]) / 2
+        y = (surface_height - message_surface_size[1]) / 2
+        surface.blit(message_surface, (x, y))
 
 
 # XML tag for message parameter.
