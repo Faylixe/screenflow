@@ -87,43 +87,71 @@ class Screen(object):
         """
         self.name = name
         self.padding = (0, 0)
-        self._surface_factory = None
-        self._font_manager = None
+        self.__surface_factory = None
+        self.__font_manager = None
+        self.__style = None
+        self.__primary_style = None
+        self.__secondary_style = None
+        self.__button_style = None
         self.background_color = background_color
 
-    @property
-    def font_manager(self):
+    def draw_background(self, surface):
         """
-        :returns:
+        :param surface:
         """
-        if self._font_manager is None:
-            raise AttributeError('Font manager not initialized')
-        return self._font_manager
+        surface.fill(self.style.background_color)
 
-    @font_manager.setter
-    def font_manager(self, delegate):
+    def draw_primary_text(self, text):
         """
-        :param delegate:
         """
-        self._font_manager = delegate
+        return None
+
+    def draw_secondary_text(self, text):
+        """
+        """
+        return None
+
+    def draw_button(self, label, size):
+        """
+        """
+        surface = self.create_surface(size)
+        # TODO : Find button style background color.
+        surface.fill(self.button_style.background_color)
+        # TODO : Find button style font
+        # TODO : Draw text.
+        return surface
+
+    def get_surface_drawable_size(self, surface):
+        """ Surface
+
+        :param surface:
+        """
+        return surface.get_size()
+
+    @property
+    def drawer(self):
+        """
+        """
+        if self.__drawer is None:
+            raise AttributeError('')
 
     @property
     def surface_factory(self):
         """
         :returns:
         """
-        if self._surface_factory is None:
+        if self.__surface_factory is None:
             def pygame_factory(size):
                 return Surface(size)
-            self._surface_factory = pygame_factory
-        return self._surface_factory
+            self.__surface_factory = pygame_factory
+        return self.__surface_factory
 
     @surface_factory.setter
     def surface_factory(self, factory):
         """
         :param factory:
         """
-        self._surface_factory = factory
+        self.__surface_factory = factory
 
     def create_surface(self, size):
         """
@@ -131,11 +159,6 @@ class Screen(object):
         :returns:
         """
         return self.surface_factory(size)
-
-    def get_surface_size(self, surface):
-        """ Surface
-        """
-        return surface.get_size()
 
     def process_event(self):
         """ To doc

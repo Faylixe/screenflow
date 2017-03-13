@@ -52,7 +52,7 @@ class MessageScreen(MessageBasedScreen):
 
         :param message: Message displayed into the screen.
         """
-        super(MessageScreen, self).__init__(name, message)
+        MessageBasedScreen.__init__(self, name, message)
         self.callback = None
 
     def on_touch(self, function):
@@ -77,9 +77,8 @@ class MessageScreen(MessageBasedScreen):
 
         :param surface: Surface to draw this screen into.
         """
-        super(MessageScreen, self).draw(surface)
-        # TODO : Consider using parent surface size getter.
-        surface_size = surface.get_size()
+        MessageBasedScreen.draw(self, surface)
+        surface_size = self.get_surface_drawable_size(surface)
         message_surface = self.get_message_surface(surface_size)
         self.draw_centered(surface, message_surface)
 
