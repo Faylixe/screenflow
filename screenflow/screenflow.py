@@ -196,7 +196,6 @@ class ScreenFlow(FontManager):
             flip()
             current = self.get_current_screen()
             if self.state == ScreenFlow.IN_TRANSITION:
-                time.wait(50)
                 if not self.transition.update(self.surface):
                     self.transition = None
                     self.state = ScreenFlow.ACTIVE
