@@ -25,7 +25,10 @@
 
 from screenflow.constants import WHITE
 
-import pygame
+from pygame import Surface
+from pygame.mouse import get_pos as mouse_position
+from pygame.event import get as events
+from pygame.constants import QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP
 
 
 class Sizeable(object):
@@ -94,18 +97,21 @@ class Screen(object):
     def process_event(self):
         """ To doc
         """
-        for event in pygame.event.get():
+        for event in events():
             if event.type == MOUSEBUTTONDOWN:
-                self.on_mouse_down(pygame.mouse.get_pos())
+                self.on_mouse_down(mouse_position())
             elif event.type == MOUSEBUTTONUP:
-                self.on_mouse_up(pygame.mouse.get_pos())
+                self.on_mouse_up(mouse_position())
+            elif event.type == QUIT:
+                return False
+        return True
 
     def generate_preview(self, size):
         """
         :param size:
         :returns:
         """
-        surface = pygame.Surface(size)
+        surface = Surface(size)
         self.draw(surface)
         return surface
 
