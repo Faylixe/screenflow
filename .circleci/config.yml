@@ -5,7 +5,7 @@ jobs:
             -   image: python:2.7
                 environment:
                     AUDIODEV: null
-        working_directory: ~/screenflow-ci
+        working_directory: ~/screenflow
         steps:
             - checkout
             - run:
@@ -16,12 +16,15 @@ jobs:
                 command: pip install pytest pytest-cov coverage codacy-coverage
             - run:
                 name: Run unit tests
-                command: pytest --junitxml=unittests.xml --cov-report term --cov=screenflow
+                command: pytest --junitxml=reports/unittests.xml --cov-report term --cov=screenflow
             - run:
                 name: Generate test coverage report
                 command: coverage xml
+            - store_artifacts:
+                path: reports/
+                destination: reports
             - store_test_results:
-                path: unittests.xml
+                path: "reports/"
             - deploy:
                 name: Deploy coverage report to Codacy
                 command: python-codacy-coverage -r coverage.xml
