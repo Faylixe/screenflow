@@ -10,13 +10,13 @@ class ScreenMock(object):
 
     def __init__(self, name):
         """ Default constructor. """
-        self.font_manager = None
+        self._font_manager = None
         self.name = name
         self.preview_generated = 0
 
-    def set_font_manager(self, manager):
+    def configure_screen_styles(self, style_factory):
         """ """
-        self.font_manager = manager
+        pass
 
     def generate_preview(self, size):
         """ """
