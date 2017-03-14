@@ -41,6 +41,9 @@ from screenflow.constants import XML_NAME
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
+# Message screen type name.
+SCREEN_TYPE = 'message_screen'
+
 
 class MessageScreen(MessageBasedScreen):
     """ MessageScreen aims to only display a text message, and allows
@@ -52,7 +55,7 @@ class MessageScreen(MessageBasedScreen):
 
         :param message: Message displayed into the screen.
         """
-        MessageBasedScreen.__init__(self, name, message)
+        MessageBasedScreen.__init__(self, name, SCREEN_TYPE, message)
         self.callback = None
 
     def on_touch(self, function):

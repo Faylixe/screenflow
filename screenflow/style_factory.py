@@ -26,8 +26,9 @@
 
 import logging
 import tinycss
-from pygame.font import SysFont
 from webcolors import hex_to_rgb, name_to_rgb
+from style import Styles, GenericStyle, FontStyle
+from constants import BLACK, WHITE, GRAY
 
 # Configure logger.
 logging.basicConfig()
@@ -53,7 +54,7 @@ def get_styles(map, selector):
     :returns:
     """
     key = selector[1:]
-    if key not in self.name_drawers.keys():
+    if key not in map.keys():
         map[key] = Styles()
     return map[key]
 
@@ -165,7 +166,9 @@ class StyleFactory(object):
         if tls.startswith('#'):
             return get_styles(self.__name_styles, tls)
         elif tls.startswith('.'):
-            return get_styles(self.__type_styles, tls)
+            styles = get_styles(self.__type_styles, tls)
+            styles.parent = self.__screenflow_styles
+            return styles
         return self.__screenflow_styles
 
     def load(self, file):
@@ -201,9 +204,11 @@ class StyleFactory(object):
         """
         if screen.name in self.__name_styles.keys():
             styles = self.__name_styles[screen.name]
-            if screen.type in self.__type_styles.keys():
-                # Set type as parent.
-                pass
+            if styles.parent is None:
+                if screen.type in self.__type_styles.keys():
+                    styles.parent = self.__type_styles[screen.type]
+                else:
+                    styles.parent = self.__screenflow_styles
         return None
 
     def __get_screen_styles(self, screen):
@@ -211,7 +216,7 @@ class StyleFactory(object):
         :param screen:
         :returns:
         """
-        styles = self.__get_name_styles(self, screen.name)
+        styles = self.__get_name_styles(screen)
         if styles is None:
             if screen.type in self.__type_styles.keys():
                 return self.__type_styles[screen.type]
@@ -223,7 +228,7 @@ class StyleFactory(object):
         :param screen:
         :returns:
         """
-        styles = self.__get_screen_styles(self, screen)
+        styles = self.__get_screen_styles(screen)
         # TODO : Check parent.
         return styles.style
 
@@ -232,6 +237,6 @@ class StyleFactory(object):
         :param screen:
         :returns:
         """
-        styles = self.__get_screen_styles(self, screen)
+        styles = self.__get_screen_styles(screen)
         # TODO : Check parent.
         return (styles.primary, styles.secondary)
