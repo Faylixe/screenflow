@@ -131,7 +131,14 @@ class Screen(object):
         :param surface: Surface to draw background into.
         """
         # TODO : Consider using background image variant ?
-        surface.fill(self.style.background_color)
+        surface.fill(self.__style.background_color)
+
+    def __get_font(self, style):
+        """
+        :param style:
+        :returns:
+        """
+        return self.font_manager.get(style.name, style.size)
 
     def __get_text(self, text, style):
         """Creates a text surface for the given text with primary font style.
@@ -140,11 +147,22 @@ class Screen(object):
         :param style: Font style to use for text rendering.
         :returns: Created text surface.
         """
-        name = style.name
-        size = style.size
-        color = style.color
-        font = self.font_manager.get(name, size)
-        return font.render(text, color)
+        font = self.__get_font(style)
+        return font.render(text, style.color)
+
+    def primary_size(self, text):
+        """
+        :param text:
+        :returns:
+        """
+        return self.__get_font(self.__primary_style).size(text)
+
+    def secondary_size(self, text):
+        """
+        :param text:
+        :returns:
+        """
+        return self.__get_font(self.__secondary_style).size(text)
 
     def draw_primary_text(self, text):
         """Creates a text surface for the given text with primary font style.

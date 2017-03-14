@@ -15,7 +15,7 @@ class FontManager(object):
 
     def __init__(self):
         """ Default constructor. """
-        self.fonts = {}
+        self.__fonts = {}
         self.__font_factory = None
 
     @property
@@ -43,8 +43,8 @@ class FontManager(object):
         :param size: Size of the font to get.
         :returns: Required font instance.
         """
-        if name not in self.fonts.keys():
-            self.fonts[name] = {}
-        if size not in self.fonts.keys():
-            self.fonts[name][size] = font_factory(name, size)
-        return self.fonts[name][size]
+        if name not in self.__fonts.keys():
+            self.__fonts[name] = {}
+        if size not in self.__fonts[name].keys():
+            self.__fonts[name][size] = self.font_factory(name, size)
+        return self.__fonts[name][size]
