@@ -79,12 +79,14 @@ class Oriented(object):
 class Screen(object):
     """ Base class for screen object. """
 
-    def __init__(self, name):
+    def __init__(self, name, type):
         """Default constructor.
 
         :param name: Name of this screen.
+        :param type: Type of this screen.
         """
         self.name = name
+        self.type = type
         self.__surface_factory = None
         self.__font_manager = None
         self.__style = None
@@ -105,16 +107,16 @@ class Screen(object):
         """
         :returns: Font manager instance if any, raise a exception otherwise.
         """
-        if self._font_manager is None:
+        if self.__font_manager is None:
             raise AttributeError('Font manager not initialized')
-        return self._font_manager
+        return self.__font_manager
 
     @font_manager.setter
     def font_manager(self, font_manager):
         """
         :param font_manager:
         """
-        self._font_manager = font_manager
+        self.__font_manager = font_manager
 
     @property
     def surface_factory(self):
@@ -157,7 +159,7 @@ class Screen(object):
         :returns: Created text surface.
         """
         font = self.__get_font(style)
-        return font.render(text, style.color)
+        return font.render(text, 0, style.color)
 
     def primary_size(self, text):
         """

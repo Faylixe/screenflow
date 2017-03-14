@@ -96,8 +96,8 @@ def test_register_factory():
         pass
     name = 'foo'
     screenflow.register_factory(name, factory)
-    assert name in screenflow.factories.keys()
-    assert screenflow.factories[name] == factory
+    assert name in screenflow.__factories.keys()
+    assert screenflow.__factories[name] == factory
 
 
 def test_register_factory_duplicate():

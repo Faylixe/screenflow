@@ -36,6 +36,9 @@ from screenflow.screens.screen import Oriented, get_longest, get_highest
 from screenflow.screens.message_based_screen import MessageBasedScreen
 from screenflow.constants import XML_NAME, VERTICAL, HORIZONTAL, BLACK, WHITE
 
+# Select screen type name.
+SCREEN_TYPE = 'select_screen'
+
 
 class SelectScreen(MessageBasedScreen, Oriented):
     """To document.
@@ -53,10 +56,8 @@ class SelectScreen(MessageBasedScreen, Oriented):
         :param message:
         :param options:
         :param orientation:
-        :param cell_background_color:
-        :param cell_padding:
         """
-        MessageBasedScreen.__init__(self, name, message)
+        MessageBasedScreen.__init__(self, name, SCREEN_TYPE, message)
         Oriented.__init__(self, orientation)
         self.options = options
         self.callback = None

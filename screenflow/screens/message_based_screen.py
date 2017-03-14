@@ -81,7 +81,7 @@ class Message(object):
         :param surface_width: Width of the surface line will be rendered.
         :returns: True if lines should be recomputed, False otherwise.
         """
-        return len(self._lines) == 0 or surface_width != self.__last_width
+        return len(self.__lines) == 0 or surface_width != self.__last_width
 
     def lines(self, sizer, surface_width):
         """Property binding of _lines attributes that computes if required text
@@ -108,13 +108,14 @@ class MessageBasedScreen(Screen):
     transition on touch event.
     """
 
-    def __init__(self, name, message):
+    def __init__(self, name, type, message):
         """Default constructor.
 
         :param name:
+        :param type:
         :param message: Message displayed into the screen.
         """
-        Screen.__init__(self, name)
+        Screen.__init__(self, name, type)
         self.message = Message(message)
         self.__last_width = 0
         self.__message_surface = None
