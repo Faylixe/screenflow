@@ -1,0 +1,22 @@
+version: 2
+jobs:
+    build:
+        docker: 
+            -   image: python
+                environment:
+                    AUDIODEV: null
+        steps:
+            - run:
+                name: Application dependencies
+                command: pip install -r requirements.txt
+            - run:
+                name: CI dependencies
+                command: pip install pytest pytest-cov coverage codacy-coverage
+            - run: pytest --junitxml=unittests.xml --cov-report term --cov=screenflow
+            - run: coverage xml
+            - store_test_results:
+                path: unittest.xml
+            - store_artifacts:
+                path: coverage.xml
+                prefix: coverage-report
+            - deploy: python-codacy-coverage -r coverage.xml

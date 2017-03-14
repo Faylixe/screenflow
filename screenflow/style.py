@@ -4,6 +4,9 @@
     CSS engine
     ==========
 
+    Screenflow embeds a CSS parsing engine for defining screen style
+    properties.
+
     Supported CSS rules
     -------------------
 
@@ -196,20 +199,13 @@ class ButtonStyle(FontStyle, GenericStyle):
         GenericStyle.__init__(self, parent)
         FontStyle.__init__(self, parent)
 
-    def draw_button(self, surface, label):
-            """Button drawing method.
-
-            :param surface: Surface to draw button into.
-            :param label: Button label.
-            """
-            surface.fill(self.background_color)
-            # Draw text.
-
 
 def get_color(value):
-    """
-    :param value:
-    :returns:
+    """Simple factory method that takes a CSS color definition
+    and transforms it into a valid RGB color tuple.
+
+    :param value: CSS color value.
+    :returns: Associated RGB color tuple.
     """
     if value[0] == '#':
         return hex_to_rgb(value)
