@@ -69,15 +69,30 @@ class Styles(object):
     """
     """
 
-    def __init__(self):
+    def __init__(self, parent):
         """
         """
-        pass
+        self.__parent = parent
+        self.__style = None
+        self.__primary = None
+        self.__secondary = None
 
-    def get_style(self, path):
+    @property
+    def primary(self):
         """
+        :returns:
         """
-    
+        if self.__primary is None:
+            return self.__parent.primary
+        return self.__primary
+
+    @primary.setter
+    def primary(self, value):
+        """
+        :param value:
+        """
+        self.__primary = value
+
 
 class GenericStyle(object):
     """
