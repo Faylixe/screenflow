@@ -16,7 +16,7 @@ jobs:
                 command: pip install pytest pytest-cov coverage codacy-coverage
             - run:
                 name: Run unit tests
-                command: pytest --junitxml=reports/unittests.xml --cov-report term --cov=screenflow
+                command: pytest --junitxml=reports/results.xml --cov-report term --cov=screenflow
             - run:
                 name: Generate test coverage report
                 command: coverage xml
