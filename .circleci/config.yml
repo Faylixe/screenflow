@@ -19,4 +19,6 @@ jobs:
             - store_artifacts:
                 path: coverage.xml
                 prefix: coverage-report
-            - deploy: python-codacy-coverage -r coverage.xml
+            - deploy:
+                name: Codacy
+                command: python-codacy-coverage -r coverage.xml
