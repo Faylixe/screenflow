@@ -14,8 +14,12 @@ jobs:
             - run:
                 name: CI dependencies
                 command: pip install pytest pytest-cov coverage codacy-coverage
-            - run: pytest --junitxml=unittests.xml --cov-report term --cov=screenflow
-            - run: coverage xml
+            - run:
+                name: Unit testing
+                command: pytest --junitxml=unittests.xml --cov-report term --cov=screenflow
+            - run:
+                name: Test coverage reporting
+                command: coverage xml
             - store_test_results:
                 path: unittest.xml
             - store_artifacts:
