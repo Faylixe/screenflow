@@ -21,9 +21,9 @@ jobs:
                 name: Generate test coverage report
                 command: coverage xml
             - store_test_results:
-                path: unittest.xml
+                path: /root/screenflow-ci/unittest.xml
             - store_artifacts:
-                path: coverage.xml
+                path: /root/screenflow-ci/coverage.xml
                 prefix: coverage-report
             - deploy:
                 name: Deploy coverage report to Codacy
