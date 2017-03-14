@@ -3,11 +3,11 @@
 """ Simple test suite for Select screen associated classes. """
 
 from screenflow.constants import XML_NAME
-from screenflow.font_manager import FontManager, FontHolder
+from screenflow.font_manager import FontManager
 from screenflow.screens import SelectScreen
 from screenflow.screens.message_based_screen import XML_MESSAGE
 from screenflow.screens.select_screen import factory, XML_OPTION
-from tests.mocks.surface_mock import SurfaceMock
+from tests.mocks.surface_mock import SurfaceMock, factory as surface_factory
 from pytest import raises
 
 # Default name for testing.
@@ -33,6 +33,8 @@ def create_select_screen(name=DEFAULT_NAME, label=DEFAULT_LABEL, options=DEFAULT
     screen_def[XML_MESSAGE] = label
     screen_def[XML_OPTION] = options
     screen = factory(screen_def)
+    screen.font_manager = FontManager()
+    screen.surface_factory = surface_factory
     return screen
 
 

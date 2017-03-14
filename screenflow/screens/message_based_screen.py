@@ -130,7 +130,7 @@ class MessageBasedScreen(Screen):
         if self.__message_surface is None or size_updated:
             self.__last_width = parent_surface_size[0]
             # TODO : Refactor sizer concept.
-            text_sizer = self.font_manager.primary
+            text_sizer = self.primary_size
             lines = self.message.lines(text_sizer, parent_surface_size[0])
             line_width = get_longest(lines, text_sizer)
             line_height = get_highest(lines, text_sizer)

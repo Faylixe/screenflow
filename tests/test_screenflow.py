@@ -179,3 +179,13 @@ def test_load_from_file_without_screen():
     screenflow = ScreenFlow(surface)
     with raises(AttributeError) as e:
         screenflow.load_from_file(file)
+
+
+def test_load_style():
+    """ """
+    pass
+
+
+def test_load_style_from_not_existing_file():
+    """ """
+    pass
