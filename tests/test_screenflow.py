@@ -20,9 +20,9 @@ def test_add_screen():
     screen = ScreenMock(name)
     screenflow = ScreenFlow(surface)
     screenflow.add_screen(screen)
-    assert screen.font_manager == screenflow
-    assert name in screenflow.screens.keys()
-    assert screenflow.screens[name] == screen
+    assert screen._font_manager == screenflow._font_manager
+    assert name in screenflow._screens.keys()
+    assert screenflow._screens[name] == screen
     assert screenflow.foo == screen
 
 
@@ -38,7 +38,7 @@ def test_get_current_screen():
     """ Test case for top stack access. """
     screenflow = ScreenFlow(surface)
     screen = ScreenMock('foo')
-    screenflow.stack.append(screen)
+    screenflow._stack.append(screen)
     current = screenflow.get_current_screen()
     assert current == screen
 
@@ -55,12 +55,12 @@ def test_navigate_to():
     screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
-    screenflow.stack.append(foo)
+    screenflow._stack.append(foo)
     screenflow.navigate_to(bar)
-    assert screenflow.state == ScreenFlow.IN_TRANSITION
-    assert len(screenflow.stack) == 2
-    assert screenflow.stack[0] == foo
-    assert screenflow.stack[1] == bar
+    assert screenflow._state == ScreenFlow.IN_TRANSITION
+    assert len(screenflow._stack) == 2
+    assert screenflow._stack[0] == foo
+    assert screenflow._stack[1] == bar
 
 
 def test_navigate_back_error():
@@ -75,12 +75,12 @@ def test_navigate_back():
     screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
-    screenflow.stack.append(foo)
-    screenflow.stack.append(bar)
+    screenflow._stack.append(foo)
+    screenflow._stack.append(bar)
     screenflow.navigate_back()
-    assert screenflow.state == ScreenFlow.IN_TRANSITION
-    assert len(screenflow.stack) == 1
-    assert screenflow.stack[0] == foo
+    assert screenflow._state == ScreenFlow.IN_TRANSITION
+    assert len(screenflow._stack) == 1
+    assert screenflow._stack[0] == foo
 
 
 def test_main_loop():
@@ -96,8 +96,8 @@ def test_register_factory():
         pass
     name = 'foo'
     screenflow.register_factory(name, factory)
-    assert name in screenflow.__factories.keys()
-    assert screenflow.__factories[name] == factory
+    assert name in screenflow._factories.keys()
+    assert screenflow._factories[name] == factory
 
 
 def test_register_factory_duplicate():
