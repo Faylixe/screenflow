@@ -5,6 +5,7 @@ jobs:
             -   image: python
                 environment:
                     AUDIODEV: null
+        working-directory: ~/screenflow-ci
         steps:
             - run:
                 name: Application dependencies
