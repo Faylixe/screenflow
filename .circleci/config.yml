@@ -21,7 +21,7 @@ jobs:
                 name: Generate test coverage report
                 command: coverage xml
             - store_artifacts:
-                path: "tests-reports/"
+                path: "test-reports/"
                 destination: reports
             - store_test_results:
                 path: "test-reports/"
