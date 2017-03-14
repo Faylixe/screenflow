@@ -56,7 +56,7 @@ class MessageScreen(MessageBasedScreen):
         :param message: Message displayed into the screen.
         """
         MessageBasedScreen.__init__(self, name, SCREEN_TYPE, message)
-        self.callback = None
+        self._callback = None
 
     def on_touch(self, function):
         """Decorator method that registers the given function as screen touch callback.
@@ -64,7 +64,7 @@ class MessageScreen(MessageBasedScreen):
         :param function: Decorated function to use as callback.
         :returns: Given function to match decorator pattern.
         """
-        self.callback = function
+        self._callback = function
         return function
 
     def on_mouse_up(self, position):
@@ -72,8 +72,8 @@ class MessageScreen(MessageBasedScreen):
 
         :param position: Position of the mouse up event.
         """
-        if self.callback is not None:
-            self.callback()
+        if self._callback is not None:
+            self._callback()
 
     def draw(self, surface):
         """Drawing method, display centered text.

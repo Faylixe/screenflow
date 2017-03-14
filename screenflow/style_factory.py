@@ -138,10 +138,10 @@ class StyleFactory(object):
 
     def __init__(self):
         """ Default constructor. """
-        self.__declaration_parser = {}
-        self.__name_styles = {}
-        self.__type_styles = {}
-        self.__screenflow_styles = create_default_styles()
+        self._declaration_parser = {}
+        self._name_styles = {}
+        self._type_styles = {}
+        self._screenflow_styles = create_default_styles()
         self.register_declaration_parser(
             'background-color',
             background_color_parser)
@@ -156,20 +156,20 @@ class StyleFactory(object):
         :param parser:
         """
         # TODO : Check for conflict.
-        self.__declaration_parser[name] = parser
+        self._declaration_parser[name] = parser
 
-    def __get_selector_styles(self, tls):
+    def _get_selector_styles(self, tls):
         """
         :param tls:
         :returns:
         """
         if tls.startswith('#'):
-            return get_styles(self.__name_styles, tls)
+            return get_styles(self._name_styles, tls)
         elif tls.startswith('.'):
-            styles = get_styles(self.__type_styles, tls)
-            styles.parent = self.__screenflow_styles
+            styles = get_styles(self._type_styles, tls)
+            styles.parent = self._screenflow_styles
             return styles
-        return self.__screenflow_styles
+        return self._screenflow_styles
 
     def load(self, file):
         """Loads and parses the given CSS file.
@@ -182,45 +182,45 @@ class StyleFactory(object):
             selector = ruleset.selector.as_css()
             path = selector.split()
             tls = path.pop(0)
-            styles = self.__get_selector_styles(selector)
+            styles = self._get_selector_styles(selector)
             style = styles.get_style(path)
             for declaration in ruleset.declarations:
-                self.__parse_declaration(declaration, style)
+                self._parse_declaration(declaration, style)
 
-    def __parse_declaration(self, declaration, style):
+    def _parse_declaration(self, declaration, style):
         """
         :param declaration:
         :param style:
         """
         name = declaration.name
-        if name not in self.__declaration_parser.keys():
+        if name not in self._declaration_parser.keys():
             # TODO : Log error.
             return
-        parser = self.__declaration_parser[name]
+        parser = self._declaration_parser[name]
         parser(declaration.value.as_css(), style)
 
-    def __get_name_styles(self, screen):
+    def _get_name_styles(self, screen):
         """
         """
-        if screen.name in self.__name_styles.keys():
-            styles = self.__name_styles[screen.name]
+        if screen.name in self._name_styles.keys():
+            styles = self._name_styles[screen.name]
             if styles.parent is None:
-                if screen.type in self.__type_styles.keys():
-                    styles.parent = self.__type_styles[screen.type]
+                if screen.type in self._type_styles.keys():
+                    styles.parent = self._type_styles[screen.type]
                 else:
-                    styles.parent = self.__screenflow_styles
+                    styles.parent = self._screenflow_styles
         return None
 
-    def __get_screen_styles(self, screen):
+    def _get_screen_styles(self, screen):
         """
         :param screen:
         :returns:
         """
-        styles = self.__get_name_styles(screen)
+        styles = self._get_name_styles(screen)
         if styles is None:
-            if screen.type in self.__type_styles.keys():
-                return self.__type_styles[screen.type]
-            return self.__screenflow_styles
+            if screen.type in self._type_styles.keys():
+                return self._type_styles[screen.type]
+            return self._screenflow_styles
         return styles
 
     def get_style(self, screen):
@@ -228,7 +228,7 @@ class StyleFactory(object):
         :param screen:
         :returns:
         """
-        styles = self.__get_screen_styles(screen)
+        styles = self._get_screen_styles(screen)
         # TODO : Check parent.
         return styles.style
 
@@ -237,6 +237,6 @@ class StyleFactory(object):
         :param screen:
         :returns:
         """
-        styles = self.__get_screen_styles(screen)
+        styles = self._get_screen_styles(screen)
         # TODO : Check parent.
         return (styles.primary, styles.secondary)

@@ -183,10 +183,10 @@ def test_load_from_file_without_screen():
 
 
 def test_load_style():
-    """ """
+    """ Test case for load style method. """
     pass
 
 
 def test_load_style_from_not_existing_file():
-    """ """
+    """ Test case for load style method with not existing file. """
     pass
