@@ -52,7 +52,7 @@ def test_on_touch():
     @screen.on_touch
     def callback():
         pass
-    assert screen.callback == callback
+    assert screen._callback == callback
 
 
 def test_mouse_event():
@@ -62,7 +62,7 @@ def test_mouse_event():
 
     def callback():
         call.append(True)
-    screen.callback = callback
+    screen._callback = callback
     screen.on_mouse_up(None)
     assert len(call) == 1
 

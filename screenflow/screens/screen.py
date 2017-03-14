@@ -33,6 +33,10 @@ from pygame.constants import QUIT, MOUSEBUTTONDOWN, MOUSEBUTTONUP
 
 def find(collection, sizer, axis):
     """
+    :param collection:
+    :param sizer:
+    :param axis:
+    :returns:
     """
     best = max(collection, key=lambda x: sizer(x)[axis])
     return sizer(best)[axis]
@@ -60,20 +64,23 @@ class Oriented(object):
     """
     """
 
-    def __init__(self, orientation,  **kwargs):
+    def __init__(self, orientation):
         """
+        :param orientation:
         """
-        self.orientation = orientation
+        self._orientation = orientation
 
     def isVertical(self):
         """
+        :returns:
         """
-        return self.orientation == VERTICAL
+        return self._orientation == VERTICAL
 
     def isHorizontal(self):
         """
+        :returns:
         """
-        return self.orientation == HORIZONTAL
+        return self._orientation == HORIZONTAL
 
 
 class Screen(object):
@@ -144,21 +151,21 @@ class Screen(object):
         # TODO : Consider using background image variant ?
         surface.fill(self._style.background_color)
 
-    def __get_font(self, style):
+    def _get_font(self, style):
         """
         :param style:
         :returns:
         """
         return self.font_manager.get(style.name, style.size)
 
-    def __get_text(self, text, style):
+    def _get_text(self, text, style):
         """Creates a text surface for the given text with primary font style.
 
         :param text: Text to render.
         :param style: Font style to use for text rendering.
         :returns: Created text surface.
         """
-        font = self.__get_font(style)
+        font = self._get_font(style)
         return font.render(text, 0, style.color)
 
     def primary_size(self, text):
@@ -166,14 +173,14 @@ class Screen(object):
         :param text:
         :returns:
         """
-        return self.__get_font(self._primary_style).size(text)
+        return self._get_font(self._primary_style).size(text)
 
     def secondary_size(self, text):
         """
         :param text:
         :returns:
         """
-        return self.__get_font(self._secondary_style).size(text)
+        return self._get_font(self._secondary_style).size(text)
 
     def draw_primary_text(self, text):
         """Creates a text surface for the given text with primary font style.
@@ -181,7 +188,7 @@ class Screen(object):
         :param text: Text to render.
         :returns: Created text surface.
         """
-        return self.__get_text(text, self._primary_style)
+        return self._get_text(text, self._primary_style)
 
     def draw_secondary_text(self, text):
         """Creates a text surface for the given text  with secondary font style.
@@ -189,7 +196,7 @@ class Screen(object):
         :param text: Text to render.
         :returns: Created text surface.
         """
-        return self.__get_text(text, self._secondary_style)
+        return self._get_text(text, self._secondary_style)
 
     def draw_button(self, label, size):
         """
