@@ -87,54 +87,54 @@ class Screen(object):
         """
         self.name = name
         self.type = type
-        self.__surface_factory = None
-        self.__font_manager = None
-        self.__style = None
-        self.__primary_style = None
-        self.__secondary_style = None
+        self._surface_factory = None
+        self._font_manager = None
+        self._style = None
+        self._primary_style = None
+        self._secondary_style = None
 
-    def configure_screen_styles(self, style_factory):
+    def configure_styles(self, style_factory):
         """
         :param style_factory:
         """
-        self.__style = style_factory.get_style(self)
+        self._style = style_factory.get_style(self)
         fonts = style_factory.get_font_styles(self)
-        self.__primary_style = fonts[0]
-        self.__secondary_style = fonts[1]
+        self._primary_style = fonts[0]
+        self._secondary_style = fonts[1]
 
     @property
     def font_manager(self):
         """
         :returns: Font manager instance if any, raise a exception otherwise.
         """
-        if self.__font_manager is None:
+        if self._font_manager is None:
             raise AttributeError('Font manager not initialized')
-        return self.__font_manager
+        return self._font_manager
 
     @font_manager.setter
     def font_manager(self, font_manager):
         """
         :param font_manager:
         """
-        self.__font_manager = font_manager
+        self._font_manager = font_manager
 
     @property
     def surface_factory(self):
         """
         :returns:
         """
-        if self.__surface_factory is None:
+        if self._surface_factory is None:
             def pygame_factory(size):
                 return Surface(size)
-            self.__surface_factory = pygame_factory
-        return self.__surface_factory
+            self._surface_factory = pygame_factory
+        return self._surface_factory
 
     @surface_factory.setter
     def surface_factory(self, factory):
         """
         :param factory:
         """
-        self.__surface_factory = factory
+        self._surface_factory = factory
 
     def draw_background(self, surface):
         """Draw a background into the given surface.
@@ -142,7 +142,7 @@ class Screen(object):
         :param surface: Surface to draw background into.
         """
         # TODO : Consider using background image variant ?
-        surface.fill(self.__style.background_color)
+        surface.fill(self._style.background_color)
 
     def __get_font(self, style):
         """
@@ -166,14 +166,14 @@ class Screen(object):
         :param text:
         :returns:
         """
-        return self.__get_font(self.__primary_style).size(text)
+        return self.__get_font(self._primary_style).size(text)
 
     def secondary_size(self, text):
         """
         :param text:
         :returns:
         """
-        return self.__get_font(self.__secondary_style).size(text)
+        return self.__get_font(self._secondary_style).size(text)
 
     def draw_primary_text(self, text):
         """Creates a text surface for the given text with primary font style.
@@ -181,7 +181,7 @@ class Screen(object):
         :param text: Text to render.
         :returns: Created text surface.
         """
-        return self.__get_text(text, self.__primary_style)
+        return self.__get_text(text, self._primary_style)
 
     def draw_secondary_text(self, text):
         """Creates a text surface for the given text  with secondary font style.
@@ -189,7 +189,7 @@ class Screen(object):
         :param text: Text to render.
         :returns: Created text surface.
         """
-        return self.__get_text(text, self.__secondary_style)
+        return self.__get_text(text, self._secondary_style)
 
     def draw_button(self, label, size):
         """
@@ -198,8 +198,8 @@ class Screen(object):
         :returns:
         """
         surface = self.create_surface(size)
-        surface.fill(self.__button_style.background_color)
-        text = self.__get_text(self, label, self.__button_style)
+        # surface.fill(self.__button_style.background_color)
+        # text = self.__get_text(self, label, self.__button_style)
         self.draw_centered(surface, text)
         return surface
 

@@ -3,6 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
+from screenflow.font_manager import FontManager
 from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
 from mocks.surface_mock import SurfaceMock
@@ -20,7 +21,7 @@ def test_add_screen():
     screen = ScreenMock(name)
     screenflow = ScreenFlow(surface)
     screenflow.add_screen(screen)
-    assert screen._font_manager == screenflow._font_manager
+    assert screen.font_manager == screenflow._font_manager
     assert name in screenflow._screens.keys()
     assert screenflow._screens[name] == screen
     assert screenflow.foo == screen

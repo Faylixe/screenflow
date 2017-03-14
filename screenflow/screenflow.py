@@ -7,12 +7,55 @@
     Screen binding
     --------------
 
+    Each screen belonging to your screenflow can be retrieved using
+    attribute binding. Let say you added a screen with name _foo_ in
+    a given screenflow instance, such screen could be accessed as following :
+
+    .. code-block:: python
+
+        screenflow.foo
+
     XML loading
     ------------
+
+    ScreenFlow allows you to define your screens by using XML format
+    using following convention :
+
+    .. code-block:: xml
+
+        <?xml version="1.0"?>
+        <screenflow>
+            <!-- Your screens here-->
+        </screenflow>
+
+    Where each screen is defined as following :
+
+     .. code-block:: xml
+
+        <screen name="screen_name" type="screen_type">
+            <!-- Your screen specific parameter here -->
+        </screen>
+
+    The _name_ attribute will be used for attribute binding. Checkout
+    available screens documentation to know what parameter can be settled.
 
     Custom screen
     -------------
 
+    You can implements your own screen by extending the Screen base class.
+    Although for screenflow to recognize your screen implementation when
+    parsing an XML file, you should register a factory function.
+
+    Such factory function should match the following signature :
+
+    .. code-block:: python
+
+        def my_factory(screen_def):
+            my_screen = ... // Create your screen instance here.
+            return my_screen
+
+    Where _screen_def_ parameter is a dictionary from xmltodict parsing
+    library.
 """
 
 import logging
@@ -127,15 +170,14 @@ class ScreenFlow(object):
         """
         self._screens[screen.name] = screen
         screen.font_manager = self._font_manager
-        screen.configure_screen_styles(self._style_factory)
+        screen.configure_styles(self._style_factory)
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access
         flow screens by name indexing.
 
         :param name: Name of the attribute to retrieve.
-        :returns:
-        :raise AttributeError:
+        :returns: Screen instance denoted by the given name.
         """
         if name in self._screens.keys():
             return self._screens[name]

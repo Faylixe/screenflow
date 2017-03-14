@@ -14,7 +14,7 @@ class ScreenMock(object):
         self.name = name
         self.preview_generated = 0
 
-    def configure_screen_styles(self, style_factory):
+    def configure_styles(self, style_factory):
         """ """
         pass
 

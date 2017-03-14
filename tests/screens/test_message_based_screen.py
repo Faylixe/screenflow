@@ -25,7 +25,7 @@ def create_message_based_screen():
     :returns: Created screen instance.
     """
     screen = MessageBasedScreen(DEFAULT_NAME, SCREEN_TYPE, DEFAULT_MESSAGE)
-    screen.configure_screen_styles(StyleFactory())
+    screen.configure_styles(StyleFactory())
     screen.font_manager = FontManager()
     return screen
 
