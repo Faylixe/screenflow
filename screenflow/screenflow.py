@@ -88,7 +88,7 @@ class ScreenFlow(FontManager):
 
         :param surface: Optional surface this flow will be rendered into.
         """
-        super(ScreenFlow, self).__init__()
+        FontManager.__init__(self)
         self.screens = {}
         self.factories = {}
         configure_screenflow(self)
@@ -110,6 +110,7 @@ class ScreenFlow(FontManager):
         """
         self.screens[screen.name] = screen
         screen.font_manager = self
+        # TODO : Set screens styles
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access
