@@ -71,7 +71,7 @@ def test_draw():
     """ Test case for message screen drawing method. """
     screen = create_message_screen()
     screen.font_manager = FontManager()
-    screen.configure_screen_styles(StyleFactory())
+    screen.configure_styles(StyleFactory())
     screen.surface_factory = mock_factory
     surface = SurfaceMock()
     screen.draw(surface)

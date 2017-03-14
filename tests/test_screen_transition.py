@@ -18,12 +18,12 @@ def check_transition(side, speed, width, expected_speed, expected_position):
     surface = SurfaceMock()
     previews = [SurfaceMock(), SurfaceMock()]
     transition = ScreenTransition(previews, side, speed)
-    assert transition.speed == expected_speed
-    assert transition.position == expected_position
+    assert transition._speed == expected_speed
+    assert transition._position == expected_position
     while transition.update(surface):
         continue
     assert surface.blit_call == (width / speed) * 2
-    return transition.position
+    return transition._position
 
 
 def test_forward_transition():
