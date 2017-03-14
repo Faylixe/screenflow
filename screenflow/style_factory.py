@@ -105,6 +105,31 @@ def color_parser(value, style):
     # TODO : Check instance.
     style.color = get_color(value)
 
+# Default style properties.
+DEFAULT_FONT = 'arial'
+DEFAULT_PRIMARY_SIZE = 20
+DEFAULT_SECONDARY_SIZE = 15
+DEFAULT_PADDING = 20
+
+
+def create_default_styles():
+    """
+    :returns:
+    """
+    styles = Styles()
+    styles.style = GenericStyle()
+    styles.style.background_color = WHITE
+    styles.style.padding = DEFAULT_PADDING
+    styles.primary = FontStyle()
+    styles.primary.name = DEFAULT_FONT
+    styles.primary.size = DEFAULT_PRIMARY_SIZE
+    styles.primary.color = BLACK
+    styles.secondary = FontStyle()
+    styles.primary.name = DEFAULT_FONT
+    styles.primary.size = DEFAULT_SECONDARY_SIZE
+    styles.primary.color = GRAY
+    return styles
+
 
 class StyleFactory(object):
     """To document.
@@ -115,7 +140,7 @@ class StyleFactory(object):
         self.__declaration_parser = {}
         self.__name_styles = {}
         self.__type_styles = {}
-        self.__screenflow_styles = Styles()
+        self.__screenflow_styles = create_default_styles()
         self.register_declaration_parser(
             'background-color',
             background_color_parser)
@@ -132,7 +157,7 @@ class StyleFactory(object):
         # TODO : Check for conflict.
         self.__declaration_parser[name] = parser
 
-    def __get_styles(self, tls):
+    def __get_selector_styles(self, tls):
         """
         :param tls:
         :returns:
@@ -154,7 +179,7 @@ class StyleFactory(object):
             selector = ruleset.selector.as_css()
             path = selector.split()
             tls = path.pop(0)
-            styles = self.__get_styles(selector)
+            styles = self.__get_selector_styles(selector)
             style = styles.get_style(path)
             for declaration in ruleset.declarations:
                 self.__parse_declaration(declaration, style)
@@ -171,20 +196,42 @@ class StyleFactory(object):
         parser = self.__declaration_parser[name]
         parser(declaration.value.as_css(), style)
 
+    def __get_name_styles(self, screen):
+        """
+        """
+        if screen.name in self.__name_styles.keys():
+            styles = self.__name_styles[screen.name]
+            if screen.type in self.__type_styles.keys():
+                # Set type as parent.
+                pass
+        return None
+
+    def __get_screen_styles(self, screen):
+        """
+        :param screen:
+        :returns:
+        """
+        styles = self.__get_name_styles(self, screen.name)
+        if styles is None:
+            if screen.type in self.__type_styles.keys():
+                return self.__type_styles[screen.type]
+            return self.__screenflow_styles
+        return styles
+
     def get_style(self, screen):
         """
         :param screen:
         :returns:
         """
-        if screen.name in self.__name_styles.keys():
-            pass
-        elif screen.type in self.__type_styles.keys():
-            pass
-        return None
+        styles = self.__get_screen_styles(self, screen)
+        # TODO : Check parent.
+        return styles.style
 
     def get_font_styles(self, screen):
         """
         :param screen:
         :returns:
         """
-        return (None, None)
+        styles = self.__get_screen_styles(self, screen)
+        # TODO : Check parent.
+        return (styles.primary, styles.secondary)
