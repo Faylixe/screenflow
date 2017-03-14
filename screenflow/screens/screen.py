@@ -23,7 +23,7 @@
 
 """
 
-from screenflow.constants import WHITE, VERTICAL, HORIZONTAL
+from screenflow.constants import VERTICAL, HORIZONTAL
 
 from pygame import Surface
 from pygame.mouse import get_pos as mouse_position
@@ -79,61 +79,34 @@ class Oriented(object):
 class Screen(object):
     """ Base class for screen object. """
 
-    def __init__(self, name, background_color=WHITE):
+    def __init__(self, name):
         """Default constructor.
 
         :param name: Name of this screen.
-        :param background_color: Default background color.
         """
         self.name = name
-        self.padding = (0, 0)
         self.__surface_factory = None
         self.__font_manager = None
         self.__style = None
         self.__primary_style = None
         self.__secondary_style = None
         self.__button_style = None
-        self.background_color = background_color
-
-    def draw_background(self, surface):
-        """
-        :param surface:
-        """
-        surface.fill(self.style.background_color)
-
-    def draw_primary_text(self, text):
-        """
-        """
-        return None
-
-    def draw_secondary_text(self, text):
-        """
-        """
-        return None
-
-    def draw_button(self, label, size):
-        """
-        """
-        surface = self.create_surface(size)
-        # TODO : Find button style background color.
-        surface.fill(self.button_style.background_color)
-        # TODO : Find button style font
-        # TODO : Draw text.
-        return surface
-
-    def get_surface_drawable_size(self, surface):
-        """ Surface
-
-        :param surface:
-        """
-        return surface.get_size()
 
     @property
-    def drawer(self):
+    def font_manager(self):
         """
+        :returns: Font manager instance if any, raise a exception otherwise.
         """
-        if self.__drawer is None:
-            raise AttributeError('')
+        if self._font_manager is None:
+            raise AttributeError('Font manager not initialized')
+        return self._font_manager
+
+    @font_manager.setter
+    def font_manager(self, font_manager):
+        """
+        :param font_manager:
+        """
+        self._font_manager = font_manager
 
     @property
     def surface_factory(self):
@@ -152,6 +125,77 @@ class Screen(object):
         :param factory:
         """
         self.__surface_factory = factory
+
+    def draw_background(self, surface):
+        """Draw a background into the given surface.
+
+        :param surface: Surface to draw background into.
+        """
+        # TODO : Consider using background image variant ?
+        surface.fill(self.style.background_color)
+
+    def __get_text(self, text, style):
+        """Creates a text surface for the given text with primary font style.
+
+        :param text: Text to render.
+        :param style: Font style to use for text rendering.
+        :returns: Created text surface.
+        """
+        name = style.name
+        size = style.size
+        color = style.color
+        font = self.font_manager.get(name, size)
+        return font.render(text, color)
+
+    def draw_primary_text(self, text):
+        """Creates a text surface for the given text with primary font style.
+
+        :param text: Text to render.
+        :returns: Created text surface.
+        """
+        return self.__get_text(text, self.__primary_style)
+
+    def draw_secondary_text(self, text):
+        """Creates a text surface for the given text  with secondary font style.
+
+        :param text: Text to render.
+        :returns: Created text surface.
+        """
+        return self.__get_text(text, self.__secondary_style)
+
+    def draw_button(self, label, size):
+        """
+        :param label:
+        :param size:
+        :returns:
+        """
+        surface = self.create_surface(size)
+        surface.fill(self.__button_style.background_color)
+        text = self.__get_text(self, label, self.__button_style)
+        self.draw_centered(surface, text)
+        return surface
+
+    def draw_centered(self, surface, delegate):
+        """
+        """
+        surface_size = surface.get_size()
+        delegate_surface_size = delegate.get_size()
+        x = (surface_size[0] - delegate_surface_size[0]) / 2
+        y = (surface_size[1] - delegate_surface_size[1]) / 2
+        surface.blit(delegate, (x, y))
+
+    def draw(self, surface):
+        """
+        :param surface: Surface to draw screen into.
+        """
+        self.draw_background(surface)
+
+    def get_surface_drawable_size(self, surface):
+        """ Surface
+
+        :param surface:
+        """
+        return surface.get_size()
 
     def create_surface(self, size):
         """
@@ -180,28 +224,6 @@ class Screen(object):
         surface = Surface(size)
         self.draw(surface)
         return surface
-
-    def draw_background(self, surface):
-        """Draw screen background by filling it with the background color.
-
-        :param surface: Surface to draw background into.
-        """
-        surface.fill(self.background_color)
-
-    def draw_centered(self, surface, delegate):
-        """
-        """
-        surface_size = surface.get_size()
-        delegate_surface_size = delegate.get_size()
-        x = (surface_size[0] - delegate_surface_size[0]) / 2
-        y = (surface_size[1] - delegate_surface_size[1]) / 2
-        surface.blit(delegate, (x, y))
-
-    def draw(self, surface):
-        """
-        :param surface: Surface to draw screen into.
-        """
-        self.draw_background(surface)
 
     def on_screen_activated(self):
         """ Callback method for screen activation pre processing. """
