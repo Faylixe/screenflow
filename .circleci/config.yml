@@ -7,6 +7,7 @@ jobs:
                     AUDIODEV: null
         working_directory: ~/screenflow-ci
         steps:
+            - checkout
             - run:
                 name: Application dependencies
                 command: pip install -r requirements.txt
