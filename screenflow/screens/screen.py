@@ -90,7 +90,6 @@ class Screen(object):
         self.__style = None
         self.__primary_style = None
         self.__secondary_style = None
-        self.__button_style = None
 
     @property
     def font_manager(self):
