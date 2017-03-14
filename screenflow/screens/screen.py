@@ -91,6 +91,15 @@ class Screen(object):
         self.__primary_style = None
         self.__secondary_style = None
 
+    def configure_screen_styles(self, style_factory):
+        """
+        :param style_factory:
+        """
+        self.__style = style_factory.get_style(self)
+        fonts = style_factory.get_font_styles(self)
+        self.__primary_style = fonts[0]
+        self.__secondary_style = fonts[1]
+
     @property
     def font_manager(self):
         """
