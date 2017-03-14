@@ -9,16 +9,16 @@ jobs:
         steps:
             - checkout
             - run:
-                name: Application dependencies
+                name: Install application dependencies
                 command: pip install -r requirements.txt
             - run:
-                name: CI dependencies
+                name: Install CI dependencies
                 command: pip install pytest pytest-cov coverage codacy-coverage
             - run:
-                name: Unit testing
+                name: Run unit tests
                 command: pytest --junitxml=unittests.xml --cov-report term --cov=screenflow
             - run:
-                name: Test coverage reporting
+                name: Generate test coverage report
                 command: coverage xml
             - store_test_results:
                 path: unittest.xml
@@ -26,5 +26,5 @@ jobs:
                 path: coverage.xml
                 prefix: coverage-report
             - deploy:
-                name: Codacy
+                name: Deploy coverage report to Codacy
                 command: python-codacy-coverage -r coverage.xml
