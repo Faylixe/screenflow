@@ -61,24 +61,26 @@ def get_highest(collection, sizer):
 
 
 class Oriented(object):
-    """
-    """
+    """ Simple class that provides orientation information. """
 
     def __init__(self, orientation):
-        """
-        :param orientation:
+        """ Default constructor.
+
+        :param orientation: Orientation attribute.
         """
         self._orientation = orientation
 
     def isVertical(self):
-        """
-        :returns:
+        """Indicates if this orientation is vertical.
+
+        :returns: True if this orientation is vertical, False otherwise.
         """
         return self._orientation == VERTICAL
 
     def isHorizontal(self):
-        """
-        :returns:
+        """Indicates if this orientation is horizontal.
+
+        :returns: True if this orientation is horizontal, False otherwise.
         """
         return self._orientation == HORIZONTAL
 
@@ -101,8 +103,10 @@ class Screen(object):
         self._secondary_style = None
 
     def configure_styles(self, style_factory):
-        """
-        :param style_factory:
+        """Configures screen associated style attributes using the given style_factory.
+        Client should override this methods in order to support custom style.
+
+        :param style_factory: Style factory instance to use for configuring.
         """
         self._style = style_factory.get_style(self)
         fonts = style_factory.get_font_styles(self)
@@ -111,7 +115,9 @@ class Screen(object):
 
     @property
     def font_manager(self):
-        """
+        """Property getter for font manager attribute. If font manager instance is not
+        settled, then an exception will be raised when trying to access.
+
         :returns: Font manager instance if any, raise a exception otherwise.
         """
         if self._font_manager is None:
@@ -120,15 +126,18 @@ class Screen(object):
 
     @font_manager.setter
     def font_manager(self, font_manager):
-        """
-        :param font_manager:
+        """Property setter for font manager attribute.
+
+        :param font_manager: Font manager instance to use.
         """
         self._font_manager = font_manager
 
     @property
     def surface_factory(self):
-        """
-        :returns:
+        """Property getter for surface factory attribute. If such factory is not settled,
+        then a default one that creates pygame.Surface will be used.
+
+        :returns: Surface factory instance to use.
         """
         if self._surface_factory is None:
             def pygame_factory(size):
@@ -137,11 +146,12 @@ class Screen(object):
         return self._surface_factory
 
     @surface_factory.setter
-    def surface_factory(self, factory):
+    def surface_factory(self, surface_factory):
+        """Property setter for surface factory attribute.
+
+        :param surface_factory: Surface factory instance to use.
         """
-        :param factory:
-        """
-        self._surface_factory = factory
+        self._surface_factory = surface_factory
 
     def draw_background(self, surface):
         """Draw a background into the given surface.

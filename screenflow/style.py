@@ -131,19 +131,45 @@ class Styles(object):
         self.__secondary = value
 
 
-class GenericStyle(object):
+class Style(object):
     """
+        Base class for any Style implementation, that manages CSS property support.
+    """
+
+    def __init__(self, supported):
+        """Default constructor.
+
+        :param supported: Collection of CSS property supported by this style.
+        """
+        self._supported = supported
+
+    def support(self, property):
+        """Indicates if the given property is supported by this style instance.
+
+        :param property: Property to check support for.
+        :returns: True is the given property is supported, False otherwise.
+        """
+        return property in self._supported
+
+
+class BasicStyle(Style):
+    """
+        Basic style implementation that only support background-color and
+        padding properties. Used as screenflow selector style.
     """
 
     def __init__(self):
-        """ """
+        """ Default constructor. """
+        Style.__init__(self, ('background-color', 'padding'))
         self.__parent = None
         self.__background_color = None
         self.__padding = None
 
     @property
     def background_color(self):
-        """
+        """Property getter for background color attribute.
+
+        :returns: Background color to use.
         """
         if self.__background_color is None:
             return self.__parent.background_color
@@ -151,13 +177,17 @@ class GenericStyle(object):
 
     @background_color.setter
     def background_color(self, background_color):
-        """
+        """Property setter for background color attribute.
+
+        :param background_color: Background color to use.
         """
         self.__background_color = background_color
 
     @property
     def padding(self):
-        """
+        """Property getter for padding attribute.
+
+        :returns: Padding to use.
         """
         if self_._padding is None:
             return self.__parent.padding
@@ -165,17 +195,21 @@ class GenericStyle(object):
 
     @padding.setter
     def padding(self, padding):
-        """
+        """Property setter for padding attribute.
+
+        :param padding: Padding to use.
         """
         self.__padding = padding
 
 
-class FontStyle(object):
+class FontStyle(Style):
     """
+        Style that manages font related properties.
     """
 
     def __init__(self):
         """ Default constructor. """
+        Style.__init__(self, ('color', 'font-size', 'font-family'))
         self.__parent = None
         self.__size = None
         self.__name = None
@@ -236,11 +270,11 @@ class FontStyle(object):
         self.__size = size
 
 
-class ButtonStyle(FontStyle, GenericStyle):
+class ButtonStyle(FontStyle, BasicStyle):
     """
     """
 
     def __init__(self):
         """ Default constructor """
-        GenericStyle.__init__(self)
+        BasicStyle.__init__(self)
         FontStyle.__init__(self)

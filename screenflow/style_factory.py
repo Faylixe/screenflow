@@ -16,8 +16,9 @@
 
     .. code-block:: python
 
+        @css_property_parser('property_name')
         def my_parser(value, style):
-            pass
+            // Set your target style attribute here.
 
     Where _value_ is the CSS value parsed for your declaration, and _style_ the
     associated Style instance to set declaration value in.
@@ -27,7 +28,7 @@
 import logging
 import tinycss
 from webcolors import hex_to_rgb, name_to_rgb
-from style import Styles, GenericStyle, FontStyle
+from style import Styles, BasicStyle, FontStyle
 from constants import BLACK, WHITE, GRAY
 
 # Configure logger.
@@ -59,51 +60,75 @@ def get_styles(map, selector):
     return map[key]
 
 
+def css_property_parser(property):
+    """Function decorator that validates CSS property support for a target
+    style instance. If such property is not supported an AttributeError is
+    raised.
+
+    :param property: Target CSS property to check support.
+    :returns: Decorated function.
+    """
+    def decorator(parser):
+        def wrapper(*args, **kwargs):
+            value = args[0]
+            style = args[1]
+            if not style.support(property):
+                raise AttributeError('Property %s not supported' % property)
+            parser(value, style)
+        return wrapper
+    return decorator
+
+
+@css_property_parser('background-color')
 def background_color_parser(value, style):
+    """Parser function for CSS background-color property. Color will be
+    evaluated through webcolors helper function.
+
+    :param value: Background color value read.
+    :param style: Target style to set background color attribute to.
     """
-    :param value:
-    :param style:
-    """
-    # TODO : Check instance.
     style.background_color = get_color(value)
 
 
+@css_property_parser('padding')
 def padding_parser(value, style):
+    """Parser function for CSS padding property. If the given value is not a
+    integer then it will be ignored.
+
+    :param value: Padding value read.
+    :param style: Target style to set padding attribute to.
     """
-    :param value:
-    :param style:
-    """
-    # TODO : Check instance.
-    # TODO : Check padding value.
     style.padding = int(value)
 
 
+@css_property_parser('font-size')
 def font_size_parser(value, style):
+    """Parser function for CSS font-size property. If the given value is not a
+    integer then it will be ignored.
+
+    :param value: Font size value read.
+    :param style: Target style to set font size attribute to.
     """
-    :param value:
-    :param style:
-    """
-    # TODO : Check instance.
-    # TODO : Check value.
     style.size = int(value)
 
 
+@css_property_parser('font-family')
 def font_family_parser(value, style):
+    """Parser function for CSS font-family property.
+
+    :param value: Font family value read.
+    :param style: Target style to set font name attribute to.
     """
-    :param value:
-    :param style:
-    """
-    # TODO : Check instance.
-    # TODO : Check value.
     style.name = value
 
 
+@css_property_parser('color')
 def color_parser(value, style):
+    """Parser function for CSS color property.
+
+    :param value: Color value read.
+    :param style: Target style to set color attribute to.
     """
-    :param value:
-    :param style:
-    """
-    # TODO : Check instance.
     style.color = get_color(value)
 
 # Default style properties.
@@ -114,11 +139,12 @@ DEFAULT_PADDING = 20
 
 
 def create_default_styles():
-    """
-    :returns:
+    """Factory method that creates a default styles instance.
+
+    :returns: Created default style instance.
     """
     styles = Styles()
-    styles.style = GenericStyle()
+    styles.style = BasicStyle()
     styles.style.background_color = WHITE
     styles.style.padding = DEFAULT_PADDING
     styles.primary = FontStyle()
@@ -197,7 +223,10 @@ class StyleFactory(object):
             # TODO : Log error.
             return
         parser = self._declaration_parser[name]
-        parser(declaration.value.as_css(), style)
+        try:
+            parser(declaration.value.as_css(), style)
+        except Exception as e:
+            logging.warn('[] %s' % str(e))
 
     def _get_name_styles(self, screen):
         """
