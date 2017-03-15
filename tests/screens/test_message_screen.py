@@ -77,6 +77,7 @@ def test_draw():
     screen.draw(surface)
     assert surface.fill_call == 1
     assert surface.blit_call == 1
-    lines = screen.message.lines(None, surface.get_size()[0])
+    drawable_size = screen.get_surface_drawable_size(surface)
+    lines = screen.message.lines(None, drawable_size[0])
     assert len(lines) >= 0
     assert lines[0] == DEFAULT_MESSAGE

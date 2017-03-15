@@ -73,31 +73,31 @@ class Styles(object):
         """
         :param parent:
         """
-        self.__parent = None
-        self.__style = None
-        self.__primary = None
-        self.__secondary = None
-        self.__other = {}
+        self._parent = None
+        self._style = None
+        self._primary = None
+        self._secondary = None
+        self._other = {}
 
     @property
     def parent(self):
         """
         :returns:
         """
-        return self.__parent
+        return self._parent
 
     @parent.setter
     def parent(self, parent):
         """
         :param parent:
         """
-        self.__parent = parent
-        if self.__style is not None:
-            self.__style.parent = self.__parent.__style
-        if self.__primary is not None:
-            self.__primary.parent = self.__parent.__primary
-        if self.__secondary is not None:
-            self.__secondary.parent = self.__parent.secondary
+        self._parent = parent
+        if self._style is not None:
+            self._style.parent = self._parent._style
+        if self._primary is not None:
+            self._primary.parent = self._parent._primary
+        if self._secondary is not None:
+            self._secondary.parent = self._parent.secondary
         # TODO : Process other ?
 
     @property
@@ -105,30 +105,30 @@ class Styles(object):
         """
         :returns:
         """
-        if self.__primary is None:
-            return self.__parent.primary
-        return self.__primary
+        if self._primary is None:
+            return self._parent.primary
+        return self._primary
 
     @primary.setter
     def primary(self, value):
         """
         :param value:
         """
-        self.__primary = value
+        self._primary = value
 
     @property
     def secondary(self):
         """
         :returns:
         """
-        return self.__secondary
+        return self._secondary
 
     @secondary.setter
     def secondary(self, value):
         """
         :param value:
         """
-        self.__secondary = value
+        self._secondary = value
 
 
 class Style(object):
@@ -161,9 +161,9 @@ class BasicStyle(Style):
     def __init__(self):
         """ Default constructor. """
         Style.__init__(self, ('background-color', 'padding'))
-        self.__parent = None
-        self.__background_color = None
-        self.__padding = None
+        self._parent = None
+        self._background_color = None
+        self._padding = None
 
     @property
     def background_color(self):
@@ -171,9 +171,9 @@ class BasicStyle(Style):
 
         :returns: Background color to use.
         """
-        if self.__background_color is None:
-            return self.__parent.background_color
-        return self.__background_color
+        if self._background_color is None:
+            return self._parent.background_color
+        return self._background_color
 
     @background_color.setter
     def background_color(self, background_color):
@@ -181,7 +181,7 @@ class BasicStyle(Style):
 
         :param background_color: Background color to use.
         """
-        self.__background_color = background_color
+        self._background_color = background_color
 
     @property
     def padding(self):
@@ -189,9 +189,9 @@ class BasicStyle(Style):
 
         :returns: Padding to use.
         """
-        if self_._padding is None:
-            return self.__parent.padding
-        return self.__padding
+        if self._padding is None:
+            return self._parent.padding
+        return self._padding
 
     @padding.setter
     def padding(self, padding):
@@ -199,7 +199,7 @@ class BasicStyle(Style):
 
         :param padding: Padding to use.
         """
-        self.__padding = padding
+        self._padding = padding
 
 
 class FontStyle(Style):
@@ -210,10 +210,10 @@ class FontStyle(Style):
     def __init__(self):
         """ Default constructor. """
         Style.__init__(self, ('color', 'font-size', 'font-family'))
-        self.__parent = None
-        self.__size = None
-        self.__name = None
-        self.__color = None
+        self._parent = None
+        self._size = None
+        self._name = None
+        self._color = None
 
     @property
     def color(self):
@@ -221,9 +221,9 @@ class FontStyle(Style):
 
         :returns: Text color to use.
         """
-        if self.__color is None:
-            return self.__parent.color
-        return self.__color
+        if self._color is None:
+            return self._parent.color
+        return self._color
 
     @color.setter
     def color(self, color):
@@ -231,7 +231,7 @@ class FontStyle(Style):
 
         :param color: Text color to use.
         """
-        self.__color = color
+        self._color = color
 
     @property
     def name(self):
@@ -239,9 +239,9 @@ class FontStyle(Style):
 
         :returns: Text color to use.
         """
-        if self.__name is None:
-            return self.__parent.name
-        return self.__name
+        if self._name is None:
+            return self._parent.name
+        return self._name
 
     @name.setter
     def name(self, name):
@@ -249,7 +249,7 @@ class FontStyle(Style):
 
         :param name: Text name to use.
         """
-        self.__name = name
+        self._name = name
 
     @property
     def size(self):
@@ -257,9 +257,9 @@ class FontStyle(Style):
 
         :returns: Text size to use.
         """
-        if self.__size is None:
-            return self.__parent.size
-        return self.__size
+        if self._size is None:
+            return self._parent.size
+        return self._size
 
     @size.setter
     def size(self, size):
@@ -267,7 +267,7 @@ class FontStyle(Style):
 
         :param size: Text size to use.
         """
-        self.__size = size
+        self._size = size
 
 
 class ButtonStyle(FontStyle, BasicStyle):
