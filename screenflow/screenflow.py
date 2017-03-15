@@ -8,7 +8,7 @@
     --------------
 
     Each screen belonging to your screenflow can be retrieved using
-    attribute binding. Let say you added a screen with name _foo_ in
+    attribute binding. Let say you added a screen with name *foo* in
     a given screenflow instance, such screen could be accessed as following :
 
     .. code-block:: python
@@ -36,7 +36,7 @@
             <!-- Your screen specific parameter here -->
         </screen>
 
-    The _name_ attribute will be used for attribute binding. Checkout
+    The *name* attribute will be used for attribute binding. Checkout
     available screens documentation to know what parameter can be settled.
 
     Custom screen
@@ -54,7 +54,7 @@
             my_screen = ... // Create your screen instance here.
             return my_screen
 
-    Where _screen_def_ parameter is a dictionary from xmltodict parsing
+    Where *screen_def* parameter is a dictionary from xmltodict parsing
     library.
 """
 
