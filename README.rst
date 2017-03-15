@@ -24,6 +24,8 @@ ScreenFlow
 **ScreenFlow** is a light UI engine primarily designed for building configuration interface for IoT devices like RaspberryPi.
 It uses an adapter layout for communicating with any graphical library. Here is the list of officially supported adapter :
 
-- `Pygame adapter<https://github.com/Faylixe/screenflow-pygame>`_
+.. _Pygame: https://github.com/Faylixe/screenflow-Pygame
+
+- Pygame_
 
 Checkout the documentation at http://screenflow.readthedocs.io.
