@@ -19,7 +19,7 @@ jobs:
                 command: pytest --junitxml=test-reports/pytest.xml --cov-report term --cov=screenflow
             - run:
                 name: Generate test coverage report
-                command: coverage xml
+                command: coverage xml --omit=screenflow/style.py
             - store_artifacts:
                 path: "test-reports/"
                 destination: reports

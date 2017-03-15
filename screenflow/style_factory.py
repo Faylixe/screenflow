@@ -21,7 +21,8 @@
             // Set your target style attribute here.
 
     Where _value_ is the CSS value parsed for your declaration, and _style_ the
-    associated Style instance to set declaration value in.
+    associated Style instance to set declaration value in. The @css_property_parser
+    ensure that the target property is supported by the given style object.
 
 """
 
@@ -49,10 +50,12 @@ def get_color(value):
 
 
 def get_styles(map, selector):
-    """
-    :param map:
-    :param selector:
-    :returns:
+    """Simple sugar function that retrieves a Styles instance from a given
+    map using the given selector, creating it if not existing.
+
+    :param map: Map to retrieve Styles from.
+    :param selector: Selector to retrieve Styles for.
+    :returns: Associated Styles instance for the given selector.
     """
     key = selector[1:]
     if key not in map.keys():
@@ -133,8 +136,8 @@ def color_parser(value, style):
 
 # Default style properties.
 DEFAULT_FONT = 'arial'
-DEFAULT_PRIMARY_SIZE = 20
-DEFAULT_SECONDARY_SIZE = 15
+DEFAULT_PRIMARY_SIZE = 15
+DEFAULT_SECONDARY_SIZE = 10
 DEFAULT_PADDING = 20
 
 
@@ -152,16 +155,16 @@ def create_default_styles():
     styles.primary.size = DEFAULT_PRIMARY_SIZE
     styles.primary.color = BLACK
     styles.secondary = FontStyle()
-    styles.primary.name = DEFAULT_FONT
-    styles.primary.size = DEFAULT_SECONDARY_SIZE
-    styles.primary.color = GRAY
+    styles.secondary.name = DEFAULT_FONT
+    styles.secondary.size = DEFAULT_SECONDARY_SIZE
+    styles.secondary.color = GRAY
     return styles
 
 
 class StyleFactory(object):
     """To document.
     """
-
+ 
     def __init__(self):
         """ Default constructor. """
         self._declaration_parser = {}
@@ -226,7 +229,11 @@ class StyleFactory(object):
         try:
             parser(declaration.value.as_css(), style)
         except Exception as e:
-            logging.warn('[] %s' % str(e))
+            logging.warn(
+                '[%s:%s] %s' % (
+                    declaration.line,
+                    declaration.column,
+                    str(e)))
 
     def _get_name_styles(self, screen):
         """
