@@ -13,8 +13,6 @@
 
         <screen name="foo" type="select">
             <message>displayed message</message>
-            <cellbackground>#000000</cellbackground> <!-- optional -->
-            <cellpadding>20</cellpadding> <!-- optional -->
             <option>first choice</option>
             <option>second choice</option>
             ...
@@ -38,6 +36,9 @@ from screenflow.screens.screen import Oriented, get_longest, get_highest
 from screenflow.screens.message_based_screen import MessageBasedScreen
 from screenflow.constants import XML_NAME, VERTICAL, HORIZONTAL, BLACK, WHITE
 
+# Select screen type name.
+SCREEN_TYPE = 'select_screen'
+
 
 class SelectScreen(MessageBasedScreen, Oriented):
     """To document.
@@ -48,25 +49,19 @@ class SelectScreen(MessageBasedScreen, Oriented):
             name,
             message,
             options,
-            orientation=VERTICAL,
-            cell_background_color=BLACK,
-            cell_padding=10):
+            orientation=VERTICAL):
         """Default constructor.
 
         :param name:
         :param message:
         :param options:
         :param orientation:
-        :param cell_background_color:
-        :param cell_padding:
         """
-        MessageBasedScreen.__init__(self, name, message)
+        MessageBasedScreen.__init__(self, name, SCREEN_TYPE, message)
         Oriented.__init__(self, orientation)
         self.options = options
-        self.cell_background_color = cell_background_color
-        self.cell_padding = cell_padding
         self.callback = None
-        self._options_surface = None
+        self.__options_surface = None
 
     def on_select(self, function):
         """Decorator method that registers  the given function as selection callback.
@@ -86,16 +81,6 @@ class SelectScreen(MessageBasedScreen, Oriented):
         # TODO : Compute option collision
         pass
 
-    def get_option_surface(self, option, size):
-        """
-        :param option:
-        :param size:
-        """
-        option_surface = self.create_surface(size)
-        option_surface.fill(self.cell_background_color)
-        # TODO : Draw option text.
-        return option_surface
-
     def get_options_surface_size(self, options_surface_size):
         """
         :param option_width:
@@ -105,6 +90,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
         n = len(self.options)
         surface_width = options_surface_size[0]
         surface_height = options_surface_size[1]
+        # TODO : Find padding.
         total_padding = self.cell_padding * (n - 1)
         if self.isVertical():
             surface_height *= n
@@ -130,6 +116,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
         :returns:
         """
         if self._options_surface is None:
+            # TODO : Match sizer.
             text_sizer = self.font_manager.primary
             option_width = get_longest(self.options, text_sizer)
             option_height = get_highest(self.options, text_sizer)
@@ -137,26 +124,24 @@ class SelectScreen(MessageBasedScreen, Oriented):
             options_surface_size = self.get_options_surface_size(
                 option_surface_size)
             self.check_bounds(options_surface_size, parent_surface_size)
-            self._options_surface = self.create_surface(options_surface_size)
-            # TODO : Add property ?
-            self._options_surface.fill((255, 255, 255))
+            self.__options_surface = self.create_surface(options_surface_size)
+            self.__options_surface.fill((255, 255, 255))
             current = 0
             for option in self.options:
-                option_surface = self.get_option_surface(
-                    option,
-                    option_surface_size)
+                option_surface = self.draw_button(option, option_surface_size)
                 position = None
                 if self.isVertical():
                     position = (0, current)
                 else:
                     position = (current, 0)
-                self._options_surface.blit(option_surface, position)
+                self.__options_surface.blit(option_surface, position)
                 if self.isVertical():
                     current += option_height
                 else:
                     current += option_width
+                # TODO : Get padding.
                 current += self.cell_padding
-        return self._options_surface
+        return self.__options_surface
 
     def get_final_surface(self, message_surface, options_surface):
         """
@@ -167,7 +152,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
         height = message_surface_size[1] + options_surface_size[1] + 20
         # TODO : Add padding.
         surface = self.create_surface((width, height))
-        surface.fill((255, 255, 255))
+        self.draw_background(surface)
         message_x = (width - message_surface_size[0]) / 2
         surface.blit(message_surface, (message_x, 0))
         options_x = (width - options_surface_size[0]) / 2
@@ -205,5 +190,4 @@ def factory(screen_def):
     options = screen_def[XML_OPTION]
     if not isinstance(options, list):
         raise AttributeError('At least two options is required')
-    # TODO : Parse optional padding
     return SelectScreen(screen_def[XML_NAME], message, options)

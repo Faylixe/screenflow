@@ -108,13 +108,14 @@ class MessageBasedScreen(Screen):
     transition on touch event.
     """
 
-    def __init__(self, name, message):
+    def __init__(self, name, type, message):
         """Default constructor.
 
         :param name:
+        :param type:
         :param message: Message displayed into the screen.
         """
-        Screen.__init__(self, name)
+        Screen.__init__(self, name, type)
         self.message = Message(message)
         self._last_width = 0
         self._message_surface = None
@@ -128,22 +129,21 @@ class MessageBasedScreen(Screen):
         """
         size_updated = self._last_width != parent_surface_size[0]
         if self._message_surface is None or size_updated:
-            text_sizer = self.font_manager.primary
+            self._last_width = parent_surface_size[0]
+            text_sizer = self.primary_size
             lines = self.message.lines(text_sizer, parent_surface_size[0])
             line_width = get_longest(lines, text_sizer)
             line_height = get_highest(lines, text_sizer)
             size = (line_width, len(lines) * line_height)
             self._message_surface = self.create_surface(size)
-            # TODO : Consider using property ?
-            self._message_surface.fill((255, 255, 255))
+            # TODO : Valid until introduction custom background.
+            self.draw_background(self._message_surface)
             y = 0
             for line in lines:
                 text_surface_width, _ = text_sizer(line)
                 x = (line_width - text_surface_width) / 2
-                self.font_manager.draw_primary_text(
-                    line,
-                    self._message_surface,
-                    (x, y))
+                self.line_surface = self.draw_primary_text(line)
+                self._message_surface.blit(self.line_surface, (x, y))
                 y += line_height
         return self._message_surface
 

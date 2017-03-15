@@ -7,22 +7,69 @@
     Screen binding
     --------------
 
+    Each screen belonging to your screenflow can be retrieved using
+    attribute binding. Let say you added a screen with name _foo_ in
+    a given screenflow instance, such screen could be accessed as following :
+
+    .. code-block:: python
+
+        screenflow.foo
+
     XML loading
     ------------
+
+    ScreenFlow allows you to define your screens by using XML format
+    using following convention :
+
+    .. code-block:: xml
+
+        <?xml version="1.0"?>
+        <screenflow>
+            <!-- Your screens here-->
+        </screenflow>
+
+    Where each screen is defined as following :
+
+     .. code-block:: xml
+
+        <screen name="screen_name" type="screen_type">
+            <!-- Your screen specific parameter here -->
+        </screen>
+
+    The _name_ attribute will be used for attribute binding. Checkout
+    available screens documentation to know what parameter can be settled.
 
     Custom screen
     -------------
 
+    You can implements your own screen by extending the Screen base class.
+    Although for screenflow to recognize your screen implementation when
+    parsing an XML file, you should register a factory function.
+
+    Such factory function should match the following signature :
+
+    .. code-block:: python
+
+        def my_factory(screen_def):
+            my_screen = ... // Create your screen instance here.
+            return my_screen
+
+    Where _screen_def_ parameter is a dictionary from xmltodict parsing
+    library.
 """
 
+import logging
 import xmltodict
-
 from pygame import time, FULLSCREEN, HWSURFACE, DOUBLEBUF
 from pygame.display import set_mode, flip, Info
-
 from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 from font_manager import FontManager
+from style_factory import StyleFactory
+
+# Configure logger.
+logging.basicConfig()
+logger = logging.getLogger(__name__)
 
 
 class NavigationException(Exception):
@@ -46,12 +93,12 @@ class ScreenTransition(object):
         :param side: Side of the transition (FORWARD, or BACKWARD)
         :param speed: Option speed in pixel of the performed transition.
         """
-        self.previews = previews
-        self.side = side
-        self.speed = side * speed
-        self.position = 0
+        self._previews = previews
+        self._side = side
+        self._speed = side * speed
+        self._position = 0
         if side == ScreenTransition.FORWARD:
-            self.position = previews[0].get_size()[0]
+            self._position = previews[0].get_size()[0]
 
     def update(self, surface):
         """Performs a transition iteration over internal screen previews.
@@ -59,16 +106,16 @@ class ScreenTransition(object):
         :param surface: Surface to draw transition in.
         :returns: True is the transition worked, False if already finished.
         """
-        self.position += self.speed
+        self._position += self._speed
         size = surface.get_size()[0]
-        if self.position < 0 or self.position > size:
+        if self._position < 0 or self._position > size:
             return False
-        surface.blit(self.previews[0], (self.position - size, 0))
-        surface.blit(self.previews[1], (self.position, 0))
+        surface.blit(self._previews[0], (self._position - size, 0))
+        surface.blit(self._previews[1], (self._position, 0))
         return True
 
 
-class ScreenFlow(FontManager):
+class ScreenFlow(object):
     """ To document. """
 
     # Constant that indicates this flow is in creation mode.
@@ -88,39 +135,52 @@ class ScreenFlow(FontManager):
 
         :param surface: Optional surface this flow will be rendered into.
         """
-        super(ScreenFlow, self).__init__()
-        self.screens = {}
-        self.factories = {}
+        self._screens = {}
+        self._factories = {}
+        self._style_factory = StyleFactory()
+        self._font_manager = FontManager()
         configure_screenflow(self)
-        self.running = False
-        self.stack = []
-        self.state = ScreenFlow.CREATING
-        self.surface = surface
-        if self.surface is None:
+        self._running = False
+        self._stack = []
+        self._state = ScreenFlow.CREATING
+        self._surface = surface
+        self._transition = None
+
+    @property
+    def surface(self):
+        """Surface property getter. If current surface is None,
+        it creates a fullscreen surface.
+
+        :returns: Target surface.
+        """
+        if self._surface is None:
+            logger.info('Target surface not specified')
+            logger.info('Creating surface')
             info = Info()
             resolution = (info.current_w, info.current_h)
             flags = FULLSCREEN | HWSURFACE | DOUBLEBUF
-            self.surface = set_mode(resolution, flags)
-        self.transition = None
+            logger.info('Creating surface (%s, %s)' % resolution)
+            self._surface = set_mode(resolution, flags)
+        return self._surface
 
     def add_screen(self, screen):
         """Adds the given screen to this screen flow.
 
         :param screen: Screen to add to this flow.
         """
-        self.screens[screen.name] = screen
-        screen.font_manager = self
+        self._screens[screen.name] = screen
+        screen.font_manager = self._font_manager
+        screen.configure_styles(self._style_factory)
 
     def __getattr__(self, name):
         """Attribute access overloading, allow to access
         flow screens by name indexing.
 
         :param name: Name of the attribute to retrieve.
-        :returns:
-        :raise AttributeError:
+        :returns: Screen instance denoted by the given name.
         """
-        if name in self.screens.keys():
-            return self.screens[name]
+        if name in self._screens.keys():
+            return self._screens[name]
         raise AttributeError('Unknown screen %s' % name)
 
     def set_transition(self, previews, side):
@@ -129,12 +189,12 @@ class ScreenFlow(FontManager):
         :param previews: Screen previews to use in built transition.
         :param side: Transition side.
         """
-        self.transition = ScreenTransition(previews, side)
-        self.state = ScreenFlow.IN_TRANSITION
+        self._transition = ScreenTransition(previews, side)
+        self._state = ScreenFlow.IN_TRANSITION
 
     def quit(self):
         """Stops the execution of this screenflow. """
-        self.running = False
+        self._running = False
 
     def navigate_to(self, screen):
         """Creates and returns a transition callback function.
@@ -149,7 +209,7 @@ class ScreenFlow(FontManager):
         previews = (
             self.surface.copy(),
             screen.generate_preview(size))
-        self.stack.append(screen)
+        self._stack.append(screen)
         self.set_transition(previews, ScreenTransition.FORWARD)
 
     def navigate_back(self):
@@ -161,9 +221,9 @@ class ScreenFlow(FontManager):
         :returns: Created callback function.
         """
         size = self.surface.get_size()
-        if len(self.stack) <= 1:
+        if len(self._stack) <= 1:
             raise NavigationException('Cannot navigate back, no more screen.')
-        self.stack.pop()
+        self._stack.pop()
         previews = (self.get_current_screen().generate_preview(size),
                     self.surface.copy())
         self.set_transition(previews, ScreenTransition.BACKWARD)
@@ -173,36 +233,34 @@ class ScreenFlow(FontManager):
 
         :returns: Current screen displayed.
         """
-        if len(self.stack) == 0:
+        if len(self._stack) == 0:
             raise IndexError('Screen stack is empty')
-        return self.stack[-1]
+        return self._stack[-1]
 
     def draw(self):
-        """
-        """
-        screen = self.get_current_screen()
-        screen.draw(self.surface)
+        """ Draws the current screen into the delegate surface."""
+        self.get_current_screen().draw(self._surface)
 
     def run(self, start_screen):
         """Starts this screen flow and maintains
         a main loop over it until application is killed
         or quit() callback is reached.
         """
-        self.stack.append(start_screen)
+        self._stack.append(start_screen)
         self.draw()
-        self.running = True
-        self.state = ScreenFlow.ACTIVE
-        while self.running:
+        self._running = True
+        self._state = ScreenFlow.ACTIVE
+        while self._running:
             flip()
             current = self.get_current_screen()
-            if self.state == ScreenFlow.IN_TRANSITION:
-                if not self.transition.update(self.surface):
-                    self.transition = None
-                    self.state = ScreenFlow.ACTIVE
+            if self._state == ScreenFlow.IN_TRANSITION:
+                if not self._transition.update(self._surface):
+                    self._transition = None
+                    self._state = ScreenFlow.ACTIVE
                     self.draw()
                     current.on_screen_activated()
-            elif self.state == ScreenFlow.ACTIVE:
-                self.running = current.process_event()
+            elif self._state == ScreenFlow.ACTIVE:
+                self._running = current.process_event()
 
     def register_factory(self, type_name, factory):
         """Registers the given factory for the given type.
@@ -210,9 +268,9 @@ class ScreenFlow(FontManager):
         :param type_name: Type name to registered factory under.
         :param factory: Factory function used for creating associated type.
         """
-        if type_name in self.factories.keys():
+        if type_name in self._factories.keys():
             raise ValueError('Screen type %s already registered' % type_name)
-        self.factories[type_name] = factory
+        self._factories[type_name] = factory
 
     def create_screen(self, screen_def):
         """Factory method that creates a screen from the given definition.
@@ -222,9 +280,16 @@ class ScreenFlow(FontManager):
         if XML_TYPE not in screen_def.keys():
             raise AttributeError('No screen type specified.')
         screen_type = screen_def[XML_TYPE]
-        if screen_type not in self.factories.keys():
+        if screen_type not in self._factories.keys():
             raise ValueError('Unknown screen type %s' % screen_type)
-        return self.factories[screen_type](screen_def)
+        return self._factories[screen_type](screen_def)
+
+    def load_style(self, css_file):
+        """Loads and configures this screenflow with the given CSS file.
+
+        :param css_file: CSS file to load.
+        """
+        self._style_factory.load(css_file)
 
     def load_from_file(self, flow_file):
         """Factory function that creates a ScreenFlow instance from

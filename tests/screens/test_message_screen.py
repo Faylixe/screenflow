@@ -4,6 +4,7 @@
 
 from screenflow.constants import XML_NAME
 from screenflow.font_manager import FontManager
+from screenflow.style_factory import StyleFactory
 from screenflow.screens import MessageScreen
 from screenflow.screens.message_screen import factory
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
@@ -51,7 +52,7 @@ def test_on_touch():
     @screen.on_touch
     def callback():
         pass
-    assert screen.callback == callback
+    assert screen._callback == callback
 
 
 def test_mouse_event():
@@ -61,7 +62,7 @@ def test_mouse_event():
 
     def callback():
         call.append(True)
-    screen.callback = callback
+    screen._callback = callback
     screen.on_mouse_up(None)
     assert len(call) == 1
 
@@ -70,6 +71,7 @@ def test_draw():
     """ Test case for message screen drawing method. """
     screen = create_message_screen()
     screen.font_manager = FontManager()
+    screen.configure_styles(StyleFactory())
     screen.surface_factory = mock_factory
     surface = SurfaceMock()
     screen.draw(surface)

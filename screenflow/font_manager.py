@@ -1,99 +1,49 @@
 #!/usr/bin/python
 
-""" Module that provides FontManager base class. """
+"""
+    A FontManager is responsible for creating and caching font
+    instance. It uses by default pygame.font.SysFont function
+    as default font factory.
+"""
 
-import logging
-import pygame
-
-from constants import BLACK
-
-# Configure logger.
-logging.basicConfig()
-logger = logging.getLogger(__name__)
-
-
-class FontHolder(object):
-    """Holder class for a font and a text color.
-
-    When accessing a font through getter method, if font has not been settled,
-    default system Arial font is used.
-    """
-
-    def __init__(self, default_size):
-        """ Default constructor. """
-        self._font = None
-        self.text_color = BLACK
-        self.default_size = default_size
-
-    @property
-    def font(self):
-        """Delegate font instance getter. Creating
-        one if not available using arial system font.
-
-        :returns: Font instance to use.
-        """
-        if self._font is None:
-            logging.debug('Font not settled, using default Arial from system')
-            self._font = pygame.font.SysFont('arial', self.default_size)
-        return self._font
-
-    @font.setter
-    def font(self, font):
-        """Setter for font value.
-
-        :param font: Font value to set.
-        """
-        self._font = font
-
-    def __call__(self, text):
-        """Function call overloading that allows holder
-        to be used as a text sizer.
-
-        :param text: Text to evaluate rendering for.
-        :returns: Rendering size of the given text.
-        """
-        return self.font.size(text)
-
-
-def draw_text(text, surface, holder, position):
-    """Simple methods that draws text on the given surface
-    using the given font holder for resources.
-
-    :param text: Text to draw.
-    :param surface: Surface to draw text into.
-    :param holder: FontHolder instance to use for getting font and text color.
-    :param position: Position of the text to draw relative to the surface.
-    """
-    surface.blit(holder.font.render(text, 1, holder.text_color, None), position)
+from pygame.font import SysFont
 
 
 class FontManager(object):
-    """A FontManager is responsible for storing two fonts :
-
-    - Primary font that will be used for important text display.
-    - Secondary font that will be used for tips, subheading, and so on.
-
-    """
+    """ FontManager is a simple font caching factory. """
 
     def __init__(self):
         """ Default constructor. """
-        self.primary = FontHolder(15)
-        self.secondary = FontHolder(10)
+        self._fonts = {}
+        self._font_factory = None
 
-    def draw_primary_text(self, text, surface, position):
-        """Draws text to screen using primary font.
+    @property
+    def font_factory(self):
+        """Font factory property getter.
 
-        :param text: Text to draw.
-        :param surface: Surface to draw text into.
-        :param position: Position of the text to draw relative to the surface.
+        :returns: Font factory instance to use.
         """
-        draw_text(text, surface, self.primary, position)
+        if self._font_factory is None:
+            self._font_factory = SysFont
+        return self._font_factory
 
-    def draw_secondary_text(self, text, surface, position):
-        """Draws text to screen using secondary font.
+    @font_factory.setter
+    def font_factory(self, font_factory):
+        """Font factory property setter.
 
-        :param text: Text to draw.
-        :param surface: Surface to draw text into.
-        :param position: Position of the text to draw relative to the surface.
+        :param font_factory: Font factory instance to use.
         """
-        draw_text(text, surface, self.secondary, position)
+        self._font_factory = font_factory
+
+    def get(self, name, size):
+        """Font access method. Creates the font instance if not exists.
+
+        :param name: Name of the font to get.
+        :param size: Size of the font to get.
+        :returns: Required font instance.
+        """
+        if name not in self._fonts.keys():
+            self._fonts[name] = {}
+        if size not in self._fonts[name].keys():
+            self._fonts[name][size] = self.font_factory(name, size)
+        return self._fonts[name][size]

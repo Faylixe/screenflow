@@ -41,6 +41,9 @@ from screenflow.constants import XML_NAME
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
+# Message screen type name.
+SCREEN_TYPE = 'message_screen'
+
 
 class MessageScreen(MessageBasedScreen):
     """ MessageScreen aims to only display a text message, and allows
@@ -52,8 +55,8 @@ class MessageScreen(MessageBasedScreen):
 
         :param message: Message displayed into the screen.
         """
-        super(MessageScreen, self).__init__(name, message)
-        self.callback = None
+        MessageBasedScreen.__init__(self, name, SCREEN_TYPE, message)
+        self._callback = None
 
     def on_touch(self, function):
         """Decorator method that registers the given function as screen touch callback.
@@ -61,7 +64,7 @@ class MessageScreen(MessageBasedScreen):
         :param function: Decorated function to use as callback.
         :returns: Given function to match decorator pattern.
         """
-        self.callback = function
+        self._callback = function
         return function
 
     def on_mouse_up(self, position):
@@ -69,17 +72,16 @@ class MessageScreen(MessageBasedScreen):
 
         :param position: Position of the mouse up event.
         """
-        if self.callback is not None:
-            self.callback()
+        if self._callback is not None:
+            self._callback()
 
     def draw(self, surface):
         """Drawing method, display centered text.
 
         :param surface: Surface to draw this screen into.
         """
-        super(MessageScreen, self).draw(surface)
-        # TODO : Consider using parent surface size getter.
-        surface_size = surface.get_size()
+        MessageBasedScreen.draw(self, surface)
+        surface_size = self.get_surface_drawable_size(surface)
         message_surface = self.get_message_surface(surface_size)
         self.draw_centered(surface, message_surface)
 

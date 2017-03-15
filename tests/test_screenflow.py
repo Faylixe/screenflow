@@ -3,6 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
+from screenflow.font_manager import FontManager
 from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
 from mocks.surface_mock import SurfaceMock
@@ -20,9 +21,9 @@ def test_add_screen():
     screen = ScreenMock(name)
     screenflow = ScreenFlow(surface)
     screenflow.add_screen(screen)
-    assert screen.font_manager == screenflow
-    assert name in screenflow.screens.keys()
-    assert screenflow.screens[name] == screen
+    assert screen.font_manager == screenflow._font_manager
+    assert name in screenflow._screens.keys()
+    assert screenflow._screens[name] == screen
     assert screenflow.foo == screen
 
 
@@ -38,7 +39,7 @@ def test_get_current_screen():
     """ Test case for top stack access. """
     screenflow = ScreenFlow(surface)
     screen = ScreenMock('foo')
-    screenflow.stack.append(screen)
+    screenflow._stack.append(screen)
     current = screenflow.get_current_screen()
     assert current == screen
 
@@ -55,12 +56,12 @@ def test_navigate_to():
     screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
-    screenflow.stack.append(foo)
+    screenflow._stack.append(foo)
     screenflow.navigate_to(bar)
-    assert screenflow.state == ScreenFlow.IN_TRANSITION
-    assert len(screenflow.stack) == 2
-    assert screenflow.stack[0] == foo
-    assert screenflow.stack[1] == bar
+    assert screenflow._state == ScreenFlow.IN_TRANSITION
+    assert len(screenflow._stack) == 2
+    assert screenflow._stack[0] == foo
+    assert screenflow._stack[1] == bar
 
 
 def test_navigate_back_error():
@@ -75,12 +76,12 @@ def test_navigate_back():
     screenflow = ScreenFlow(surface)
     foo = ScreenMock('foo')
     bar = ScreenMock('bar')
-    screenflow.stack.append(foo)
-    screenflow.stack.append(bar)
+    screenflow._stack.append(foo)
+    screenflow._stack.append(bar)
     screenflow.navigate_back()
-    assert screenflow.state == ScreenFlow.IN_TRANSITION
-    assert len(screenflow.stack) == 1
-    assert screenflow.stack[0] == foo
+    assert screenflow._state == ScreenFlow.IN_TRANSITION
+    assert len(screenflow._stack) == 1
+    assert screenflow._stack[0] == foo
 
 
 def test_main_loop():
@@ -96,8 +97,8 @@ def test_register_factory():
         pass
     name = 'foo'
     screenflow.register_factory(name, factory)
-    assert name in screenflow.factories.keys()
-    assert screenflow.factories[name] == factory
+    assert name in screenflow._factories.keys()
+    assert screenflow._factories[name] == factory
 
 
 def test_register_factory_duplicate():
@@ -179,3 +180,13 @@ def test_load_from_file_without_screen():
     screenflow = ScreenFlow(surface)
     with raises(AttributeError) as e:
         screenflow.load_from_file(file)
+
+
+def test_load_style():
+    """ Test case for load style method. """
+    pass
+
+
+def test_load_style_from_not_existing_file():
+    """ Test case for load style method with not existing file. """
+    pass

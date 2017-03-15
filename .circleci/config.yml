@@ -1,0 +1,30 @@
+version: 2
+jobs:
+    build:
+        docker: 
+            -   image: python:2.7
+                environment:
+                    AUDIODEV: null
+        working_directory: ~/screenflow
+        steps:
+            - checkout
+            - run:
+                name: Install application dependencies
+                command: pip install -r requirements.txt
+            - run:
+                name: Install CI dependencies
+                command: pip install pytest pytest-cov coverage codacy-coverage
+            - run:
+                name: Run unit tests
+                command: pytest --junitxml=test-reports/pytest.xml --cov-report term --cov=screenflow
+            - run:
+                name: Generate test coverage report
+                command: coverage xml --omit=screenflow/style.py
+            - store_artifacts:
+                path: "test-reports/"
+                destination: reports
+            - store_test_results:
+                path: "test-reports/"
+            - deploy:
+                name: Deploy coverage report to Codacy
+                command: python-codacy-coverage -r coverage.xml
