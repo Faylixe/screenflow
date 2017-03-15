@@ -29,7 +29,7 @@
 import logging
 import tinycss
 from webcolors import hex_to_rgb, name_to_rgb
-from style import Styles, BasicStyle, FontStyle
+from style import Styles, BasicStyle, FontStyle, ButtonStyle
 from constants import BLACK, WHITE, GRAY
 
 # Configure logger.
@@ -158,13 +158,19 @@ def create_default_styles():
     styles.secondary.name = DEFAULT_FONT
     styles.secondary.size = DEFAULT_SECONDARY_SIZE
     styles.secondary.color = GRAY
+    styles.button = ButtonStyle()
+    styles.button.background_color = BLACK
+    styles.button.padding = 20
+    styles.button.name = DEFAULT_FONT
+    styles.button.size = DEFAULT_PRIMARY_SIZE
+    styles.button.color = WHITE
     return styles
 
 
 class StyleFactory(object):
     """To document.
     """
- 
+
     def __init__(self):
         """ Default constructor. """
         self._declaration_parser = {}
@@ -276,3 +282,12 @@ class StyleFactory(object):
         styles = self._get_screen_styles(screen)
         # TODO : Check parent.
         return (styles.primary, styles.secondary)
+
+    def get_button_style(self, screen):
+        """
+        :param screen:
+        :returns:
+        """
+        styles = self._get_screen_styles(screen)
+        # TODO : Check parent.
+        return styles.button

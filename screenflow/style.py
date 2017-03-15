@@ -77,6 +77,7 @@ class Styles(object):
         self._style = None
         self._primary = None
         self._secondary = None
+        self._button = None
         self._other = {}
 
     @property
@@ -98,6 +99,8 @@ class Styles(object):
             self._primary.parent = self._parent._primary
         if self._secondary is not None:
             self._secondary.parent = self._parent.secondary
+        if self._button is not None:
+            self._button.parent = self._parent.button
         # TODO : Process other ?
 
     @property
@@ -110,25 +113,43 @@ class Styles(object):
         return self._primary
 
     @primary.setter
-    def primary(self, value):
+    def primary(self, primary):
         """
-        :param value:
+        :param primary:
         """
-        self._primary = value
+        self._primary = primary
 
     @property
     def secondary(self):
         """
         :returns:
         """
+        if self._secondary is None:
+            return self._parent.secondary
         return self._secondary
 
     @secondary.setter
-    def secondary(self, value):
+    def secondary(self, secondary):
         """
-        :param value:
+        :param secondary:
         """
-        self._secondary = value
+        self._secondary = secondary
+
+    @property
+    def button(self):
+        """
+        :returns:
+        """
+        if self._button is None:
+            return self._parent.button
+        return self._button
+
+    @button.setter
+    def button(self, button):
+        """
+        :param button:
+        """
+        self._button = button
 
 
 class Style(object):

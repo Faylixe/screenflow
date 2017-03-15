@@ -69,11 +69,9 @@
 
 import logging
 import xmltodict
-from pygame import time, FULLSCREEN, HWSURFACE, DOUBLEBUF
-from pygame.display import set_mode, flip, Info
-from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
 from font_manager import FontManager
+from screens import configure_screenflow
 from style_factory import StyleFactory
 
 # Configure logger.
@@ -136,17 +134,19 @@ class ScreenFlow(object):
     # Constant that indicates this flow is active and a screen is displayed.
     ACTIVE = 1
 
-    def __init__(self, surface=None):
+    def __init__(self, graphics_adapter, surface=None):
         """Default constructor.
 
         Using by default a fullscreen window instance if a target surface
         is not given.
 
+        :param graphics_adapter:
         :param surface: Optional surface this flow will be rendered into.
         """
         self._screens = {}
         self._factories = {}
         self._style_factory = StyleFactory()
+        self._graphics_adapter = graphics_adapter
         self._font_manager = FontManager()
         configure_screenflow(self)
         self._running = False
@@ -163,13 +163,8 @@ class ScreenFlow(object):
         :returns: Target surface.
         """
         if self._surface is None:
-            logger.info('Target surface not specified')
-            logger.info('Creating surface')
-            info = Info()
-            resolution = (info.current_w, info.current_h)
-            flags = FULLSCREEN | HWSURFACE | DOUBLEBUF
-            logger.info('Creating surface (%s, %s)' % resolution)
-            self._surface = set_mode(resolution, flags)
+            logger.info('Main surface not specified')
+            self._surface = self._graphics_adapter.create_main_surface()
         return self._surface
 
     def add_screen(self, screen):
@@ -178,7 +173,8 @@ class ScreenFlow(object):
         :param screen: Screen to add to this flow.
         """
         self._screens[screen.name] = screen
-        screen.font_manager = self._font_manager
+        screen.drawer = self._graphics_adapter.drawer
+        screen.event_manager = self._graphics_adapter.event_manager
         screen.configure_styles(self._style_factory)
 
     def __getattr__(self, name):
@@ -216,7 +212,7 @@ class ScreenFlow(object):
         """
         size = self.surface.get_size()
         previews = (
-            self.surface.copy(),
+            self._graphics_adapter.drawer.copy(surface),
             screen.generate_preview(size))
         self._stack.append(screen)
         self.set_transition(previews, ScreenTransition.FORWARD)
@@ -234,7 +230,7 @@ class ScreenFlow(object):
             raise NavigationException('Cannot navigate back, no more screen.')
         self._stack.pop()
         previews = (self.get_current_screen().generate_preview(size),
-                    self.surface.copy())
+                    self._graphics_adapter.drawer.copy(surface))
         self.set_transition(previews, ScreenTransition.BACKWARD)
 
     def get_current_screen(self):
@@ -260,7 +256,7 @@ class ScreenFlow(object):
         self._running = True
         self._state = ScreenFlow.ACTIVE
         while self._running:
-            flip()
+            self._graphics_adapter.flip_display()
             current = self.get_current_screen()
             if self._state == ScreenFlow.IN_TRANSITION:
                 if not self._transition.update(self._surface):

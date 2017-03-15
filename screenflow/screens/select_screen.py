@@ -34,7 +34,7 @@
 
 from screenflow.screens.screen import Oriented, get_longest, get_highest
 from screenflow.screens.message_based_screen import MessageBasedScreen
-from screenflow.constants import XML_NAME, VERTICAL, HORIZONTAL, BLACK, WHITE
+from screenflow.constants import XML_NAME, VERTICAL
 
 # Select screen type name.
 SCREEN_TYPE = 'select_screen'
@@ -61,7 +61,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
         Oriented.__init__(self, orientation)
         self.options = options
         self.callback = None
-        self.__options_surface = None
+        self._options_surface = None
 
     def on_select(self, function):
         """Decorator method that registers  the given function as selection callback.
@@ -91,7 +91,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
         surface_width = options_surface_size[0]
         surface_height = options_surface_size[1]
         # TODO : Find padding.
-        total_padding = self.cell_padding * (n - 1)
+        total_padding = self._style.padding * (n - 1)
         if self.isVertical():
             surface_height *= n
             surface_height += total_padding
@@ -110,22 +110,29 @@ class SelectScreen(MessageBasedScreen, Oriented):
             # TODO : Warning.
             pass
 
+    def _get_options_surface(self, parent_surface_size):
+        """
+        """
+        builder = self.surface_builder()
+        builder.
+        return builder.build()
+
     def get_options_surface(self, parent_surface_size):
         """
         :param parent_surface_width:
         :returns:
         """
         if self._options_surface is None:
-            # TODO : Match sizer.
-            text_sizer = self.font_manager.primary
-            option_width = get_longest(self.options, text_sizer)
-            option_height = get_highest(self.options, text_sizer)
+            text_sizer = self.primary_size
+            padding = self._button_style.padding * 2
+            option_width = get_longest(self.options, text_sizer) + padding
+            option_height = get_highest(self.options, text_sizer) + padding
             option_surface_size = (option_width, option_height)
             options_surface_size = self.get_options_surface_size(
                 option_surface_size)
             self.check_bounds(options_surface_size, parent_surface_size)
-            self.__options_surface = self.create_surface(options_surface_size)
-            self.__options_surface.fill((255, 255, 255))
+            self._options_surface = self.create_surface(options_surface_size)
+            self._options_surface.fill((255, 255, 255))
             current = 0
             for option in self.options:
                 option_surface = self.draw_button(option, option_surface_size)
@@ -134,14 +141,14 @@ class SelectScreen(MessageBasedScreen, Oriented):
                     position = (0, current)
                 else:
                     position = (current, 0)
-                self.__options_surface.blit(option_surface, position)
+                self._options_surface.blit(option_surface, position)
                 if self.isVertical():
                     current += option_height
                 else:
                     current += option_width
-                # TODO : Get padding.
-                current += self.cell_padding
-        return self.__options_surface
+                current += self._style.padding
+        return self._options_surface
+
 
     def get_final_surface(self, message_surface, options_surface):
         """
@@ -160,6 +167,13 @@ class SelectScreen(MessageBasedScreen, Oriented):
         options_y = message_surface_size[1] + 20
         surface.blit(options_surface, (options_x, options_y))
         return surface
+
+    def _get_final_surface(self):
+        """
+        """
+        builder = MultiSurfaceBuilder()
+        with builder.sub_surface() as sub_builder():
+            pass
 
     def draw(self, surface):
         """Drawing method, display centered label and options list below.
