@@ -51,20 +51,6 @@ class Drawer(object):
         """
         raise NotImplementError()
 
-    def get_text_surface(self, text, font):
-        """
-        :param text:
-        :returns:
-        """
-        raise NotImplementedError()
-
-    def get_secondary_text_surface(self, text):
-        """
-        :param text:
-        :returns:
-        """
-        raise NotImplementedError()
-
     def draw_background(self, surface):
         """Draw a background into the given surface.
 
