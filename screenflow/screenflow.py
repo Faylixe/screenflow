@@ -4,6 +4,9 @@
     ScreenFlow
     ==========
 
+    ScreenFlow class is the library entry point, which implements all the logic
+    to manages event, handles screen creation, and so on.
+
     Screen binding
     --------------
 
@@ -55,7 +58,13 @@
             return my_screen
 
     Where *screen_def* parameter is a dictionary from xmltodict parsing
-    library.
+    library. Then registering such function is as easy as following :
+
+    .. code-block:: python
+
+        screenflow = ScreenFlow()
+        screenflow.register_factory('type_name', my_factory)
+
 """
 
 import logging
