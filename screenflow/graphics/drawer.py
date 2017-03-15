@@ -34,7 +34,36 @@ class Drawer(object):
         :param size:
         :returns:
         """
-        raise IOError('Not implemented')
+        raise NotImplementedError()
+
+    def fill_surface(self, surface, color):
+        """
+        :param surface:
+        :param color:
+        """
+        raise NotImplementedError()
+
+    def blit_surface(self, destination, source, position):
+        """
+        :param destination:
+        :param source:
+        :param position:
+        """
+        raise NotImplementError()
+
+    def get_text_surface(self, text, font):
+        """
+        :param text:
+        :returns:
+        """
+        raise NotImplementedError()
+
+    def get_secondary_text_surface(self, text):
+        """
+        :param text:
+        :returns:
+        """
+        raise NotImplementedError()
 
     def draw_background(self, surface):
         """Draw a background into the given surface.

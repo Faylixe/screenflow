@@ -149,7 +149,6 @@ class SelectScreen(MessageBasedScreen, Oriented):
                 current += self._style.padding
         return self._options_surface
 
-
     def get_final_surface(self, message_surface, options_surface):
         """
         """
@@ -171,6 +170,7 @@ class SelectScreen(MessageBasedScreen, Oriented):
     def _get_final_surface(self):
         """
         """
+        with self.c
         builder = MultiSurfaceBuilder()
         with builder.sub_surface() as sub_builder():
             pass
