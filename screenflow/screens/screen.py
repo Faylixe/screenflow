@@ -134,8 +134,9 @@ class Screen(object):
 
     @property
     def surface_factory(self):
-        """Property getter for surface factory attribute. If such factory is not settled,
-        then a default one that creates pygame.Surface will be used.
+        """Property getter for surface factory attribute.
+        If such factory is not settled, then a default one
+        that creates pygame.Surface will be used.
 
         :returns: Surface factory instance to use.
         """
