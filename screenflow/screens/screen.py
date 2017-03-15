@@ -240,7 +240,11 @@ class Screen(object):
 
         :param surface:
         """
-        return surface.get_size()
+        original_size = surface.get_size()
+        padded_size = [original_size[0], original_size[1]]
+        padded_size[0] -= self._style.padding * 2
+        padded_size[1] -= self._style.padding * 2
+        return padded_size
 
     def create_surface(self, size):
         """
