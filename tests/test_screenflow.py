@@ -6,7 +6,7 @@ from screenflow import ScreenFlow, NavigationException
 from screenflow.font_manager import FontManager
 from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
-from mocks.surface_mock import SurfaceMock
+from mocks.mock_surface import MockSurface
 from mocks.screen_mock import ScreenMock
 from pytest import raises
 from os.path import join

@@ -3,7 +3,7 @@
 """ Simple test suite for ScreenTransition class. """
 
 from screenflow.screenflow import ScreenTransition
-from mocks.surface_mock import SurfaceMock, DEFAULT_SURFACE_SIZE
+from mocks.surface_mock import MockSurface, DEFAULT_SURFACE_SIZE
 
 
 def check_transition(side, speed, width, expected_speed, expected_position):
@@ -15,8 +15,8 @@ def check_transition(side, speed, width, expected_speed, expected_position):
     :param expected_speed: Expected effective speed value for transition.
     :param expected_position: Expected starting position for transition.
     """
-    surface = SurfaceMock()
-    previews = [SurfaceMock(), SurfaceMock()]
+    surface = MockSurface()
+    previews = [MockSurface(), MockSurface()]
     transition = ScreenTransition(previews, side, speed)
     assert transition._speed == expected_speed
     assert transition._position == expected_position

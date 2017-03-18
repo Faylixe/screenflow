@@ -17,7 +17,6 @@ class GraphicsAdapter(object):
         """
         self.drawer = drawer
         self.event_manager = event_manager
-        self._font_manager = None
 
     @property
     def font_manager(self):
