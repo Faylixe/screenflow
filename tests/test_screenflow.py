@@ -13,12 +13,8 @@ from os.path import join
 
 
 @fixture
-def surface(request):
-    """Fixture for surface parameter.
-
-    :param request: Fixture request.
-    :returns: Mock surface to use for tests.
-    """
+def surface():
+    """ Fixture for surface parameter. """
     return MockSurface()
 
 

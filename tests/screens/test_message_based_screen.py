@@ -7,7 +7,7 @@ from screenflow.style_factory import StyleFactory
 from screenflow.screens.message_based_screen import MessageBasedScreen
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
 from tests.mocks.mock_surface import factory as mock_factory
-from pytest import raises
+from pytest import raises, fixture
 
 # Default name for testing.
 DEFAULT_NAME = 'select'
@@ -19,20 +19,17 @@ DEFAULT_MESSAGE = 'Message'
 SCREEN_TYPE = 'test_screen'
 
 
-def create_message_based_screen():
-    """Factory method that creates a test screen instance.
-
-    :returns: Created screen instance.
-    """
+@fixture
+def screen():
+    """ Fixture for message based screen parameter. """
     screen = MessageBasedScreen(DEFAULT_NAME, SCREEN_TYPE, DEFAULT_MESSAGE)
     screen.configure_styles(StyleFactory())
     screen.font_manager = FontManager()
     return screen
 
 
-def test_get_message_surface():
+def test_get_message_surface(screen):
     """ Test case for surface factory method. """
-    screen = create_message_based_screen()
     screen.surface_factory = mock_factory
     surface = screen.get_message_surface((500, 500))
     assert surface.blit_call == 1
@@ -42,18 +39,16 @@ def test_get_message_surface():
     assert lines[0] == DEFAULT_MESSAGE
 
 
-def test_message_lines():
+def test_message_lines(screen):
     """ Test case for message splitting. """
-    screen = create_message_based_screen()
     text = 'This is a very long text which requires to be splitted'
     message = Message(text)
     lines = message.lines(screen.primary_size, 100)
     assert len(lines) > 1
 
 
-def test_message_large_token():
+def test_message_large_token(screen):
     """ Test case for message splitting with large token. """
-    screen = create_message_based_screen()
     text = 'Thisisaverylongtextwhichrequirestobesplitted'
     message = Message(text)
     lines = message.lines(screen.primary_size, 200)

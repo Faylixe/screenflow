@@ -9,7 +9,7 @@ from screenflow.screens import MessageScreen
 from screenflow.screens.message_screen import factory
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
 from tests.mocks.mock_surface import MockSurface, factory as mock_factory
-from pytest import raises
+from pytest import raises, fixture
 
 # Default name for testing.
 DEFAULT_NAME = 'select'
@@ -18,23 +18,18 @@ DEFAULT_NAME = 'select'
 DEFAULT_MESSAGE = 'Message'
 
 
-def create_message_screen(name=DEFAULT_NAME, message=DEFAULT_MESSAGE):
-    """Simple factory method that creates
-    a message using the given name and message.
-
-    :param name: Name of the created screen.
-    :param message: Message of the created screen.
-    """
+@fixture
+def screen():
+    """ Fixture for screen parameter. """
     screen_def = {}
-    screen_def[XML_NAME] = name
-    screen_def[XML_MESSAGE] = message
+    screen_def[XML_NAME] = DEFAULT_NAME
+    screen_def[XML_MESSAGE] = DEFAULT_MESSAGE
     screen = factory(screen_def)
     return screen
 
 
-def test_factory():
+def test_factory(screen):
     """ Test case for message screen factory. """
-    screen = create_message_screen()
     assert isinstance(screen, MessageScreen)
     assert screen.name == DEFAULT_NAME
 
@@ -45,19 +40,16 @@ def test_messageless_factory():
         factory({})
 
 
-def test_on_touch():
+def test_on_touch(screen):
     """ Test case for on_touch event binding. """
-    screen = create_message_screen()
-
     @screen.on_touch
     def callback():
         pass
     assert screen._callback == callback
 
 
-def test_mouse_event():
+def test_mouse_event(screen):
     """ Test case for mouse event. """
-    screen = create_message_screen()
     call = []
 
     def callback():
@@ -67,9 +59,8 @@ def test_mouse_event():
     assert len(call) == 1
 
 
-def test_draw():
+def test_draw(screen):
     """ Test case for message screen drawing method. """
-    screen = create_message_screen()
     screen.font_manager = FontManager()
     screen.configure_styles(StyleFactory())
     screen.surface_factory = mock_factory
