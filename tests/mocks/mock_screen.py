@@ -2,10 +2,10 @@
 
 """ To document. """
 
-from surface_mock import SurfaceMock
+from mock_surface import MockSurface
 
 
-class ScreenMock(object):
+class MockScreen(object):
     """ Mock class for Screen. """
 
     def __init__(self, name):
@@ -21,4 +21,4 @@ class ScreenMock(object):
     def generate_preview(self, size):
         """ """
         self.preview_generated += 1
-        return SurfaceMock(size)
+        return MockSurface(size)
