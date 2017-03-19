@@ -3,7 +3,7 @@
 """ Simple test suite for FontManager class. """
 
 from pygame.font import SysFont, init as font_init
-from screenflow.font_manager import FontManager
+from screenflow.css.font_manager import FontManager
 
 
 def setup_module(module):
