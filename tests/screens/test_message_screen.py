@@ -8,7 +8,7 @@ from screenflow.style_factory import StyleFactory
 from screenflow.screens import MessageScreen
 from screenflow.screens.message_screen import factory
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
-from tests.mocks.surface_mock import SurfaceMock, factory as mock_factory
+from tests.mocks.mock_surface import MockSurface, factory as mock_factory
 from pytest import raises
 
 # Default name for testing.
@@ -73,7 +73,7 @@ def test_draw():
     screen.font_manager = FontManager()
     screen.configure_styles(StyleFactory())
     screen.surface_factory = mock_factory
-    surface = SurfaceMock()
+    surface = MockSurface()
     screen.draw(surface)
     assert surface.fill_call == 1
     assert surface.blit_call == 1

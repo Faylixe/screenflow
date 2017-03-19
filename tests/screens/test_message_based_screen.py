@@ -6,7 +6,7 @@ from screenflow.font_manager import FontManager
 from screenflow.style_factory import StyleFactory
 from screenflow.screens.message_based_screen import MessageBasedScreen
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
-from tests.mocks.surface_mock import factory as mock_factory
+from tests.mocks.mock_surface import factory as mock_factory
 from pytest import raises
 
 # Default name for testing.
