@@ -3,8 +3,8 @@
 """ Simple test suite for Message screen associated classes. """
 
 from screenflow.constants import XML_NAME
-from screenflow.font_manager import FontManager
-from screenflow.style_factory import StyleFactory
+from screenflow.css.font_manager import FontManager
+from screenflow.css.style_factory import StyleFactory
 from screenflow.screens import MessageScreen
 from screenflow.screens.message_screen import factory
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE

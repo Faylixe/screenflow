@@ -3,7 +3,7 @@
 """ Simple test suite for Select screen associated classes. """
 
 from screenflow.constants import XML_NAME
-from screenflow.font_manager import FontManager
+from screenflow.css.font_manager import FontManager
 from screenflow.screens import SelectScreen
 from screenflow.screens.message_based_screen import XML_MESSAGE
 from screenflow.screens.select_screen import factory, XML_OPTION

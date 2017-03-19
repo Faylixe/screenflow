@@ -30,7 +30,7 @@ import logging
 import tinycss
 from webcolors import hex_to_rgb, name_to_rgb
 from style import Styles, BasicStyle, FontStyle
-from constants import BLACK, WHITE, GRAY
+from screenflow.constants import BLACK, WHITE, GRAY
 
 # Configure logger.
 logging.basicConfig()

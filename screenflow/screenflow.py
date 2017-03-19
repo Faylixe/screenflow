@@ -73,8 +73,8 @@ from pygame import time, FULLSCREEN, HWSURFACE, DOUBLEBUF
 from pygame.display import set_mode, flip, Info
 from screens import configure_screenflow
 from constants import XML_SCREENFLOW, XML_SCREEN, XML_TYPE
-from font_manager import FontManager
-from style_factory import StyleFactory
+from css.font_manager import FontManager
+from css.style_factory import StyleFactory
 
 # Configure logger.
 logging.basicConfig()

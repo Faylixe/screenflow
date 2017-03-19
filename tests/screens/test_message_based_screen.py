@@ -2,8 +2,8 @@
 
 """ Simple test suite for Message based screen associated classes. """
 
-from screenflow.font_manager import FontManager
-from screenflow.style_factory import StyleFactory
+from screenflow.css.font_manager import FontManager
+from screenflow.css.style_factory import StyleFactory
 from screenflow.screens.message_based_screen import MessageBasedScreen
 from screenflow.screens.message_based_screen import Message, XML_MESSAGE
 from tests.mocks.mock_surface import factory as mock_factory

@@ -3,7 +3,7 @@
 """ Test suite for ScreenFlow class. """
 
 from screenflow import ScreenFlow, NavigationException
-from screenflow.font_manager import FontManager
+from screenflow.css.font_manager import FontManager
 from screenflow.constants import XML_TYPE, XML_NAME
 from screenflow.screens import MessageScreen
 from mocks.mock_surface import MockSurface
