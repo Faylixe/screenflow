@@ -1,8 +1,10 @@
-##!/usr/bin/python
+#!/usr/bin/env python
+# coding: utf-8
 
 """ To document """
 
 from screenflow.screens import Screen
+
 
 class InputScreen(Screen):
     """To document.

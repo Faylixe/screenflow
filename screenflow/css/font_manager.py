@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# coding: utf-8
 
 """
     A FontManager is responsible for creating and caching font
